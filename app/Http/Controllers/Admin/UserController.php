@@ -1,0 +1,90 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use Illuminate\Support\Facades\View;
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
+use App\Http\Requests\Admin\UserRequest;
+
+class UserController extends Controller
+{
+    public function __construct(private User $user) {}
+
+    public function index()
+    {
+        try {
+            $records = $this->user
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+
+            $view = View::make('admin.users.index')
+                ->with('records', $records);
+
+            return $view;
+        } catch (\Exception $e) {
+        }
+    }
+
+    public function create()
+    {
+        try {
+            if (request()->ajax()) {
+                return response()->json([], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' =>  \Lang::get('admin/notification.error'),
+            ], 500);
+        }
+    }
+
+    public function store(UserRequest $request)
+    {
+        try {
+
+            $data = $request->validated();
+
+            unset($data['password_confirmation']);
+
+            if (!$request->filled('password') && $request->filled('id')) {
+                unset($data['password']);
+            }
+
+            $this->user->updateOrCreate([
+                'id' => $request->input('id')
+            ], $data);
+
+            return response()->json([
+                'message' => 'Usuario creado correctamente',
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 422);
+        }
+    }
+
+    public function edit(User $user)
+    {
+        return response()->json([
+            'user' => $user,
+        ], 200);
+    }
+
+    public function destroy(User $user)
+    {
+        try {
+            $user->delete();
+
+            return response()->json([
+                'message' => 'Usuario eliminado correctamente',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+}
