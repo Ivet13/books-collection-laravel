@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->string('name');
             $table->text('bio')->nullable();
             $table->timestamps(); // created_at, updated_at
+            $table->softDeletes(); // deleted_at
         });
     }
 

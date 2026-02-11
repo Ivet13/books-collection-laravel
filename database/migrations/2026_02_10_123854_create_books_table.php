@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->string('isbn')->nullable()->unique();
             $table->timestamps(); // created_at, updated_at
+            $table->softDeletes();
         });
     }
 

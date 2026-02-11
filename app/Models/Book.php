@@ -4,10 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+use App\Models\Author;
+use App\Models\Publisher;
+use App\Models\Genre;
 
 class Book extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -19,4 +27,24 @@ class Book extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public function authors()
+    {
+        return $this->belongsToMany(Author::class, 'book_authors');
+    }
+
+    public function publisher()
+    {
+        return $this->belongsTo(Publisher::class);
+    }
+
+    public function genres()
+    {
+        return $this->belongsToMany(Genre::class);
+    }
+
+    public function bookPublisher()
+    {
+        return $this->hasOne(\App\Models\BookPublisher::class);
+    }
 }
