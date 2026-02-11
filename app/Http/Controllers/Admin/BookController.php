@@ -12,6 +12,7 @@ class BookController extends Controller
     {
         $books = Book::orderBy('created_at', 'desc')->get();
         return view('admin.books.index', compact('books'));
+        //return response()->json($books);
     }
 
     public function create()

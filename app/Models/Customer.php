@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Book;
 
 class Customer extends Authenticatable
 {
@@ -48,5 +50,12 @@ class Customer extends Authenticatable
     public function scopeInactive(Builder $query)
     {
         return $query->whereNotNull('deactivated_at');
+    }
+
+    public function books(): BelongsToMany
+    {
+        return $this->belongsToMany(Book::class, 'book_customer', 'customer_id', 'book_id')
+            ->withPivot(['status', 'is_favorite', 'rating', 'review'])
+            ->withTimestamps();
     }
 }

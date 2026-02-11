@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Author;
 use App\Models\Publisher;
 use App\Models\Genre;
+use App\Models\Customer;
 
 class Book extends Model
 {
@@ -40,11 +41,17 @@ class Book extends Model
 
     public function genres()
     {
-        return $this->belongsToMany(Genre::class);
+        return $this->belongsToMany(\App\Models\Genre::class, 'book_genres');
     }
-
     public function bookPublisher()
     {
         return $this->hasOne(\App\Models\BookPublisher::class);
+    }
+
+    public function customers(): BelongsToMany
+    {
+        return $this->belongsToMany(Customer::class, 'book_customer', 'book_id', 'customer_id')
+            ->withPivot(['status', 'is_favorite', 'rating', 'review'])
+            ->withTimestamps();
     }
 }
