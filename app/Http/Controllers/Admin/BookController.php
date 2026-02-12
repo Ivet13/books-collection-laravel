@@ -10,7 +10,7 @@ class BookController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Book::query();
+        $query = Book::query()->with('authors')->with(['bookPublisher.publisher'])->with('genres');
 
         // Texto libre: title o isbn
         if ($request->filled('q')) {
@@ -71,7 +71,11 @@ class BookController extends Controller
 
     public function create()
     {
-        return view('admin.books.create');
+        $authors = \App\Models\Author::orderBy('name')->get();
+        $genres = \App\Models\Genre::orderBy('name')->get();
+        $publishers = \App\Models\Publisher::orderBy('name')->get();
+
+        return view('admin.books.create', compact('authors', 'genres', 'publishers'));
     }
 
     public function store(Request $request)

@@ -76,7 +76,56 @@
                     @enderror
                 </div>
             </div>
+
+            <tr>
+                <th>Autores:</th>
+                <td>
+                    @forelse($record->authors as $author)
+                        <div>
+                            <strong>{{ $author->name }}</strong>
+                            @if ($author->bio)
+                                <div>{{ $author->bio }}</div>
+                            @endif
+                        </div>
+                    @empty
+                        <em>Sin autores</em>
+                    @endforelse
+                </td>
+            </tr>
+            <tr>
+                <th>Editorial:</th>
+                <td>
+                    {{ $record->bookPublisher?->publisher?->name ?? 'Sin editorial' }}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Año publicación:</th>
+                <td>
+                    {{ $record->bookPublisher?->published_year ?? '-' }}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>Genres:</th>
+                <td>
+                    @forelse($record->genres as $genre)
+                        <div>
+                            <strong>{{ $genre->name }}</strong>
+                            @if ($genre->bio)
+                                <div>{{ $genre->bio }}</div>
+                            @endif
+                        </div>
+                    @empty
+                        <em>Sin genres</em>
+                    @endforelse
+                </td>
+            </tr>
         </form>
+
+
+
     </div>
 @endsection
 
