@@ -10,9 +10,9 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = Customer::orderBy('created_at', 'desc')->get();
+        $records = Customer::orderBy('created_at', 'desc')->get();
 
-        return view('admin.customers.index', compact('customers'));
+        return view('admin.customers.index', compact('records'));
     }
 
     public function create()

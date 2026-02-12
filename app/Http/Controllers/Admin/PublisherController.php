@@ -10,8 +10,8 @@ class PublisherController extends Controller
 {
     public function index()
     {
-        $publishers = Publisher::orderBy('name')->get();
-        return view('admin.publishers.index', compact('publishers'));
+        $records = Publisher::orderBy('name')->get();
+        return view('admin.publishers.index', compact('records'));
     }
 
     public function create()

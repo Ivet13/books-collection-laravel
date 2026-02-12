@@ -11,8 +11,8 @@ class GenreController extends Controller
 {
     public function index()
     {
-        $genres = Genre::orderBy('name')->get();
-        return view('admin.genres.index', compact('genres'));
+        $records = Genre::orderBy('name')->get();
+        return view('admin.genres.index', compact('records'));
     }
 
     public function create()

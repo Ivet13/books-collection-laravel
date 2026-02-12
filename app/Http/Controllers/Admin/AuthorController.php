@@ -10,8 +10,8 @@ class AuthorController extends Controller
 {
     public function index()
     {
-        $authors = Author::orderBy('name')->get();
-        return view('admin.authors.index', compact('authors'));
+        $records = Author::orderBy('name')->get();
+        return view('admin.authors.index', compact('records'));
     }
 
     public function create()
