@@ -41,7 +41,12 @@
                     {{-- Limpiar formulario --}}
                     <button type="reset" title="Limpiar">
                         <x-icon.broom />
+
+                    </button> {{-- Eliminar libro --}}
+                    <button type="button" title="Eliminar" class="delete-btn" style="display: none;">
+                        <x-icon.delete />
                     </button>
+
                 </div>
             </div>
 

@@ -5,6 +5,7 @@
 
             const submitBtn = form.querySelector('button[type="submit"]');
             const resetBtn = form.querySelector('button[type="reset"]');
+            const deleteBtn = form.querySelector('.delete-btn');
             const defaultAction = "{{ route('admin.books.store') }}";
             const methodInput = document.createElement('input');
             methodInput.type = 'hidden';
@@ -23,6 +24,9 @@
                 document.getElementById('isbn').value = '';
                 document.getElementById('description').value = '';
 
+                // Hide delete button
+                if (deleteBtn) deleteBtn.style.display = 'none';
+
                 // Remove selected class from all items if exists
                 document.querySelectorAll('.edit-tab').forEach(el => el.classList.remove('selected'));
             }
@@ -31,6 +35,19 @@
                 // Allow default reset but ensure we clean up extra stuff
                 setTimeout(resetForm, 0);
             });
+
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', function() {
+                    if (confirm('¿Estás seguro de que quieres eliminar este libro?')) {
+                        // Change method to DELETE
+                        methodInput.value = 'DELETE';
+                        if (!form.contains(methodInput)) {
+                            form.appendChild(methodInput);
+                        }
+                        form.submit();
+                    }
+                });
+            }
 
             document.querySelectorAll('.edit-tab').forEach(item => {
                 item.addEventListener('click', function() {
@@ -41,6 +58,7 @@
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
+                          console.log(data)
                             // Populate form
                             document.getElementById('title').value = data.title || '';
                             document.getElementById('isbn').value = data.isbn || '';
@@ -51,9 +69,13 @@
                             form.action = url;
 
                             // Add _method PUT
+                            methodInput.value = 'PUT';
                             if (!form.contains(methodInput)) {
                                 form.appendChild(methodInput);
                             }
+
+                            // Show delete button
+                            if (deleteBtn) deleteBtn.style.display = 'inline-block';
 
                             // Visual feedback (optional)
                             document.querySelectorAll('.edit-tab').forEach(el => el.classList

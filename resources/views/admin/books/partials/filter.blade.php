@@ -1,4 +1,4 @@
-<form method="GET" action="{{ route('admin.books.index') }}" style="display:flex; gap:10px; align-items:center;">
+<form method="GET" action="{{ route('admin.books.index') }}" style="">
     <button type="submit" title="Aplicar filtros">
         <x-icon.filter-menu />
     </button>
