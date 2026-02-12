@@ -35,11 +35,14 @@ main {
     padding-top: 2vh;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap; /* Allow wrapping */
 }
 
 table {
     border: 2px solid var(--main-bg-color);
     margin: 1%;
+    width: 100%; /* Ensure table takes full width in its container */
+    max-width: 100%;
 }
 
 label {
@@ -53,19 +56,22 @@ form > .form-options {
     justify-content: space-between;
     align-items: center;
     border-bottom: 3px solid var(--main-bg-color);
+    flex-wrap: wrap; /* Allow options to wrap */
 }
 
 form > .form-fields {
     display: flex;
     justify-content: space-between;
     padding: 2%;
+    flex-wrap: wrap; /* Allow fields to wrap */
 }
 
 form > .form-fields * {
     display: flex;
     flex-direction: column;
-    min-width: 50%;
+    min-width: 45%; /* Slightly less than 50% to account for gaps/padding */
     padding: 1%;
+    box-sizing: border-box; /* Ensure padding is included in width */
 }
 
 main button {
@@ -76,6 +82,7 @@ main button {
     font-weight: bold;
     transition-duration: 0.4s;
     cursor: pointer;
+    padding: 0.5rem 1rem; /* Add padding for better touch targets */
 }
 
 main button:hover {
@@ -100,16 +107,40 @@ main button > p {
     flex-direction: column;
     text-align: left;
     color: grey;
+    margin: 2%;
+    flex: 1; /* Allow it to grow */
+    min-width: 300px; /* Minimum width before wrapping */
 }
 
 .main-content {
     flex-grow: 2;
     margin: 2%;
+    flex: 2; /* Adjust proportion */
+    min-width: 300px; /* Minimum width before wrapping */
 }
 
-.table-content {
-    margin: 2%;
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+    }
+
+    .table-content, .main-content {
+        width: 96%; /* Full width with margin */
+        margin: 2%;
+        flex: none; /* Disable flex scaling */
+    }
+
+    form > .form-fields {
+        flex-direction: column;
+    }
+
+    form > .form-fields * {
+        min-width: 100%;
+    }
 }
+
+
 
 span {
     width: 1.5rem;
