@@ -64,6 +64,11 @@ class BookController extends Controller
     }
 
 
+    public function show(Book $book)
+    {
+        return response()->json($book);
+    }
+
     public function create()
     {
         return view('admin.books.create');
