@@ -9,20 +9,30 @@
     @stack('styles')
 </head>
 
-<body>
-    <header>
-        <div> Kaicen formación - BOOKS </div>
+<body class="layout">
+    <header class="header">
+        <div> Kaicen formación - {{ __('admin/titles.books') }} </div>
         <div>
             <x-icon.menu />
         </div>
     </header>
 
-    <main>
+    <div class="overlay" id="menuOverlay" hidden></div>
+
+    <nav class="side-menu" id="sideMenu" aria-hidden="true">
+        <ul class="side-menu__list">
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Libros</a></li>
+            <li><a href="#">Géneros</a></li>
+            <li><a href="#">Publishers</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
         @yield('content')
     </main>
-
     <footer>
-        @yield('footer')
+        <p>© {{ date('Y') }} - Un Proyecto hecho con Laravel - &#x2764 </p>
     </footer>
     @stack('scripts')
 </body>

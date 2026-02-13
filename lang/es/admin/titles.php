@@ -9,4 +9,9 @@ return [
     'updated_at' => 'Fecha de actualización',
     'password' => 'Contraseña',
     'password_confirmation' => 'Confirmación de contraseña',
+    'books' => 'Libros',
+    'authors' => 'Autores',
+    'publishers' => 'Editoriales',
+    'genres' => 'Géneros',
+    'customers' => 'Clientes',
 ];

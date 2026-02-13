@@ -1,3 +1,4 @@
+import './menu';
 import './books';
 import './authors';
 import './genres';

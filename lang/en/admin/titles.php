@@ -8,4 +8,9 @@ return [
     'updated_at' => 'Updated at',
     'password' => 'Password',
     'password_confirmation' => 'Password confirmation',
+    'books' => 'Books',
+    'authors' => 'Authors',
+    'publishers' => 'Publishers',
+    'genres' => 'Genres',
+    'customers' => 'Customers',
 ];
