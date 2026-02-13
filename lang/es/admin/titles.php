@@ -1,7 +1,7 @@
 <?php
 
-
 return [
+    'mainTitle' => 'Club de Lectura',
     'users' => 'Usuarios',
     'name' => 'Nombre',
     'email' => 'Email',

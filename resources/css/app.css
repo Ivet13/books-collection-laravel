@@ -309,6 +309,11 @@ body.menu-open {
         min-width: 100%;
     }
 
+    .side-menu {
+        width: 85vw;
+        max-width: 320px;
+    }
+
 
 
 

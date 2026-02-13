@@ -11,7 +11,7 @@
 
 <body class="layout">
     <header class="header">
-        <div> Kaicen formación - {{ __('admin/titles.books') }} </div>
+        <div>{{ __('admin/titles.mainTitle') }} </div>
         <div>
             <x-icon.menu />
         </div>
@@ -21,10 +21,10 @@
 
     <nav class="side-menu" id="sideMenu" aria-hidden="true">
         <ul class="side-menu__list">
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">Libros</a></li>
-            <li><a href="#">Géneros</a></li>
-            <li><a href="#">Publishers</a></li>
+            <li><a href="{{ route('admin.books.index') }}">{{ __('admin/titles.books') }}</a></li>
+            <li><a href="{{ route('admin.authors.index') }}">{{ __('admin/titles.authors') }}</a></li>
+            <li><a href="{{ route('admin.genres.index') }}">{{ __('admin/titles.genres') }}</a></li>
+            <li><a href="{{ route('admin.publishers.index') }}">{{ __('admin/titles.publishers') }}</a></li>
         </ul>
     </nav>
 

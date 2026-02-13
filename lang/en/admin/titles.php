@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'mainTitle' => 'Book Club',
     'users' => 'Users',
     'name' => 'Name',
     'email' => 'Email',
