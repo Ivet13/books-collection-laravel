@@ -8,11 +8,33 @@ use Illuminate\Http\Request;
 
 class PublisherController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $records = Publisher::orderBy('name')->get();
+        $query = Publisher::query();
+
+        if ($request->filled('q')) {
+            $q = trim((string) $request->input('q'));
+            $query->where('name', 'like', "%{$q}%");
+        }
+
+        $records = $query->orderBy('name')->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return response()->view('admin.publishers.partials.list', compact('records'));
+        }
+
         return view('admin.publishers.index', compact('records'));
     }
+
+    public function show(Publisher $publisher)
+    {
+        return response()->json([
+            'id' => $publisher->id,
+            'name' => $publisher->name,
+            'bio' => $publisher->bio,
+        ]);
+    }
+
 
     public function create()
     {
@@ -22,15 +44,14 @@ class PublisherController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255|unique:publishers,name',
+            'name' => ['required', 'string', 'max:255'],
+            'bio' => ['nullable', 'string'],
         ]);
 
-        Publisher::create($data);
+        $publisher = Publisher::create($data);
 
-        return redirect()->route('publishers.index')
-            ->with('success', 'Editorial creada');
+        return response()->json(['id' => $publisher->id], 201);
     }
-
     public function edit(Publisher $publisher)
     {
         return view('admin.publishers.edit', compact('publisher'));
@@ -39,20 +60,18 @@ class PublisherController extends Controller
     public function update(Request $request, Publisher $publisher)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255|unique:publishers,name,' . $publisher->id,
+            'name' => ['required', 'string', 'max:255'],
+            'bio' => ['nullable', 'string'],
         ]);
 
         $publisher->update($data);
 
-        return redirect()->route('publishers.index')
-            ->with('success', 'Editorial actualizada');
+        return response()->json(['id' => $publisher->id]);
     }
 
     public function destroy(Publisher $publisher)
     {
         $publisher->delete();
-
-        return redirect()->route('publishers.index')
-            ->with('success', 'Editorial eliminada');
+        return response()->json(['ok' => true]);
     }
 }
