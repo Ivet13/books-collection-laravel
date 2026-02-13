@@ -34,11 +34,6 @@ class Book extends Model
         return $this->belongsToMany(Author::class, 'book_authors');
     }
 
-    public function publisher()
-    {
-        return $this->belongsTo(Publisher::class);
-    }
-
     public function genres()
     {
         return $this->belongsToMany(\App\Models\Genre::class, 'book_genres');
@@ -46,6 +41,18 @@ class Book extends Model
     public function bookPublisher()
     {
         return $this->hasOne(\App\Models\BookPublisher::class);
+    }
+
+    public function publisher()
+    {
+        return $this->hasOneThrough(
+            Publisher::class,
+            BookPublisher::class,
+            'book_id',       // FK en book_publishers...
+            'id',            // PK en publishers...
+            'id',            // PK en books...
+            'publisher_id'   // FK a publishers en book_publishers
+        );
     }
 
     public function customers(): BelongsToMany
