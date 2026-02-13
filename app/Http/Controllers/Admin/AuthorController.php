@@ -8,10 +8,34 @@ use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $records = Author::orderBy('name')->get();
+        $query = Author::query();
+
+        if ($request->filled('q')) {
+            $q = trim((string) $request->input('q'));
+            $query->where('name', 'like', "%{$q}%");
+        }
+
+        $records = $query->orderBy('name')->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return response()->view('admin.authors.partials.list', compact('records'));
+        }
+
         return view('admin.authors.index', compact('records'));
+    }
+
+    public function show(Author $author)
+    {
+        $author->load(['books:id,title']); // si quieres mostrar libros en meta
+
+        return response()->json([
+            'id' => $author->id,
+            'name' => $author->name,
+            'bio' => $author->bio,
+            'books' => $author->books,
+        ]);
     }
 
     public function create()
@@ -26,10 +50,9 @@ class AuthorController extends Controller
             'bio'  => 'nullable|string',
         ]);
 
-        Author::create($data);
+        $author = Author::create($data);
 
-        return redirect()->route('authors.index')
-            ->with('success', 'Autor creado');
+        return response()->json(['id' => $author->id], 201);
     }
 
     public function edit(Author $author)
@@ -46,15 +69,13 @@ class AuthorController extends Controller
 
         $author->update($data);
 
-        return redirect()->route('authors.index')
-            ->with('success', 'Autor actualizado');
+        return response()->json(['id' => $author->id]);
     }
 
     public function destroy(Author $author)
     {
         $author->delete();
 
-        return redirect()->route('authors.index')
-            ->with('success', 'Autor eliminado');
+        return response()->json(['ok' => true]);
     }
 }

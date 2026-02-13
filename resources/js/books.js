@@ -1,11 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // ✅ Root para evitar choques con authors.js
+  const root = document.querySelector(".books-page");
+  if (!root) return;
+
+  console.log("books.js activo");
+
   const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
 
-  const listEl = document.querySelector(".js-list");
-  const paginationEl = document.querySelector(".js-pagination");
-  const filterForm = document.querySelector(".js-filter-form");
-  const filterResetBtn = document.querySelector(".js-filter-reset");
-  const form = document.querySelector(".js-book-form");
+  const listEl = root.querySelector(".js-list");
+  const paginationEl = root.querySelector(".js-pagination");
+  const filterForm = root.querySelector(".js-filter-form");
+  const filterResetBtn = root.querySelector(".js-filter-reset");
+
+  const form = root.querySelector(".js-book-form");
   if (!form || !listEl) return;
 
   const storeUrl = form.dataset.storeUrl;
@@ -23,10 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const meta = {
-    authors: document.getElementById("meta-authors"),
-    publisher: document.getElementById("meta-publisher"),
-    year: document.getElementById("meta-year"),
-    genres: document.getElementById("meta-genres"),
+    authors: root.querySelector("#meta-authors"),
+    publisher: root.querySelector("#meta-publisher"),
+    year: root.querySelector("#meta-year"),
+    genres: root.querySelector("#meta-genres"),
   };
 
   const headers = () => ({
@@ -36,7 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setErrors(msgs = []) {
     if (!errorsEl) return;
-    errorsEl.innerHTML = msgs.length ? `<ul>${msgs.map(m => `<li>${m}</li>`).join("")}</ul>` : "";
+    errorsEl.innerHTML = msgs.length
+      ? `<ul>${msgs.map(m => `<li>${m}</li>`).join("")}</ul>`
+      : "";
   }
 
   function setDeleteVisible(visible) {
@@ -45,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function clearSelected() {
-    document.querySelectorAll(".edit-tab.selected").forEach(el => el.classList.remove("selected"));
+    root.querySelectorAll(".edit-tab.selected").forEach(el => el.classList.remove("selected"));
   }
 
   function enterCreateMode() {
@@ -66,8 +75,16 @@ document.addEventListener("DOMContentLoaded", () => {
     clearSelected();
   }
 
+  function escapeHtml(s) {
+    return String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
   function renderMeta(data) {
-    // Ajusta según lo que devuelva tu JSON
     const authors = (data.authors || []).map(a => a.name).filter(Boolean);
     const genres = (data.genres || []).map(g => g.name).filter(Boolean);
 
@@ -84,15 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (meta.genres) meta.genres.innerHTML = genres.length
       ? genres.map(n => `<div><strong>${escapeHtml(n)}</strong></div>`).join("")
       : "<em>Sin genres</em>";
-  }
-
-  function escapeHtml(s) {
-    return String(s)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
   }
 
   async function loadBook(id, tabEl) {
@@ -126,17 +134,14 @@ document.addEventListener("DOMContentLoaded", () => {
     setErrors([]);
 
     const data = new FormData(form);
-
-    // IMPORTANTE: Laravel espera POST + _method cuando usas routes resource
     data.set("_method", fields.method.value);
 
     const res = await fetch(form.action, {
       method: "POST",
-      headers: { ...headers() },
+      headers: headers(),
       body: data,
     });
 
-    // Validación
     if (res.status === 422) {
       const json = await res.json().catch(() => null);
       const msgs = json?.errors ? Object.values(json.errors).flat() : ["Error de validación."];
@@ -150,10 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const json = await res.json();
-    // Esperamos que devuelva el libro guardado
-    // Opcional: actualizar lista sin recargar
-    await refreshList();        // refresca lista + paginación
-    await loadBook(json.id);    // deja el form en edit-mode del libro guardado
+    await refreshList();
+    await loadBook(json.id);
   }
 
   async function deleteBook() {
@@ -170,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const res = await fetch(url, {
       method: "POST",
-      headers: { ...headers() },
+      headers: headers(),
       body: data,
     });
 
@@ -183,9 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
     enterCreateMode();
   }
 
-  // --- LISTA + FILTROS + PAGINACIÓN POR AJAX (HTML parcial) ---
   async function refreshList(url = window.location.href) {
-    // pedimos HTML parcial (lista + paginación) desde index
     const res = await fetch(url, {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
@@ -208,15 +209,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (newList) listEl.innerHTML = newList.innerHTML;
     if (newPagination && paginationEl) paginationEl.innerHTML = newPagination.innerHTML;
 
-    bindListClicks();       // reenganchar eventos en los nuevos nodos
-    bindPaginationClicks(); // idem
+    bindListClicks();
+    bindPaginationClicks();
 
-    // Mantener URL sin recargar
     window.history.pushState({}, "", url);
   }
 
   function bindListClicks() {
-    document.querySelectorAll(".edit-tab").forEach(tab => {
+    root.querySelectorAll(".edit-tab").forEach(tab => {
       tab.addEventListener("click", () => loadBook(tab.dataset.id, tab));
     });
   }
@@ -231,32 +231,32 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Eventos del form
+  // Eventos
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     saveBook();
   });
 
+  // Si sigues usando type="reset", vale; si no, quita esto.
   form.addEventListener("reset", () => {
     setTimeout(enterCreateMode, 0);
   });
 
   deleteBtn?.addEventListener("click", deleteBook);
 
-  filterResetBtn?.addEventListener("click", (e) => {
-  e.preventDefault();
-  filterForm.reset();
-  refreshList(filterForm.action); // vuelve a /admin/books sin querystring
-});
-
-  // Filtros por AJAX
   filterForm?.addEventListener("submit", (e) => {
     e.preventDefault();
-    const url = `${window.location.pathname}?${new URLSearchParams(new FormData(filterForm)).toString()}`;
+    const url = `${filterForm.action}?${new URLSearchParams(new FormData(filterForm)).toString()}`;
     refreshList(url);
   });
 
-  // Inicial
+  filterResetBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    filterForm?.reset();
+    refreshList(filterForm.action);
+  });
+
+  // Init
   bindListClicks();
   bindPaginationClicks();
   enterCreateMode();

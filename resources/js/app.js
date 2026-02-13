@@ -1,1 +1,4 @@
-import './form';
+import './books';
+import './authors';
+import './genres';
+

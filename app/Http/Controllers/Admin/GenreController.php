@@ -9,27 +9,49 @@ use Illuminate\Http\GenreRequest;
 
 class GenreController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $records = Genre::orderBy('name')->get();
+        $query = Genre::query();
+
+        if ($request->filled('q')) {
+            $q = trim((string) $request->input('q'));
+            $query->where('name', 'like', "%{$q}%");
+        }
+
+        $records = $query->orderBy('name')->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return response()->view('admin.genres.partials.list', compact('records'));
+        }
+
         return view('admin.genres.index', compact('records'));
     }
 
-    public function create()
+    public function show(Genre $genre)
     {
-        return view('admin.genres.create');
+        return response()->json([
+            'id' => $genre->id,
+            'name' => $genre->name,
+            'bio' => $genre->bio,
+        ]);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255|unique:genres,name',
+            'name' => ['required', 'string', 'max:255'],
+            'bio' => ['nullable', 'string'],
         ]);
 
-        Genre::create($data);
+        $genre = Genre::create($data);
 
-        return redirect()->route('genres.index')
-            ->with('success', 'Género creado');
+        return response()->json(['id' => $genre->id], 201);
+    }
+
+
+    public function create()
+    {
+        return view('admin.genres.create');
     }
 
     public function edit(Genre $genre)
@@ -40,20 +62,18 @@ class GenreController extends Controller
     public function update(Request $request, Genre $genre)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255|unique:genres,name,' . $genre->id,
+            'name' => ['required', 'string', 'max:255'],
+            'bio' => ['nullable', 'string'],
         ]);
 
         $genre->update($data);
 
-        return redirect()->route('genres.index')
-            ->with('success', 'Género actualizado');
+        return response()->json(['id' => $genre->id]);
     }
 
     public function destroy(Genre $genre)
     {
         $genre->delete();
-
-        return redirect()->route('genres.index')
-            ->with('success', 'Género eliminado');
+        return response()->json(['ok' => true]);
     }
 }
