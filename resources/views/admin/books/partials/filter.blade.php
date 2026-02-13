@@ -1,4 +1,4 @@
-<form method="GET" action="{{ route('admin.books.index') }}" style="">
+<form class="js-filter-form" method="GET" action="{{ route('admin.books.index') }}" style="">
     <button type="submit" title="Aplicar filtros">
         <x-icon.filter-menu />
     </button>
@@ -32,5 +32,6 @@
         @endforeach
     </select>
 
-    <a href="{{ route('admin.books.index') }}">Reset</a>
+    <button type="button" class="js-filter-reset">Reset</button>
+
 </form>

@@ -60,13 +60,32 @@ class BookController extends Controller
         $genres = \App\Models\Genre::orderBy('name')->get();
         $publishers = \App\Models\Publisher::orderBy('name')->get();
 
+        if ($request->ajax()) {
+            return response()->view('admin.books.index', compact('records', 'authors', 'genres', 'publishers'));
+        }
+
         return view('admin.books.index', compact('records', 'authors', 'genres', 'publishers'));
     }
 
 
     public function show(Book $book)
     {
-        return response()->json($book);
+        $book->load([
+            'authors:id,name',
+            'genres:id,name',
+            'bookPublisher.publisher:id,name',
+        ]);
+
+        return response()->json([
+            'id' => $book->id,
+            'title' => $book->title,
+            'isbn' => $book->isbn,
+            'description' => $book->description,
+            'authors' => $book->authors,
+            'genres' => $book->genres,
+            'publisher' => $book->bookPublisher?->publisher,
+            'published_year' => $book->bookPublisher?->published_year,
+        ]);
     }
 
     public function create()
@@ -81,15 +100,14 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'isbn' => 'nullable|string|max:255|unique:books,isbn',
+            'title' => ['required', 'string', 'max:255'],
+            'isbn' => ['nullable', 'string', 'max:50'],
+            'description' => ['nullable', 'string'],
         ]);
 
-        Book::create($data);
+        $book = Book::create($data);
 
-        return redirect()->route('admin.books.index')
-            ->with('success', 'Libro creado');
+        return response()->json(['id' => $book->id], 201);
     }
 
     public function edit(Book $book)
@@ -100,22 +118,18 @@ class BookController extends Controller
     public function update(Request $request, Book $book)
     {
         $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'isbn' => 'nullable|string|max:255|unique:books,isbn,' . $book->id,
+            'title' => ['required', 'string', 'max:255'],
+            'isbn' => ['nullable', 'string', 'max:50'],
+            'description' => ['nullable', 'string'],
         ]);
 
         $book->update($data);
 
-        return redirect()->route('admin.books.index')
-            ->with('success', 'Libro actualizado');
+        return response()->json(['id' => $book->id]);
     }
-
     public function destroy(Book $book)
     {
         $book->delete();
-
-        return redirect()->route('admin.books.index')
-            ->with('success', 'Libro eliminado');
+        return response()->json(['ok' => true]);
     }
 }
