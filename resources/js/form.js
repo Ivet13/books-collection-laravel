@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const listEl = document.querySelector(".js-list");
   const paginationEl = document.querySelector(".js-pagination");
-  const filterForm = document.querySelector(".js-filter-form"); // pon esta clase en tu form de filtros
+  const filterForm = document.querySelector(".js-filter-form");
+  const filterResetBtn = document.querySelector(".js-filter-reset");
   const form = document.querySelector(".js-book-form");
   if (!form || !listEl) return;
 
@@ -241,6 +242,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   deleteBtn?.addEventListener("click", deleteBook);
+
+  filterResetBtn?.addEventListener("click", (e) => {
+  e.preventDefault();
+  filterForm.reset();
+  refreshList(filterForm.action); // vuelve a /admin/books sin querystring
+});
 
   // Filtros por AJAX
   filterForm?.addEventListener("submit", (e) => {
