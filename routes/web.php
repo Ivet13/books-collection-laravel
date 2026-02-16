@@ -10,6 +10,9 @@ use App\Http\Controllers\Admin\PublisherController;
 
 use App\Http\Controllers\BookCustomerController;
 
+use App\Http\Controllers\CustomerAuthController;
+use App\Http\Controllers\CustomerCollectionController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -74,4 +77,21 @@ Route::middleware('auth')->group(function () {
         '/books/{book}/collection',
         [BookCustomerController::class, 'destroy']
     )->name('books.collection.destroy');
+});
+
+
+Route::get('/', fn() => view('public.home'))->name('home');
+
+// Auth customers
+Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('customer.register');
+Route::post('/register', [CustomerAuthController::class, 'register'])->name('customer.register.store');
+
+Route::get('/login', [CustomerAuthController::class, 'showLogin'])->name('customer.login');
+Route::post('/login', [CustomerAuthController::class, 'login'])->name('customer.login.store');
+
+Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout');
+
+// Área privada customer
+Route::middleware('auth:customer')->group(function () {
+    Route::get('/my/books', [CustomerCollectionController::class, 'index'])->name('customer.collection');
 });
