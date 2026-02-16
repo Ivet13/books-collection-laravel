@@ -95,3 +95,23 @@ Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('custome
 Route::middleware('auth:customer')->group(function () {
     Route::get('/my/books', [CustomerCollectionController::class, 'index'])->name('customer.collection');
 });
+
+
+Route::get('/login', [CustomerAuthController::class, 'showLogin'])->name('login');
+
+
+Route::get('/', fn() => view('public.home'))->name('home');
+
+// Auth customers
+Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('customer.register');
+Route::post('/register', [CustomerAuthController::class, 'register'])->name('customer.register.store');
+
+Route::get('/login', [CustomerAuthController::class, 'showLogin'])->name('customer.login');
+Route::post('/login', [CustomerAuthController::class, 'login'])->name('customer.login.store');
+
+Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout');
+
+// Área privada customer
+Route::middleware('auth:customer')->group(function () {
+    Route::get('/my/books', [CustomerCollectionController::class, 'index'])->name('customer.collection');
+});
