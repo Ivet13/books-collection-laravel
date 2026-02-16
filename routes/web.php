@@ -19,10 +19,7 @@ use App\Http\Controllers\CustomerCollectionController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', fn() => view('public.home'))->name('home');
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +63,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:customer')->group(function () {
 
     Route::post(
         '/books/{book}/collection',
@@ -77,10 +74,12 @@ Route::middleware('auth')->group(function () {
         '/books/{book}/collection',
         [BookCustomerController::class, 'destroy']
     )->name('books.collection.destroy');
+
+    // Área privada customer
+    Route::get('/home', [CustomerCollectionController::class, 'index'])->name('customer.collection');
+    //Route::get('/home', [BookCustomerController::class, 'index'])->name('customer.collection');
 });
 
-
-Route::get('/', fn() => view('public.home'))->name('home');
 
 // Auth customers
 Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('customer.register');
@@ -90,9 +89,3 @@ Route::get('/login', [CustomerAuthController::class, 'showLogin'])->name('custom
 Route::post('/login', [CustomerAuthController::class, 'login'])->name('customer.login.store');
 
 Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout');
-
-// Área privada customer
-Route::middleware('auth:customer')->group(function () {
-    Route::get('/home', [CustomerCollectionController::class, 'index'])->name('customer.collection');
-    //Route::get('/home', [BookCustomerController::class, 'index'])->name('customer.collection');
-});
