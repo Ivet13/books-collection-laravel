@@ -9,7 +9,7 @@ class BookCustomerController extends Controller
 {
     public function store(Request $request, Book $book)
     {
-        $customer = auth()->user();
+        $customer = auth('customer')->user();
         // o auth('customer')->user() si usas guard separado
 
         $data = $request->validate([
@@ -33,7 +33,7 @@ class BookCustomerController extends Controller
 
     public function destroy(Book $book)
     {
-        $customer = auth()->user();
+        $customer = auth('customer')->user();
 
         $customer->books()->detach($book->id);
 
