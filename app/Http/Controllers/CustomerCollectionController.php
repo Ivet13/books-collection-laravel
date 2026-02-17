@@ -10,6 +10,10 @@ class CustomerCollectionController extends Controller
     {
         $customer = auth('customer')->user();
 
+        if (!$customer) {
+            abort(401, 'Unauthorized');
+        }
+
         $request->validate([
             'status' => 'nullable|in:wishlist,reading,read',
             'favorite' => 'nullable|in:0,1',

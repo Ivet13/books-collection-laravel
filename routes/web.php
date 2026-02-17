@@ -1,25 +1,62 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\BookController;
-use App\Http\Controllers\Admin\AuthorController;
-use App\Http\Controllers\Admin\GenreController;
-use App\Http\Controllers\Admin\PublisherController;
-
-use App\Http\Controllers\BookCustomerController;
-
-use App\Http\Controllers\CustomerAuthController;
-use App\Http\Controllers\CustomerCollectionController;
+use App\Http\Controllers\Admin\{
+    UserController,
+    BookController,
+    AuthorController,
+    GenreController,
+    PublisherController
+};
+use App\Http\Controllers\{
+    BookCustomerController,
+    CustomerAuthController,
+    CustomerCollectionController
+};
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Public Routes
 |--------------------------------------------------------------------------
 */
 
 Route::get('/', fn() => view('public.home'))->name('home');
+
+/*
+|--------------------------------------------------------------------------
+| Customer Authentication Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('')->name('customer.')->group(function () {
+    // Registration
+    Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [CustomerAuthController::class, 'register'])->name('register.store');
+
+    // Login
+    Route::get('/login', [CustomerAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [CustomerAuthController::class, 'login'])->name('login.store');
+
+    // Logout
+    Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Customer Protected Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth:customer')->prefix('')->name('')->group(function () {
+    // Customer collection/mi-coleccion
+    Route::get('/mi-coleccion', [CustomerCollectionController::class, 'index'])->name('customer.collection');
+
+    // Book collection management
+    Route::post('/books/{book}/collection', [BookCustomerController::class, 'store'])
+        ->name('books.collection.store');
+    Route::delete('/books/{book}/collection', [BookCustomerController::class, 'destroy'])
+        ->name('books.collection.destroy');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -28,12 +65,9 @@ Route::get('/', fn() => view('public.home'))->name('home');
 */
 
 Route::prefix('admin')->name('admin.')->group(function () {
-
-    // Usuarios
+    // Users
     Route::resource('usuarios', UserController::class, [
-        'parameters' => [
-            'usuarios' => 'user',
-        ],
+        'parameters' => ['usuarios' => 'user'],
         'names' => [
             'index' => 'users',
             'create' => 'users_create',
@@ -55,37 +89,3 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Publishers
     Route::resource('publishers', PublisherController::class);
 });
-
-
-/*
-|--------------------------------------------------------------------------
-| Customer Collection (book_customer)
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware('auth:customer')->group(function () {
-
-    Route::post(
-        '/books/{book}/collection',
-        [BookCustomerController::class, 'store']
-    )->name('books.collection.store');
-
-    Route::delete(
-        '/books/{book}/collection',
-        [BookCustomerController::class, 'destroy']
-    )->name('books.collection.destroy');
-
-    // Área privada customer
-    Route::get('/home', [CustomerCollectionController::class, 'index'])->name('customer.collection');
-    //Route::get('/home', [BookCustomerController::class, 'index'])->name('customer.collection');
-});
-
-
-// Auth customers
-Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('customer.register');
-Route::post('/register', [CustomerAuthController::class, 'register'])->name('customer.register.store');
-
-Route::get('/login', [CustomerAuthController::class, 'showLogin'])->name('customer.login');
-Route::post('/login', [CustomerAuthController::class, 'login'])->name('customer.login.store');
-
-Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout');
