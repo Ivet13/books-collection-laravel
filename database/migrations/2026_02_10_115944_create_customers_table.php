@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('about')->nullable();
             $table->timestamp('deactivated_at')->nullable();
             $table->timestamps(); // created_at + updated_at
+            $table->rememberToken();
         });
     }
 

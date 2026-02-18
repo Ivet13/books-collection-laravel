@@ -23,7 +23,9 @@ class PublisherController extends Controller
             return response()->view('admin.publishers.partials.list', compact('records'));
         }
 
-        return view('admin.publishers.index', compact('records'));
+        return view('admin.publishers.index', [
+            'records' => $records,
+        ]);
     }
 
     public function show(Publisher $publisher)
@@ -54,7 +56,9 @@ class PublisherController extends Controller
     }
     public function edit(Publisher $publisher)
     {
-        return view('admin.publishers.edit', compact('publisher'));
+        return view('admin.publishers.edit', [
+            'publisher' => $publisher,
+        ]);
     }
 
     public function update(Request $request, Publisher $publisher)

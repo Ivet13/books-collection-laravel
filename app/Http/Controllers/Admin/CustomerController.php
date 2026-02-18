@@ -12,7 +12,9 @@ class CustomerController extends Controller
     {
         $records = Customer::orderBy('created_at', 'desc')->get();
 
-        return view('admin.customers.index', compact('records'));
+        return view('admin.customers.index', [
+            'records' => $records,
+        ]);
     }
 
     public function create()
@@ -39,7 +41,9 @@ class CustomerController extends Controller
 
     public function edit(Customer $customer)
     {
-        return view('admin.customers.edit', compact('customer'));
+        return view('admin.customers.edit', [
+            'customer' => $customer,
+        ]);
     }
 
     public function update(Request $request, Customer $customer)

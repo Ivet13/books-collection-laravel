@@ -24,7 +24,9 @@ class GenreController extends Controller
             return response()->view('admin.genres.partials.list', compact('records'));
         }
 
-        return view('admin.genres.index', compact('records'));
+        return view('admin.genres.index', [
+            'records' => $records,
+        ]);
     }
 
     public function show(Genre $genre)
@@ -56,7 +58,9 @@ class GenreController extends Controller
 
     public function edit(Genre $genre)
     {
-        return view('admin.genres.edit', compact('genre'));
+        return view('admin.genres.edit', [
+            'genre' => $genre,
+        ]);
     }
 
     public function update(Request $request, Genre $genre)

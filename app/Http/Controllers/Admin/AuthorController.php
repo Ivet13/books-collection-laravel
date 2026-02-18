@@ -23,7 +23,9 @@ class AuthorController extends Controller
             return response()->view('admin.authors.partials.list', compact('records'));
         }
 
-        return view('admin.authors.index', compact('records'));
+        return view('admin.authors.index', [
+            'records' => $records,
+        ]);
     }
 
     public function show(Author $author)
@@ -57,7 +59,9 @@ class AuthorController extends Controller
 
     public function edit(Author $author)
     {
-        return view('admin.authors.edit', compact('author'));
+        return view('admin.authors.edit', [
+            'author' => $author,
+        ]);
     }
 
     public function update(Request $request, Author $author)

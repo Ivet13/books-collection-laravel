@@ -10,10 +10,6 @@ class CustomerCollectionController extends Controller
     {
         $customer = auth('customer')->user();
 
-        if (!$customer) {
-            abort(401, 'Unauthorized');
-        }
-
         $request->validate([
             'status' => 'nullable|in:wishlist,reading,read',
             'favorite' => 'nullable|in:0,1',
@@ -43,6 +39,9 @@ class CustomerCollectionController extends Controller
 
         $books = $booksQuery->paginate(10)->withQueryString();
 
-        return view('public.collection.index', compact('books', 'customer'));
+        return view('public.collection.index', [
+            'books' => $books,
+            'customer' => $customer,
+        ]);
     }
 }

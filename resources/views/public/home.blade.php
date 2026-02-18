@@ -3,7 +3,7 @@
         Home
     </x-slot>
 
-    <h1>Bienvenida a Books Collection</h1>
+    <h1>Bienvenid@ a Books Collection</h1>
 
     @if (auth('customer')->check())
         <p>Hola {{ auth('customer')->user()->name }} 👋</p>

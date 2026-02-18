@@ -64,7 +64,12 @@ class BookController extends Controller
             return response()->view('admin.books.index', compact('records', 'authors', 'genres', 'publishers'));
         }
 
-        return view('admin.books.index', compact('records', 'authors', 'genres', 'publishers'));
+        return view('admin.books.index', [
+            'records' => $records,
+            'authors' => $authors,
+            'genres' => $genres,
+            'publishers' => $publishers,
+        ]);
     }
 
 
@@ -94,7 +99,11 @@ class BookController extends Controller
         $genres = \App\Models\Genre::orderBy('name')->get();
         $publishers = \App\Models\Publisher::orderBy('name')->get();
 
-        return view('admin.books.create', compact('authors', 'genres', 'publishers'));
+        return view('admin.books.create', [
+            'authors' => $authors,
+            'genres' => $genres,
+            'publishers' => $publishers,
+        ]);
     }
 
     public function store(Request $request)
@@ -112,7 +121,9 @@ class BookController extends Controller
 
     public function edit(Book $book)
     {
-        return view('admin.books.edit', compact('book'));
+        return view('admin.books.edit', [
+            'book' => $book,
+        ]);
     }
 
     public function update(Request $request, Book $book)
