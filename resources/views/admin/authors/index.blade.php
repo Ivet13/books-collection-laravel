@@ -1,51 +1,60 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout title="Autores | Admin">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <div class="authors-page">
         <aside class="authors-left">
-            @include('admin.authors.partials.filter')
+            {{-- We might need a specific filter for authors, or use the generic one if it fits. 
+                 The legacy view included 'admin.authors.partials.filter'. 
+                 Assuming we might need to migrate that too or if the generic one works.
+                 For now, I'll use a placeholder or check if generic filter works. 
+                 The generic filter has slots for authors, genres, publishers. 
+                 On authors page, we probably filter by name (q).
+            --}}
+            {{-- @todo: Create/Use author specific filter if needed. For now using a simple form or checking if generic filter can be adapted. 
+                 The generic filter expects $authors, $genres, $publishers which might not be present here.
+                 I will create a simple search form here to match legacy functionality or import if available.
+            --}}
+            <form class="js-filter-form" method="GET" action="{{ route('admin.authors.index') }}">
+                <div class="search-box">
+                    <input type="text" name="q" placeholder="Buscar autor..." value="{{ request('q') }}">
+                    <button type="submit">Buscar</button>
+                </div>
+            </form>
 
-            {{-- lista + paginación (en carga normal también) --}}
-            @include('admin.authors.partials.list', ['records' => $records])
+            {{-- lista + paginación --}}
+            <div class="js-list">
+                @forelse ($records as $record)
+                    <x-author-item :author="$record" />
+                @empty
+                    <p>No hay autores.</p>
+                @endforelse
+
+                <div class="js-pagination">
+                    {{ $records->links() }}
+                </div>
+            </div>
         </aside>
 
         <main class="authors-right">
-            <form class="js-author-form" method="POST" action="{{ route('admin.authors.store') }}"
-                data-store-url="{{ route('admin.authors.store') }}" data-show-url-base="{{ url('/admin/authors') }}">
-                @csrf
-
-                <input type="hidden" id="author_id" value="">
-                <input type="hidden" id="method" value="POST">
-
-                <div class="buttons">
-                    <button type="submit" title="Guardar"><x-icon.content-save /></button>
-                    <button type="button" class="js-author-reset" title="Limpiar"><x-icon.broom /></button>
-                    <button type="button" class="delete-btn" style="display:none;"
-                        title="Eliminar"><x-icon.delete /></button>
-                </div>
-
-                <div class="js-errors" style="color:red; margin:8px 0;"></div>
-
-                <div class="form-fields">
-                    <div>
-                        <label for="name">Nombre</label>
-                        <input id="name" name="name" type="text" placeholder="Ursula K. Le Guin">
-                    </div>
-
-                    <div style="width:100%;">
-                        <label for="bio">Bio</label>
-                        <textarea id="bio" name="bio" placeholder="..."></textarea>
-                    </div>
-                </div>
-
-                {{-- meta info (opcional) --}}
-                <section style="margin-top:12px;">
-                    <strong>Libros:</strong>
-                    <div id="meta-books">—</div>
-                </section>
-            </form>
+            <x-author-form />
         </main>
     </div>
-@endsection
+
+    @push('scripts')
+        <style>
+            .authors-page {
+                display: grid;
+                grid-template-columns: 1fr 420px;
+                gap: 16px;
+            }
+
+            .edit-tab {
+                cursor: pointer;
+            }
+
+            .edit-tab.selected {
+                outline: 2px solid blue;
+            }
+        </style>
+    @endpush
+</x-app-layout>
