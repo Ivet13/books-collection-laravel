@@ -36,15 +36,22 @@ document.addEventListener("DOMContentLoaded", () => {
     genres: root.querySelector("#meta-genres"),
   };
 
-  const headers = () => ({
+  // --- Headers separados: JSON vs HTML ---
+  const jsonHeaders = () => ({
+    "X-Requested-With": "XMLHttpRequest",
     "X-CSRF-TOKEN": csrf,
     "Accept": "application/json",
+  });
+
+  const htmlHeaders = () => ({
+    "X-Requested-With": "XMLHttpRequest",
+    "Accept": "text/html",
   });
 
   function setErrors(msgs = []) {
     if (!errorsEl) return;
     errorsEl.innerHTML = msgs.length
-      ? `<ul>${msgs.map(m => `<li>${m}</li>`).join("")}</ul>`
+      ? `<ul>${msgs.map(m => `<li>${escapeHtml(m)}</li>`).join("")}</ul>`
       : "";
   }
 
@@ -59,11 +66,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function enterCreateMode() {
     form.action = storeUrl;
-    fields.book_id.value = "";
-    fields.method.value = "POST";
-    fields.title.value = "";
-    fields.isbn.value = "";
-    fields.description.value = "";
+    if (fields.book_id) fields.book_id.value = "";
+    if (fields.method) fields.method.value = "POST";
+    if (fields.title) fields.title.value = "";
+    if (fields.isbn) fields.isbn.value = "";
+    if (fields.description) fields.description.value = "";
+
     setDeleteVisible(false);
     setErrors([]);
 
@@ -88,26 +96,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const authors = (data.authors || []).map(a => a.name).filter(Boolean);
     const genres = (data.genres || []).map(g => g.name).filter(Boolean);
 
-    if (meta.authors) meta.authors.innerHTML = authors.length
-      ? authors.map(n => `<div><strong>${escapeHtml(n)}</strong></div>`).join("")
-      : "<em>Sin autores</em>";
+    if (meta.authors) {
+      meta.authors.innerHTML = authors.length
+        ? authors.map(n => `<div><strong>${escapeHtml(n)}</strong></div>`).join("")
+        : "<em>Sin autores</em>";
+    }
 
-    if (meta.publisher) meta.publisher.textContent =
-      data.publisher?.name || "Sin editorial";
+    if (meta.publisher) meta.publisher.textContent = data.publisher?.name || "Sin editorial";
+    if (meta.year) meta.year.textContent = data.published_year ?? "-";
 
-    if (meta.year) meta.year.textContent =
-      data.published_year ?? "-";
-
-    if (meta.genres) meta.genres.innerHTML = genres.length
-      ? genres.map(n => `<div><strong>${escapeHtml(n)}</strong></div>`).join("")
-      : "<em>Sin genres</em>";
+    if (meta.genres) {
+      meta.genres.innerHTML = genres.length
+        ? genres.map(n => `<div><strong>${escapeHtml(n)}</strong></div>`).join("")
+        : "<em>Sin géneros</em>";
+    }
   }
 
   async function loadBook(id, tabEl) {
+    if (!id) return;
     setErrors([]);
+
     const url = `${showBase}/${id}`;
 
-    const res = await fetch(url, { headers: headers() });
+    const res = await fetch(url, { headers: jsonHeaders() });
     if (!res.ok) {
       setErrors([`No se pudo cargar el libro (HTTP ${res.status}).`]);
       return;
@@ -115,13 +126,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const data = await res.json();
 
-    fields.book_id.value = data.id;
-    fields.title.value = data.title || "";
-    fields.isbn.value = data.isbn || "";
-    fields.description.value = data.description || "";
+    if (fields.book_id) fields.book_id.value = data.id;
+    if (fields.title) fields.title.value = data.title || "";
+    if (fields.isbn) fields.isbn.value = data.isbn || "";
+    if (fields.description) fields.description.value = data.description || "";
 
     form.action = url;
-    fields.method.value = "PUT";
+    if (fields.method) fields.method.value = "PUT";
     setDeleteVisible(true);
 
     renderMeta(data);
@@ -130,69 +141,13 @@ document.addEventListener("DOMContentLoaded", () => {
     tabEl?.classList.add("selected");
   }
 
-  async function saveBook() {
-    setErrors([]);
-
-    const data = new FormData(form);
-    data.set("_method", fields.method.value);
-
-    const res = await fetch(form.action, {
-      method: "POST",
-      headers: headers(),
-      body: data,
-    });
-
-    if (res.status === 422) {
-      const json = await res.json().catch(() => null);
-      const msgs = json?.errors ? Object.values(json.errors).flat() : ["Error de validación."];
-      setErrors(msgs);
-      return;
-    }
-
-    if (!res.ok) {
-      setErrors([`Error guardando (HTTP ${res.status}).`]);
-      return;
-    }
-
-    const json = await res.json();
-    await refreshList();
-    await loadBook(json.id);
+  function currentListUrl() {
+    // Si tienes filtros en la URL, esto mantiene page, q, author_id, etc.
+    return window.location.href;
   }
 
-  async function deleteBook() {
-    if (!fields.book_id.value) return;
-    if (!confirm("¿Eliminar este libro?")) return;
-
-    setErrors([]);
-
-    const data = new FormData();
-    data.set("_token", form.querySelector('input[name="_token"]')?.value || "");
-    data.set("_method", "DELETE");
-
-    const url = `${showBase}/${fields.book_id.value}`;
-
-    const res = await fetch(url, {
-      method: "POST",
-      headers: headers(),
-      body: data,
-    });
-
-    if (!res.ok) {
-      setErrors([`Error eliminando (HTTP ${res.status}).`]);
-      return;
-    }
-
-    await refreshList();
-    enterCreateMode();
-  }
-
-  async function refreshList(url = window.location.href) {
-    const res = await fetch(url, {
-      headers: {
-        "X-Requested-With": "XMLHttpRequest",
-        "Accept": "text/html",
-      },
-    });
+  async function refreshList(url = currentListUrl()) {
+    const res = await fetch(url, { headers: htmlHeaders() });
 
     if (!res.ok) {
       setErrors([`No se pudo refrescar la lista (HTTP ${res.status}).`]);
@@ -209,44 +164,115 @@ document.addEventListener("DOMContentLoaded", () => {
     if (newList) listEl.innerHTML = newList.innerHTML;
     if (newPagination && paginationEl) paginationEl.innerHTML = newPagination.innerHTML;
 
-    bindListClicks();
-    bindPaginationClicks();
-
+    // Mantén la URL sincronizada (muy útil para back/refresh)
     window.history.pushState({}, "", url);
   }
 
-  function bindListClicks() {
-    root.querySelectorAll(".edit-tab").forEach(tab => {
-      tab.addEventListener("click", () => loadBook(tab.dataset.id, tab));
+  async function saveBook() {
+    setErrors([]);
+
+    const data = new FormData(form);
+    data.set("_method", fields.method.value);
+
+    const res = await fetch(form.action, {
+      method: "POST",
+      headers: {
+        "X-CSRF-TOKEN": csrf,
+        "X-Requested-With": "XMLHttpRequest",
+        "Accept": "text/html",
+      },
+      body: data,
     });
+
+    if (res.status === 422) {
+      const json = await res.json().catch(() => null);
+      const msgs = json?.errors ? Object.values(json.errors).flat() : ["Error de validación."];
+      setErrors(msgs);
+      return;
+    }
+
+    if (!res.ok) {
+      setErrors([`Error guardando (HTTP ${res.status}).`]);
+      return;
+    }
+
+    const html = await res.text();
+
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+
+    const newList = tmp.querySelector(".js-list");
+    const newPagination = tmp.querySelector(".js-pagination");
+
+    if (newList) listEl.innerHTML = newList.innerHTML;
+    if (newPagination && paginationEl) paginationEl.innerHTML = newPagination.innerHTML;
   }
 
-  function bindPaginationClicks() {
-    if (!paginationEl) return;
-    paginationEl.querySelectorAll("a").forEach(a => {
-      a.addEventListener("click", (e) => {
-        e.preventDefault();
-        refreshList(a.href);
-      });
+  async function deleteBook() {
+    const id = fields.book_id?.value;
+    if (!id) return;
+    if (!confirm("¿Eliminar este libro?")) return;
+
+    setErrors([]);
+
+    const data = new FormData();
+    data.set("_token", form.querySelector('input[name="_token"]')?.value || "");
+    data.set("_method", "DELETE");
+
+    const url = `${showBase}/${id}`;
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: jsonHeaders(),
+      body: data,
     });
+
+    if (!res.ok) {
+      setErrors([`Error eliminando (HTTP ${res.status}).`]);
+      return;
+    }
+
+    await refreshList();
+    enterCreateMode();
   }
 
-  // Eventos
+  // --- EVENT DELEGATION (clave para que no se rompa al refrescar DOM) ---
+
+  // Click en item de lista
+  root.addEventListener("click", (e) => {
+    const tab = e.target.closest(".edit-tab");
+    if (!tab || !root.contains(tab)) return;
+    const id = tab.dataset.id;
+    loadBook(id, tab);
+  });
+
+  // Click en paginación (solo dentro del contenedor)
+  root.addEventListener("click", (e) => {
+    const a = e.target.closest(".js-pagination a");
+    if (!a) return;
+    e.preventDefault();
+    refreshList(a.href);
+  });
+
+  // Submit del form (guardar)
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     saveBook();
   });
 
-  // Si sigues usando type="reset", vale; si no, quita esto.
+  // Reset del form (modo crear)
   form.addEventListener("reset", () => {
     setTimeout(enterCreateMode, 0);
   });
 
+  // Delete
   deleteBtn?.addEventListener("click", deleteBook);
 
+  // Filtros
   filterForm?.addEventListener("submit", (e) => {
     e.preventDefault();
-    const url = `${filterForm.action}?${new URLSearchParams(new FormData(filterForm)).toString()}`;
+    const qs = new URLSearchParams(new FormData(filterForm)).toString();
+    const url = qs ? `${filterForm.action}?${qs}` : filterForm.action;
     refreshList(url);
   });
 
@@ -256,8 +282,11 @@ document.addEventListener("DOMContentLoaded", () => {
     refreshList(filterForm.action);
   });
 
+  // Si el usuario da atrás/adelante en el navegador, recarga listado acorde
+  window.addEventListener("popstate", () => {
+    refreshList(window.location.href);
+  });
+
   // Init
-  bindListClicks();
-  bindPaginationClicks();
   enterCreateMode();
 });

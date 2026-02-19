@@ -61,9 +61,10 @@ class BookController extends Controller
         $publishers = \App\Models\Publisher::orderBy('name')->get();
 
         if ($request->ajax()) {
-            return response()->view('admin.books.index', ['records' => $records, 'authors' => $authors, 'genres' => $genres, 'publishers' => $publishers]);
+            return response()->view('admin.books._list_and_pagination', [
+                'records' => $records,
+            ]);
         }
-
         return view('admin.books.index', [
             'records' => $records,
             'authors' => $authors,
@@ -93,7 +94,7 @@ class BookController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $authors = \App\Models\Author::orderBy('name')->get();
         $genres = \App\Models\Genre::orderBy('name')->get();
@@ -116,6 +117,28 @@ class BookController extends Controller
 
         $book = Book::create($data);
 
+        if ($request->ajax()) {
+            $query = Book::query()
+                ->with('authors')
+                ->with(['bookPublisher.publisher'])
+                ->with('genres');
+
+            // reaplica filtros igual que en index (ideal: extraer a un método)
+            if ($request->filled('q')) {
+                $q = $request->string('q')->toString();
+                $query->where(
+                    fn($sub) =>
+                    $sub->where('title', 'like', "%{$q}%")->orWhere('isbn', 'like', "%{$q}%")
+                );
+            }
+
+            // ... author_id, genre_id, publisher_id igual ...
+
+            $records = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+            return response()->json(['id' => $book->id]);
+        }
+
+
         return response()->json(['id' => $book->id], 201);
     }
 
@@ -135,6 +158,19 @@ class BookController extends Controller
         ]);
 
         $book->update($data);
+        if ($request->ajax()) {
+            $records = Book::query()
+                ->with('authors')
+                ->with(['bookPublisher.publisher'])
+                ->with('genres')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10)
+                ->withQueryString();
+
+            return response()->view('admin.books._list_and_pagination', [
+                'records' => $records
+            ]);
+        }
 
         return response()->json(['id' => $book->id]);
     }

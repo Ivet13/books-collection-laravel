@@ -6,24 +6,17 @@
         {{-- COLUMNA IZQUIERDA: lista + filtros + paginación --}}
         <aside class="books-left">
 
+            <div id="books-left-fragment">
+                @include('admin.books._list_and_pagination', ['records' => $records])
+            </div>
+
             <div class="table-menu">
                 {{-- FILTROS --}}
                 <x-filter :authors="$authors" :genres="$genres" :publishers="$publishers" />
 
-                {{-- PAGINACIÓN --}}
-                <div class="js-pagination">
-                    {{ $records->links() }}
-                </div>
             </div>
 
-            {{-- LISTA --}}
-            <div class="js-list">
-                @forelse ($records as $record)
-                    <x-book-item :book="$record" />
-                @empty
-                    <p>No hay libros con esos filtros.</p>
-                @endforelse
-            </div>
+
         </aside>
 
         {{-- COLUMNA DERECHA: panel (form + meta) --}}
