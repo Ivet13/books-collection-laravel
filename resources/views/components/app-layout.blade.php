@@ -28,7 +28,7 @@
         </ul>
     </nav>
 
-    <main class="content">
+    <main id="app-content" class="content">
         {{ $slot }}
     </main>
     <footer>
