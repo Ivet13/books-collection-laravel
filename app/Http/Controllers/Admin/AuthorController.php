@@ -20,7 +20,7 @@ class AuthorController extends Controller
         $records = $query->orderBy('name')->paginate(10)->withQueryString();
 
         if ($request->ajax()) {
-            return response()->view('admin.authors.partials.list', compact('records'));
+            return response()->view('admin.authors.partials.list', ['records' => $records]);
         }
 
         return view('admin.authors.index', [

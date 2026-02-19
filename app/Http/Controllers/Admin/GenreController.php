@@ -21,7 +21,7 @@ class GenreController extends Controller
         $records = $query->orderBy('name')->paginate(10)->withQueryString();
 
         if ($request->ajax()) {
-            return response()->view('admin.genres.partials.list', compact('records'));
+            return response()->view('admin.genres.partials.list', ['records' => $records]);
         }
 
         return view('admin.genres.index', [

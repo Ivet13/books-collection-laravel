@@ -61,7 +61,7 @@ class BookController extends Controller
         $publishers = \App\Models\Publisher::orderBy('name')->get();
 
         if ($request->ajax()) {
-            return response()->view('admin.books.index', compact('records', 'authors', 'genres', 'publishers'));
+            return response()->view('admin.books.index', ['records' => $records, 'authors' => $authors, 'genres' => $genres, 'publishers' => $publishers]);
         }
 
         return view('admin.books.index', [

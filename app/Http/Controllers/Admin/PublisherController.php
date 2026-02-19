@@ -20,7 +20,7 @@ class PublisherController extends Controller
         $records = $query->orderBy('name')->paginate(10)->withQueryString();
 
         if ($request->ajax()) {
-            return response()->view('admin.publishers.partials.list', compact('records'));
+            return response()->view('admin.publishers.partials.list', ['records' => $records]);
         }
 
         return view('admin.publishers.index', [
