@@ -1,0 +1,94 @@
+/* MENU */
+
+.menu-toggle {
+    background: none;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    padding: .25rem;
+    display: flex;
+    align-items: center;
+}
+
+.menu-toggle .icon {
+    width: 28px;
+    height: 28px;
+}
+
+/* Off-canvas menu */
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: auto;
+    height: 100dvh;
+    width: 280px;
+    background: #333;
+    color: #fff;
+    padding: 80px 16px 16px;
+    /* deja espacio para header */
+    transform: translateX(110%);
+    transition: transform .25s ease;
+    z-index: 1000;
+}
+
+/* Estado abierto */
+body.menu-open .side-menu {
+    transform: translateX(0);
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .45);
+    z-index: 900;
+    opacity: 0;
+    transition: opacity .25s ease;
+}
+
+body.menu-open .overlay {
+    opacity: 1;
+}
+
+/* Lista */
+.side-menu__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.side-menu__list a {
+    display: block;
+    padding: .8rem .6rem;
+    border-radius: .6rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.side-menu__list a:hover {
+    background: rgba(255, 255, 255, .08);
+}
+
+/* Animación hamburguesa -> X */
+.menu-toggle line {
+    transition: transform .25s ease, opacity .2s ease;
+    transform-origin: 50% 50%;
+}
+
+body.menu-open .menu-toggle .l1 {
+    transform: translateY(6px) rotate(-45deg);
+}
+
+body.menu-open .menu-toggle .l2 {
+    opacity: 0;
+}
+
+body.menu-open .menu-toggle .l3 {
+    transform: translateY(-6px) rotate(45deg);
+}
+
+/* Evita scroll del body cuando el menú está abierto */
+body.menu-open {
+    overflow: hidden;
+}

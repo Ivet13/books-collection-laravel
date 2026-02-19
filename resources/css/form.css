@@ -1,0 +1,68 @@
+/* FORM OPTIONS */
+form>.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border-color);
+    flex-wrap: wrap;
+}
+
+/* FORM FIELDS */
+form>.form-fields {
+    display: flex;
+    justify-content: space-between;
+    padding: 2%;
+    flex-wrap: wrap;
+}
+
+form>.form-fields * {
+    display: flex;
+    flex-direction: column;
+    min-width: 45%;
+    padding: 1%;
+    box-sizing: border-box;
+}
+
+/* INPUTS */
+input,
+textarea,
+select {
+    background-color: var(--panel-bg-color);
+    color: var(--main-txt-color);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* ===============================
+   FILTROS
+================================= */
+
+form {
+    background-color: var(--bg-card);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+form input,
+form select {
+    background-color: #1b1b1b;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 8px 10px;
+    border-radius: 6px;
+    min-width: 180px;
+}
+
+form input:focus,
+form select:focus {
+    outline: none;
+    border-color: var(--accent);
+}

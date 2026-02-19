@@ -1,0 +1,8 @@
+footer {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 1rem 0;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}

@@ -1,0 +1,39 @@
+/* BUTTONS */
+main button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    transition-duration: 0.3s;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+}
+
+main button:hover {
+    background-color: var(--accent-hover);
+}
+
+/* Botones */
+button {
+    background-color: var(--accent);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    background-color: var(--accent-hover);
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

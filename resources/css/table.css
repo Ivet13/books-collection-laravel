@@ -1,0 +1,32 @@
+/* TABLE */
+table {
+    border: 2px solid var(--border-color);
+    margin: 1%;
+    width: 100%;
+    max-width: 100%;
+    background-color: var(--panel-bg-color);
+    color: var(--main-txt-color);
+}
+
+/* TABLE MENU */
+.table-menu {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 1vh;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--border-color);
+}
+
+
+
+/* LEFT COLUMN */
+.table-content {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    color: var(--secondary-txt-color);
+    margin: 2%;
+    flex: 1;
+    min-width: 300px;
+}

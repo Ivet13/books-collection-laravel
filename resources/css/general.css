@@ -1,0 +1,107 @@
+/* 🎨 DARK VARIABLES */
+:root {
+    --main-bg-color: #1e1e1e;
+    /* fondo general */
+    --panel-bg-color: #252526;
+    /* paneles */
+    --accent-color: #ff4081;
+    /* rosa ajustado */
+    --accent-hover: #ff79a8;
+    --main-txt-color: #e4e4e4;
+    /* texto principal */
+    --secondary-txt-color: #aaaaaa;
+    /* texto secundario */
+    --border-color: #333;
+}
+
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+}
+
+
+/* ===============================
+   PUBLIC COLLECTION STYLES
+================================= */
+
+:root {
+    --bg-main: #1e1e1e;
+    --bg-card: #252526;
+    --accent: #ff4081;
+    --accent-hover: #ff79a8;
+    --text-main: #e4e4e4;
+    --text-muted: #aaaaaa;
+    --border-color: #333;
+}
+
+/* Layout general */
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Título */
+h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+}
+
+/* MAIN LAYOUT */
+main {
+    background-color: var(--main-bg-color);
+    color: var(--main-txt-color);
+    padding-top: 2vh;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* RIGHT PANEL */
+.main-content {
+    flex-grow: 2;
+    margin: 2%;
+    flex: 2;
+    min-width: 300px;
+    background-color: var(--panel-bg-color);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+
+/* LABELS */
+label {
+    color: var(--main-txt-color);
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+
+/* ICONS */
+span {
+    width: 1.5rem;
+    fill: white;
+    display: block;
+}

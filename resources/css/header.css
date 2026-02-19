@@ -1,0 +1,14 @@
+/* HEADER */
+header {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--accent-color);
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 1%;
+}
+
+header>nav>a {
+    color: var(--main-txt-color);
+}
