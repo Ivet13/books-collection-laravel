@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-admin-layout>
     {{-- CSRF para fetch --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -25,7 +25,7 @@
             </section>
         </main>
     </div>
-</x-app-layout>
+</x-admin-layout>
 
 @push('scripts')
     <style>

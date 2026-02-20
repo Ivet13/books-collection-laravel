@@ -1,4 +1,4 @@
-<x-app-layout title="Editoriales | Admin">
+<x-admin-layout title="Editoriales | Admin">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <div class="publishers-page">
@@ -154,7 +154,7 @@
                         // Llenar form
                         document.getElementById('publisher_id').value = data.id;
                         document.getElementById('method').value =
-                        'PUT'; // para lógica interna si hiciera falta
+                            'PUT'; // para lógica interna si hiciera falta
                         form.name.value = data.name;
                         form.bio.value = data.bio || '';
 
@@ -191,4 +191,4 @@
             });
         </script>
     @endpush
-</x-app-layout>
+</x-admin-layout>

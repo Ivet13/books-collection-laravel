@@ -1,11 +1,11 @@
-@import 'general.css';
-@import 'header.css';
-@import 'footer.css';
-@import 'table.css';
-@import 'form.css';
-@import 'buttons.css';
-@import 'menu.css';
-@import 'pagination.css';
+@import './general.css';
+@import './header.css';
+@import './footer.css';
+@import './table.css';
+@import './form.css';
+@import './buttons.css';
+@import './menu.css';
+@import './pagination.css';
 
 
 /* Responsive */
