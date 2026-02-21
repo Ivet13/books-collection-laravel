@@ -89,16 +89,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 Route::prefix('admin')->name('admin.')->group(function () {
     // Users
-    Route::resource('usuarios', AdminAuthController::class, [
-        'parameters' => ['usuarios' => 'user'],
-        'names' => [
-            'index' => 'users',
-            'create' => 'users_create',
-            'edit' => 'users_edit',
-            'store' => 'users_store',
-            'destroy' => 'users_destroy',
-        ]
-    ]);
+    Route::resource('customers', CustomerController::class);
 
     // Books
     Route::resource('books', BookController::class);

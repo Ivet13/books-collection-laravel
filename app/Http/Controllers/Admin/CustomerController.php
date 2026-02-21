@@ -11,7 +11,8 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $records = Customer::orderBy('created_at', 'desc')->get();
+        $query = Customer::orderBy('created_at', 'desc');
+        $records = $query->paginate(10);
 
         return view('admin.customers.index', [
             'records' => $records,

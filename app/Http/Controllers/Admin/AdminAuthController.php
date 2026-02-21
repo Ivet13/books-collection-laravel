@@ -33,7 +33,7 @@ class AdminAuthController extends Controller
 
         if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->route('admin.users.index');
+            return redirect()->route('admin.customers.index');
         }
 
         return back()->withErrors(['email' => 'Credenciales incorrectas.'])->onlyInput('email');
@@ -47,7 +47,7 @@ class AdminAuthController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
 
-            $view = View::make('admin.users.index')
+            $view = View::make('admin.customers.index')
                 ->with('records', $records);
 
             return $view;
