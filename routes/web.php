@@ -2,16 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
-    UserController,
+    AdminAuthController,
     BookController,
     AuthorController,
     GenreController,
+    CustomerController,
     PublisherController
 };
 use App\Http\Controllers\{
     BookCustomerController,
     CustomerAuthController,
-    CustomerCollectionController
+    CustomerCollectionController,
+    Controller
 };
 
 /*
@@ -28,7 +30,7 @@ Route::get('/', fn() => view('public.home'))->name('home');
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('')->name('customer.')->group(function () {
+Route::prefix('customer')->name('customer.')->group(function () {
     // Registration
     Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [CustomerAuthController::class, 'register'])->name('register.store');
@@ -47,15 +49,15 @@ Route::prefix('')->name('customer.')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth:customer')->prefix('')->name('')->group(function () {
-    // Customer collection/mi-coleccion
-    Route::get('/mi-coleccion', [CustomerCollectionController::class, 'index'])->name('customer.collection');
+Route::middleware('auth:customer')->prefix('customer')->name('customer.')->group(function () {
+    // Customer collection
+    Route::get('/collection', [CustomerCollectionController::class, 'index'])->name('collection');
 
     // Book collection management
-    Route::post('/books/{book}/collection', [BookCustomerController::class, 'store'])
-        ->name('books.collection.store');
-    Route::delete('/books/{book}/collection', [BookCustomerController::class, 'destroy'])
-        ->name('books.collection.destroy');
+    Route::post('/collection/{collectionId}/store', [BookCustomerController::class, 'store'])
+        ->name('collection.store');
+    Route::delete('/collection/{collectionId}/destroy', [BookCustomerController::class, 'destroy'])
+        ->name('collection.destroy');
 });
 
 /*
@@ -64,9 +66,30 @@ Route::middleware('auth:customer')->prefix('')->name('')->group(function () {
 |--------------------------------------------------------------------------
 */
 
+/*
+|--------------------------------------------------------------------------
+| Admin Authentication Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Login
+    Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('login.store');
+
+    // Logout
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Admin Protected Routes
+|--------------------------------------------------------------------------
+*/
+
 Route::prefix('admin')->name('admin.')->group(function () {
     // Users
-    Route::resource('usuarios', UserController::class, [
+    Route::resource('usuarios', AdminAuthController::class, [
         'parameters' => ['usuarios' => 'user'],
         'names' => [
             'index' => 'users',

@@ -1,4 +1,4 @@
-<x-public-layout>
+<x-public.public-layout>
     <x-slot:title>
         Mi colección
     </x-slot>
@@ -28,10 +28,10 @@
     <hr>
 
     @forelse($books as $book)
-        <x-book-card :book="$book" />
+        <x-public.book-card :book="$book" />
     @empty
         <p>No tienes libros en tu colección todavía.</p>
     @endforelse
 
     {{ $books->links() }}
-</x-public-layout>
+</x-public.public-layout>

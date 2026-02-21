@@ -1,4 +1,4 @@
-<x-admin-layout title="Editoriales | Admin">
+<x-admin.admin-layout title="Editoriales | Admin">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <div class="publishers-page">
@@ -13,7 +13,7 @@
             {{-- lista + paginación --}}
             <div class="js-list">
                 @forelse ($records as $record)
-                    <x-publisher-item :publisher="$record" />
+                    <x-admin.publisher-item :publisher="$record" />
                 @empty
                     <p>No hay editoriales.</p>
                 @endforelse
@@ -25,7 +25,7 @@
         </aside>
 
         <main class="publishers-right">
-            <x-publisher-form />
+            <x-admin.publisher-form />
         </main>
     </div>
 
@@ -191,4 +191,4 @@
             });
         </script>
     @endpush
-</x-admin-layout>
+</x-admin.admin-layout>

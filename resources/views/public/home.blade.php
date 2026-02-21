@@ -1,4 +1,4 @@
-<x-public-layout>
+<x-public.public-layout>
     <x-slot:title>
         Home
     </x-slot>
@@ -12,4 +12,4 @@
         <a href="{{ route('customer.login') }}">Login</a>
         <a href="{{ route('customer.register') }}">Registro</a>
     @endif
-</x-public-layout>
+</x-public.public-layout>

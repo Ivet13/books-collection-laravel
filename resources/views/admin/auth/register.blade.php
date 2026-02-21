@@ -1,4 +1,4 @@
-<x-public.public-layout>
+<x-admin.admin-layout>
     <x-slot:title>
         Registro
     </x-slot>
@@ -39,4 +39,4 @@
 
         <button type="submit">Crear cuenta</button>
     </form>
-</x-public.public-layout>
+</x-admin.admin-layout>

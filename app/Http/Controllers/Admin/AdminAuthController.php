@@ -7,10 +7,38 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\UserRequest;
+use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller
+class AdminAuthController extends Controller
 {
     public function __construct(private User $user) {}
+
+    public function showLogin()
+    {
+        return view('admin.auth.login');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        // Opcional: impedir login si está desactivado
+        $admin = User::where('email', $credentials['email'])->first();
+        if ($admin && $admin->deactivated_at) {
+            return back()->withErrors(['email' => 'Cuenta desactivada.']);
+        }
+
+        if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->route('admin.users.index');
+        }
+
+        return back()->withErrors(['email' => 'Credenciales incorrectas.'])->onlyInput('email');
+    }
+
 
     public function index()
     {

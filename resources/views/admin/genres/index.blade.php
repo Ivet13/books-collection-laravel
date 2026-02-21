@@ -1,4 +1,4 @@
-<x-admin-layout title="Géneros | Admin">
+<x-admin.admin-layout title="Géneros | Admin">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <div class="genres-page">
@@ -13,7 +13,7 @@
             {{-- lista + paginación --}}
             <div class="js-list">
                 @forelse ($records as $record)
-                    <x-genre-item :genre="$record" />
+                    <x-admin.genre-item :genre="$record" />
                 @empty
                     <p>No hay géneros.</p>
                 @endforelse
@@ -25,7 +25,7 @@
         </aside>
 
         <main class="genres-right">
-            <x-genre-form />
+            <x-admin.genre-form />
         </main>
     </div>
 
@@ -191,4 +191,4 @@
             });
         </script>
     @endpush
-</x-admin-layout>
+</x-admin.admin-layout>

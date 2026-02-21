@@ -1,4 +1,4 @@
-<x-admin-layout>
+<x-admin.admin-layout>
     {{-- CSRF para fetch --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -12,7 +12,7 @@
 
             <div class="table-menu">
                 {{-- FILTROS --}}
-                <x-filter :authors="$authors" :genres="$genres" :publishers="$publishers" />
+                <x-admin.filter :authors="$authors" :genres="$genres" :publishers="$publishers" />
 
             </div>
 
@@ -22,11 +22,11 @@
         {{-- COLUMNA DERECHA: panel (form + meta) --}}
         <main class="books-right">
             <section class="panel">
-                <x-book-form />
+                <x-admin.book-form />
             </section>
         </main>
     </div>
-</x-admin-layout>
+</x-admin.admin-layout>
 
 @push('scripts')
     <style>

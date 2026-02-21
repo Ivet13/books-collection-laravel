@@ -1,4 +1,4 @@
-<x-admin-layout>
+<x-admin.admin-layout>
     {{-- CSRF para fetch --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -21,11 +21,11 @@
         {{-- COLUMNA DERECHA: panel (form + meta) --}}
         <main class="authors-right">
             <section class="panel">
-                <x-authors-form />
+                <x-admin.author-form />
             </section>
         </main>
     </div>
-</x-admin-layout>
+</x-admin.admin-layout>
 
 @push('scripts')
     <style>

@@ -1,11 +1,11 @@
-<x-public.public-layout>
+<x-admin.admin-layout>
     <x-slot:title>
         Login
     </x-slot>
 
     <h1>Login</h1>
 
-    <form method="POST" action="{{ route('customer.login.store') }}">
+    <form method="POST" action="{{ route('admin.login.store') }}">
         @csrf
 
         <div>
@@ -30,4 +30,4 @@
 
         <button type="submit">Entrar</button>
     </form>
-</x-public.public-layout>
+</x-admin.admin-layout>
