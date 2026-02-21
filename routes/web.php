@@ -24,13 +24,21 @@ use App\Http\Controllers\{
 
 Route::get('/', fn() => view('public.home'))->name('home');
 
+
 /*
+|--------------------------------------------------------------------------
+| Customer Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('customer')->name('customer.')->group(function () {
+
+    /*
 |--------------------------------------------------------------------------
 | Customer Authentication Routes
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('customer')->name('customer.')->group(function () {
     // Registration
     Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [CustomerAuthController::class, 'register'])->name('register.store');
@@ -41,23 +49,23 @@ Route::prefix('customer')->name('customer.')->group(function () {
 
     // Logout
     Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
-});
 
-/*
+    /*
 |--------------------------------------------------------------------------
 | Customer Protected Routes
 |--------------------------------------------------------------------------
 */
+    Route::middleware('auth:customer')->group(function () {
+        // Customer collection
+        Route::get('/collection', [CustomerCollectionController::class, 'index'])->name('collection');
 
-Route::middleware('auth:customer')->prefix('customer')->name('customer.')->group(function () {
-    // Customer collection
-    Route::get('/collection', [CustomerCollectionController::class, 'index'])->name('collection');
+        // Book collection management
+        Route::post('/collection/{book}', [BookCustomerController::class, 'store'])
+            ->name('collection.store');
 
-    // Book collection management
-    Route::post('/collection/{collectionId}/store', [BookCustomerController::class, 'store'])
-        ->name('collection.store');
-    Route::delete('/collection/{collectionId}/destroy', [BookCustomerController::class, 'destroy'])
-        ->name('collection.destroy');
+        Route::delete('/collection/{book}', [BookCustomerController::class, 'destroy'])
+            ->name('collection.destroy');
+    });
 });
 
 /*
@@ -65,41 +73,41 @@ Route::middleware('auth:customer')->prefix('customer')->name('customer.')->group
 | Admin Routes
 |--------------------------------------------------------------------------
 */
-
-/*
+Route::prefix('admin')->name('admin.')->group(function () {
+    /*
 |--------------------------------------------------------------------------
 | Admin Authentication Routes
 |--------------------------------------------------------------------------
 */
-
-Route::prefix('admin')->name('admin.')->group(function () {
     // Login
+    Route::get('/', [AdminAuthController::class, 'showLogin'])->name('login');
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AdminAuthController::class, 'login'])->name('login.store');
 
     // Logout
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
-});
 
-/*
+
+    /*
 |--------------------------------------------------------------------------
 | Admin Protected Routes
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    // Users
-    Route::resource('customers', CustomerController::class);
+    Route::middleware('auth:web')->group(function () {
+        // Users
+        Route::resource('customers', CustomerController::class);
 
-    // Books
-    Route::resource('books', BookController::class);
+        // Books
+        Route::resource('books', BookController::class);
 
-    // Authors
-    Route::resource('authors', AuthorController::class);
+        // Authors
+        Route::resource('authors', AuthorController::class);
 
-    // Genres
-    Route::resource('genres', GenreController::class);
+        // Genres
+        Route::resource('genres', GenreController::class);
 
-    // Publishers
-    Route::resource('publishers', PublisherController::class);
+        // Publishers
+        Route::resource('publishers', PublisherController::class);
+    });
 });

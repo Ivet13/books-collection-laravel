@@ -25,6 +25,7 @@
             @else
                 | <a href="{{ route('customer.login') }}">Login</a>
                 | <a href="{{ route('customer.register') }}">Registro</a>
+                | <a href="{{ route('admin.login') }}">Admin</a>
             @endif
         </nav>
     </header>
