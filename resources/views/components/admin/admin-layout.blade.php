@@ -21,23 +21,25 @@
     </header>
 
     <div class="overlay" id="menuOverlay" hidden></div>
+    @auth('web')
+        {{-- Admin menu --}}
+        <nav class="side-menu" id="sideMenu" aria-hidden="true">
+            <ul class="side-menu__list">
+                <li><a href="{{ route('admin.customers.index') }}">{{ __('admin/titles.customers') }}</a></li>
+                <li><a href="{{ route('admin.books.index') }}">{{ __('admin/titles.books') }}</a></li>
+                <li><a href="{{ route('admin.authors.index') }}">{{ __('admin/titles.authors') }}</a></li>
+                <li><a href="{{ route('admin.genres.index') }}">{{ __('admin/titles.genres') }}</a></li>
+                <li><a href="{{ route('admin.publishers.index') }}">{{ __('admin/titles.publishers') }}</a></li>
 
-    <nav class="side-menu" id="sideMenu" aria-hidden="true">
-        <ul class="side-menu__list">
-            <li><a href="{{ route('admin.customers.index') }}">{{ __('admin/titles.customers') }}</a></li>
-            <li><a href="{{ route('admin.books.index') }}">{{ __('admin/titles.books') }}</a></li>
-            <li><a href="{{ route('admin.authors.index') }}">{{ __('admin/titles.authors') }}</a></li>
-            <li><a href="{{ route('admin.genres.index') }}">{{ __('admin/titles.genres') }}</a></li>
-            <li><a href="{{ route('admin.publishers.index') }}">{{ __('admin/titles.publishers') }}</a></li>
-
-            <li>
-                <form method="POST" action="{{ route('admin.logout') }}" style="display:inline;">
-                    @csrf
-                    <button type="submit">Logout</button>
-                </form>
-            </li>
-        </ul>
-    </nav>
+                <li>
+                    <form method="POST" action="{{ route('admin.logout') }}" style="display:inline;">
+                        @csrf
+                        <button type="submit">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    @endauth
 
     <main id="app-content" class="content">
         {{ $slot }}

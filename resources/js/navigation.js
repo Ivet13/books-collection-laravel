@@ -20,14 +20,13 @@ document.addEventListener("click", async (e) => {
     const html = await res.text();
     const tmp = document.createElement("div");
     tmp.innerHTML = html;
-    console.log(html)
 
     const newContent = tmp.querySelector("#app-content");
     const appContent = document.querySelector("#app-content");
 
     if (newContent && appContent) {
         appContent.innerHTML = newContent.innerHTML;
-        //   window.history.pushState({}, "", url);
+        window.history.pushState({}, "", url);
     } else {
         console.error("No encuentro #app-content en la respuesta");
     }
