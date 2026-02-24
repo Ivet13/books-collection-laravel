@@ -1,8 +1,7 @@
-import './menu';
-import './books';
-import './authors';
-import './genres';
-import './publishers';
-import './navigation';
-//import './formValidate';
+import './bootstrap';
 
+import Alpine from 'alpinejs';
+
+window.Alpine = Alpine;
+
+Alpine.start();

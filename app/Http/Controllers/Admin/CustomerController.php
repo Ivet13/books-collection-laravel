@@ -5,40 +5,54 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\UserRequest;
+use Barryvdh\Debugbar\Facades\Debugbar;
 
 
 class CustomerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $query = Customer::orderBy('created_at', 'desc');
-        $records = $query->paginate(10);
+        $query = Customer::query();
 
+        // Texto libre: title o isbn
+        if ($request->filled('q')) {
+            $q = $request->string('q')->toString();
+
+            $query->where(function ($sub) use ($q) {
+                $sub->where('email', 'like', "%{$q}%")
+                    ->orWhere('name', 'like', "%{$q}%");
+            });
+        }
+
+        // records = paginación (mejor que get)
+        $records = $query
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+
+
+        if ($request->ajax()) {
+            return response()->view('admin.customers._list_and_pagination', [
+                'records' => $records,
+            ]);
+        }
         return view('admin.customers.index', [
             'records' => $records,
         ]);
     }
+
 
     public function create()
     {
         return view('admin.customers.create');
     }
 
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $data = $request->validate([
-            'email' => 'required|email|unique:customers,email',
-            'password' => 'required|min:6',
-            'name' => 'required|string|max:255',
-            'about' => 'nullable|string',
-        ]);
-
-        $data['password'] = bcrypt($data['password']);
-
-        Customer::create($data);
-
-        return redirect()->route('customers.index')
-            ->with('success', 'Customer creado correctamente');
+        echo 'hola';
+        exit();
     }
 
     public function edit(Customer $customer)

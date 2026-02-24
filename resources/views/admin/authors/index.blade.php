@@ -2,7 +2,9 @@
     {{-- CSRF para fetch --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <div class="authors-page">
+    <div class="authors-page" data-list-url="{{ route('admin.authors.index') }}"
+        data-store-url="{{ route('admin.authors.store') }}" data-show-url="{{ url('/admin/authors') }}"
+        data-destroy-url="{{ url('/admin/authors') }}">
         {{-- COLUMNA IZQUIERDA: lista + filtros + paginación --}}
         <aside class="authors-left">
 

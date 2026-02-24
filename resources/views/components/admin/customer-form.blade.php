@@ -1,8 +1,8 @@
-<form class="js-author-form" method="POST" action="{{ route('admin.authors.store') }}"
-    data-store-url="{{ route('admin.authors.store') }}" data-show-url-base="{{ url('/admin/authors') }}">
+<form class="js-customers-form" method="POST" action="{{ route('admin.customers.store') }}"
+    data-store-url="{{ route('admin.customers.store') }}" data-show-url-base="{{ url('/admin/customers') }}">
     @csrf
 
-    <input type="hidden" id="author_id" value="">
+    <input type="hidden" id="customer_id" value="">
     <input type="hidden" id="method" value="POST">
 
     <div class="buttons">

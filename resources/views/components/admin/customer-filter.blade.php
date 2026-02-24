@@ -1,4 +1,4 @@
-<form class="js-filter-form" method="GET" action="{{ route('admin.books.index') }}" style="">
+<form class="js-filter-form" method="GET" action="{{ route('admin.customers.index') }}" style="">
     <button type="submit" title="Aplicar filtros">
         <span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -10,7 +10,7 @@
 
     </button>
 
-    <input type="text" name="q" placeholder="Buscar por título o ISBN" value="{{ request('q') }}">
+    <input type="text" name="q" placeholder="Buscar por nombre o apellido" value="{{ request('q') }}">
 
 
 
