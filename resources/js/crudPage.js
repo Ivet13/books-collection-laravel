@@ -146,6 +146,7 @@ async function fetchJson(url, opts = {}) {
  * @property {(id:string, root:Element)=>string} showUrl - Function returning URL for item JSON (from data attribute)
  * @property {(root:Element)=>string} storeUrl - Function returning URL for POST/PUT (from data attribute)
  * @property {(id:string, root:Element)=>string} destroyUrl - Function returning URL for delete (from data attribute)
+ * @property {(id:string, root:Element)=>string} updateUrl - Function returning URL for update (from data attribute)
  *
  * @property {string} [idFieldSelector] - Hidden input selector for id (default: 'input[name="id"]')
  * @property {string} [methodFieldSelector] - Hidden _method selector (default: 'input[name="_method"]')
@@ -281,6 +282,7 @@ export function initCrudPage(config) {
 
         setSelected(id);
         setFormModeEdit(id);
+        document.getElementsByClassName('delete-btn')[0].classList.remove('hidden');
 
         if (config.onLoadToForm) {
             config.onLoadToForm(data, ctx);
@@ -314,11 +316,36 @@ export function initCrudPage(config) {
 
         clearErrors(form);
 
-        const storeUrl = buildUrl(config.storeUrl(root));
+        const idField = form.querySelector(idFieldSel);
+        const id = idField?.value ? String(idField.value) : '';
+
+        // build FormData (must include _method when updating)
         const fd = config.buildFormData ? config.buildFormData(form, ctx) : new FormData(form);
 
+        // Ensure method override exists when editing
+        if (id) {
+            // If your form already has <input name="_method"> it will be included automatically.
+            // This is a safety net in case it's missing.
+            if (!fd.has('_method')) fd.append('_method', 'PUT');
+        } else {
+            // For create, ensure no stray _method
+            if (fd.has('_method')) fd.set('_method', 'POST');
+        }
+
+        // Choose correct URL
+        let actionUrl = buildUrl(config.storeUrl(root)); // create
+        if (id) {
+            if (typeof config.updateUrl === 'function') {
+                actionUrl = buildUrl(config.updateUrl(id, root));
+            } else {
+                // fallback: RESTful /{id}
+                actionUrl = buildUrl(`${config.storeUrl(root).replace(/\/$/, '')}/${id}`);
+            }
+        }
+
+
         // Ensure CSRF for POST
-        const res = await fetch(storeUrl, {
+        const res = await fetch(actionUrl, {
             method: 'POST',
             headers: { 'X-CSRF-TOKEN': csrf, ...headersJson() },
             credentials: 'same-origin',
@@ -374,6 +401,7 @@ export function initCrudPage(config) {
         if (ctx.selectedId && String(ctx.selectedId) === String(id)) {
             setSelected(null);
             setFormModeCreate();
+            document.getElementsByClassName('delete-btn')[0].classList.add('hidden');
         }
 
         const listUrl = config.listUrl(root);
@@ -388,16 +416,22 @@ export function initCrudPage(config) {
         console.log(editEl)
 
 
-        setDeleteVisible(true);
-
         console.log(config.deleteBtnSelector)
         const delEl = e.target.closest(config.deleteBtnSelector || '[data-action="delete"][data-id]');
         console.log(delEl)
-        function setDeleteVisible(visible) {
-            if (!delEl) return;
-            delEl.style.display = visible ? "inline-block" : "none";
+
+        // Delete buttons
+        if (delEl) {
+            e.preventDefault();
+            // const id = delEl.getAttribute('data-id');
+            const id = form.querySelector('[name="id"]').value;
+            try {
+                await deleteItem(id);
+            } catch (err) {
+                console.error(err);
+            }
+            return;
         }
-        setDeleteVisible(true);
 
         // Delete buttons
         if (delEl) {
@@ -413,6 +447,7 @@ export function initCrudPage(config) {
 
         // Edit click
         if (editEl) {
+            console.log(editEl)
             e.preventDefault();
             const id = editEl.getAttribute('data-id');
             try {
@@ -516,6 +551,7 @@ export function initCrudPage(config) {
             loadItem(id, { push: false }).catch((err) => console.error(err));
         } else {
             setFormModeCreate();
+            document.getElementsByClassName('delete-btn')[0].classList.add('hidden');
         }
     })();
 }

@@ -1,9 +1,10 @@
 <form class="js-author-form" method="POST" action="{{ route('admin.authors.store') }}"
-    data-store-url="{{ route('admin.authors.store') }}" data-show-url-base="{{ url('/admin/authors') }}">
+    data-store-url="{{ route('admin.authors.store') }}" data-show-url-base="{{ url('/admin/authors') }}"
+    data-destroy-url-base="{{ url('/admin/authors') }}">
     @csrf
 
-    <input type="hidden" id="author_id" value="">
-    <input type="hidden" id="method" value="POST">
+    <input type="hidden" id="id" name="id" value="">
+    <input type="hidden" id="method" name="_method" value="POST">
 
     <div class="buttons">
         <button type="submit" title="Guardar">
@@ -12,7 +13,7 @@
         <button type="button" class="js-author-reset" title="Limpiar">
             <x-icon.broom />
         </button>
-        <button type="button" class="delete-btn" style="display:none;" title="Eliminar">
+        <button type="button" class="delete-btn hidden" title="Eliminar">
             <x-icon.delete />
         </button>
     </div>
@@ -37,3 +38,9 @@
         <div id="meta-books">—</div>
     </section>
 </form>
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
