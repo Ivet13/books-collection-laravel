@@ -5,10 +5,7 @@ use Illuminate\Support\Facades\Route;
 require __DIR__ . '/auth.admin.php';
 require __DIR__ . '/auth.customer.php';
 
-
-
 use App\Http\Controllers\Admin\{
-    AdminAuthController,
     BookController,
     AuthorController,
     GenreController,
@@ -17,9 +14,7 @@ use App\Http\Controllers\Admin\{
 };
 use App\Http\Controllers\{
     BookCustomerController,
-    CustomerAuthController,
-    CustomerCollectionController,
-    Controller
+    CustomerCollectionController
 };
 
 /*
@@ -28,25 +23,15 @@ use App\Http\Controllers\{
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('customer')->name('customer.')->group(function () {
+Route::prefix('customer')->name('customer.')->middleware('auth:customer')->group(function () {
 
-    /*
-|--------------------------------------------------------------------------
-| Customer Protected Routes
-|--------------------------------------------------------------------------
-*/
-    Route::middleware('auth:customer')->group(function () {
+    // Customer collection
+    Route::get('/collection', [CustomerCollectionController::class, 'index'])->name('collection');
 
-        // Customer collection
-        Route::get('/collection', [CustomerCollectionController::class, 'index'])->name('collection');
+    // Book collection management
+    Route::post('/collection/{book}', [BookCustomerController::class, 'store'])->name('collection.store');
 
-        // Book collection management
-        Route::post('/collection/{book}', [BookCustomerController::class, 'store'])
-            ->name('collection.store');
-
-        Route::delete('/collection/{book}', [BookCustomerController::class, 'destroy'])
-            ->name('collection.destroy');
-    });
+    Route::delete('/collection/{book}', [BookCustomerController::class, 'destroy'])->name('collection.destroy');
 });
 
 /*
@@ -54,44 +39,24 @@ Route::prefix('customer')->name('customer.')->group(function () {
 | Admin Routes
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'verified'])->group(function () {
+
     Route::get('/dashboard', function () {
         return view('dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    })->name('dashboard');
 
+    // Users
+    Route::resource('customers', CustomerController::class);
 
-    /*
-|--------------------------------------------------------------------------
-| Admin Protected Routes
-|--------------------------------------------------------------------------
-*/
+    // Books
+    Route::resource('books', BookController::class);
 
-    Route::middleware('auth:web')->group(function () {
-        // Users
-        Route::resource('customers', CustomerController::class);
+    // Authors
+    Route::resource('authors', AuthorController::class);
 
-        // Books
-        Route::resource('books', BookController::class);
+    // Genres
+    Route::resource('genres', GenreController::class);
 
-        // Authors
-        Route::resource('authors', AuthorController::class);
-
-        // Genres
-        Route::resource('genres', GenreController::class);
-
-        // Publishers
-        Route::resource('publishers', PublisherController::class);
-    });
+    // Publishers
+    Route::resource('publishers', PublisherController::class);
 });
-
-
-/*
-use App\Http\Controllers\ProfileController;
-
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-*/
