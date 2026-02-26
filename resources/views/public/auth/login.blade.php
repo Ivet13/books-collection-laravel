@@ -3,7 +3,7 @@
         Login
     </x-slot>
 
-    <h1>Login</h1>
+    <h1>Login customer</h1>
 
     <form method="POST" action="{{ route('customer.login.store') }}">
         @csrf

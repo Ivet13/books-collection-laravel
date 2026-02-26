@@ -3,9 +3,9 @@
         Login
     </x-slot>
 
-    <h1>Login</h1>
+    <h1>Login ADMIN</h1>
 
-    <form method="POST" action="{{ route('admin.login.store') }}">
+    <form method="POST" action="{{ route('admin.login') }}">
         @csrf
 
         <div>
