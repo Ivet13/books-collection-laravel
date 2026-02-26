@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'hardcover' => [
+        'token' => env('HARDCOVER_TOKEN'),
+    ],
+
 ];

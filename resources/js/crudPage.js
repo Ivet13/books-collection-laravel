@@ -9,6 +9,8 @@
 //   import { initCrudPage } from './modules/crudPage';
 //   initCrudPage({ rootSelector: '.authors-page', ... });
 
+console.log('crudPage.js loaded');
+
 function defaultGetCsrfToken() {
     const el = document.querySelector('meta[name="csrf-token"]');
     return el ? el.getAttribute('content') : '';
@@ -270,6 +272,7 @@ export function initCrudPage(config) {
     }
 
     async function loadItem(id, { push = true } = {}) {
+        console.log(id)
         if (!id) return;
 
         const url = buildUrl(config.showUrl(String(id), root));

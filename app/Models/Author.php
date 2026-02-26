@@ -16,6 +16,7 @@ class Author extends Model
     protected $fillable = [
         'name',
         'bio',
+        'api_id',
     ];
 
     public function books()

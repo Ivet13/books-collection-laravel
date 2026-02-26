@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->text('bio')->nullable();
+            $table->string('api_id')->nullable();
             $table->timestamps(); // created_at, updated_at
             $table->softDeletes(); // deleted_at
         });
