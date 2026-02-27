@@ -1,4 +1,9 @@
-<x-guest-layout>
+<x-public.public-layout>
+    <x-slot:title>
+        Register
+    </x-slot>
+
+    <h1>Register customer</h1>
     <form method="POST" action="{{ route('customer.register') }}">
         @csrf
 
@@ -49,4 +54,4 @@
             </x-primary-button>
         </div>
     </form>
-</x-guest-layout>
+</x-public.public-layout>

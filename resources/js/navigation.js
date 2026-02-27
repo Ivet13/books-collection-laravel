@@ -1,33 +1,30 @@
-document.addEventListener("click", async (e) => {
-    const link = e.target.closest(".side-menu a");
-    if (!link) return;
+// resources/js/navigation.js
+async function loadCrud(url, { push = true } = {}) {
+    const res = await fetch(url, { headers: { Accept: "application/json" } });
+    if (!res.ok) throw new Error(`Error ${res.status}`);
 
-    e.preventDefault();
+    const data = await res.json(); // { form, table }
+    document.querySelector("#crudForm").innerHTML = data.form ?? "";
+    document.querySelector("#crudTable").innerHTML = data.table ?? "";
 
-    const url = link.href;
-    console.log(url)
-    const res = await fetch(url, {
-        headers: {
-            "Accept": "text/html",
-        },
+    if (push) history.pushState({}, "", url);
+}
+
+function isModifiedClick(e) {
+    return e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0;
+}
+
+export function initNavigation() {
+    document.addEventListener("click", (e) => {
+        const link = e.target.closest(".side-menu a");
+        if (!link) return;
+        if (isModifiedClick(e)) return;
+
+        e.preventDefault();
+        loadCrud(link.href).catch(console.error);
     });
 
-    if (!res.ok) {
-        console.error("Error cargando", res.status);
-        return;
-    }
-
-    const html = await res.text();
-    const tmp = document.createElement("div");
-    tmp.innerHTML = html;
-
-    const newContent = tmp.querySelector("#app-content");
-    const appContent = document.querySelector("#app-content");
-
-    if (newContent && appContent) {
-        appContent.innerHTML = newContent.innerHTML;
-        window.history.pushState({}, "", url);
-    } else {
-        console.error("No encuentro #app-content en la respuesta");
-    }
-});
+    window.addEventListener("popstate", () => {
+        loadCrud(location.href, { push: false }).catch(console.error);
+    });
+}

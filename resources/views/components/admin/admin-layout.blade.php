@@ -42,7 +42,15 @@
     @endauth
 
     <main id="app-content" class="content">
-        {{ $slot }}
+        <div class="crud-shell">
+            <section class="form" id="crudForm">
+                {{ $form ?? '' }}
+            </section>
+
+            <section class="table" id="crudTable">
+                {{ $table ?? '' }}
+            </section>
+        </div>
     </main>
     <footer>
         <p>© {{ date('Y') }} - Un Proyecto hecho con Laravel - &#x2764 </p>

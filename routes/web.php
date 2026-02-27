@@ -17,6 +17,11 @@ use App\Http\Controllers\{
     CustomerCollectionController
 };
 
+// HOME PAGE
+
+Route::get('/', fn() => view('public.home'));
+
+
 /*
 |--------------------------------------------------------------------------
 | Customer Routes
@@ -40,10 +45,6 @@ Route::prefix('customer')->name('customer.')->middleware('auth:customer')->group
 |--------------------------------------------------------------------------
 */
 Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'verified'])->group(function () {
-
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
 
     // Users
     Route::resource('customers', CustomerController::class);

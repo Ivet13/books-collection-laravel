@@ -21,7 +21,15 @@ class AuthorController extends Controller
         $records = $query->orderBy('name')->paginate(10)->withQueryString();
 
         if ($request->ajax()) {
-            return response()->view('admin.authors._list_and_pagination', ['records' => $records]);
+            $formHtml = view('components.admin.author-form')->render();
+
+            $tableHtml = view('admin.authors._list_and_pagination', [
+                'records' => $records,
+            ])->render();
+            return response()->json([
+                'form' => $formHtml,
+                'table' => $tableHtml,
+            ]);
         }
 
         return view('admin.authors.index', [

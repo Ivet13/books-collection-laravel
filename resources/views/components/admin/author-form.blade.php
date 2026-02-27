@@ -1,6 +1,6 @@
 <form class="js-author-form" method="POST" action="{{ route('admin.authors.store') }}"
     data-store-url="{{ route('admin.authors.store') }}" data-show-url-base="{{ url('/admin/authors') }}"
-    data-destroy-url-base="{{ url('/admin/authors') }}">
+    data-update-url-base="{{ url('/admin/authors') }}" data-destroy-url-base="{{ url('/admin/authors') }}">
     @csrf
 
     <input type="hidden" id="id" name="id" value="">
