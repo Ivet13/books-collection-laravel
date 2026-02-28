@@ -8,13 +8,13 @@
 
     <div class="buttons">
         <button type="submit" title="Guardar">
-            <x-icon.content-save />
+            <x-icons.content-save />
         </button>
         <button type="button" class="js-author-reset" title="Limpiar">
-            <x-icon.broom />
+            <x-icons.broom />
         </button>
         <button type="button" class="delete-btn hidden" title="Eliminar">
-            <x-icon.delete />
+            <x-icons.delete />
         </button>
     </div>
 

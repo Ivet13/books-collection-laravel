@@ -14,8 +14,8 @@ export function initCrudTable() {
         const host = document.querySelector("#crudTable");
         if (!host || !host.contains(e.target)) return;
 
-        // EDIT: cualquier elemento con data-id y data-action="edit" (o enlace)
-        const editEl = e.target.closest('[data-action="edit"][data-id], [data-id]');
+        // EDIT: cualquier elemento con data-id
+        const editEl = e.target.closest('[data-id]');
         if (!editEl) return;
 
         // Si clicas en la paginación, no queremos tratarlo como edit:

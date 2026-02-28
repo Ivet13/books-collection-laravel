@@ -16,7 +16,7 @@
     <header class="header">
         <div>{{ __('admin/titles.mainTitle') }} </div>
         <div>
-            <x-icon.menu />
+            <x-icons.menu />
         </div>
     </header>
 
@@ -43,12 +43,14 @@
 
     <main id="app-content" class="content">
         <div class="crud-shell">
-            <section class="form" id="crudForm">
-                {{ $form ?? '' }}
-            </section>
+
 
             <section class="table" id="crudTable">
                 {{ $table ?? '' }}
+            </section>
+
+            <section class="form" id="crudForm">
+                {{ $form ?? '' }}
             </section>
         </div>
     </main>
