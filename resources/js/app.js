@@ -1,4 +1,4 @@
-import './bootstrap';
+
 
 import Alpine from 'alpinejs';
 
@@ -10,10 +10,7 @@ Alpine.start();
 import './menu';
 import './navigation';
 
-import './customers';
-import './genres';
-import './publishers';
-import './books';
+
 
 
 //import './formValidate';
