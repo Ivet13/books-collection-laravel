@@ -19,9 +19,9 @@ function showDeleteButton(form, show) {
     btn.classList.toggle("hidden", !show);
 }
 
-async function refreshCrud() {
+async function refreshCrud(url = location.href) {
     // recarga la URL actual; tu controller debe devolver {form, table} en JSON
-    const res = await fetch(location.href, { headers: { Accept: "application/json" } });
+    const res = await fetch(url, { headers: { Accept: "application/json" } });
     if (!res.ok) throw new Error(`Refresh failed ${res.status}`);
     const data = await res.json();
     document.querySelector("#crudForm").innerHTML = data.form ?? "";
@@ -29,13 +29,14 @@ async function refreshCrud() {
 }
 
 export function initCrudForm() {
+    console.log('initCrudForm')
     // SUBMIT (crear/editar)
     document.addEventListener("submit", async (e) => {
         const host = document.querySelector("#crudForm");
         if (!host || !host.contains(e.target)) return;
 
-        const form = e.target.closest("form.js-author-form, form");
-        if (!form || !form.classList.contains("js-author-form")) return;
+        const form = e.target.closest("form.js-crud-form, form");
+        if (!form || !form.classList.contains("js-crud-form")) return;
 
         e.preventDefault();
         clearErrors(form);
@@ -48,7 +49,7 @@ export function initCrudForm() {
         if (!updateBase) return setGeneralError(form, "Falta data-update-url-base");
 
         const url = id ? `${updateBase.replace(/\/$/, "")}/${id}` : storeUrl;
-
+        console.log(url)
         const fd = new FormData(form);
         // Laravel: siempre POST con _method
         if (id) fd.set("_method", "PUT");
@@ -92,10 +93,10 @@ export function initCrudForm() {
         const host = document.querySelector("#crudForm");
         if (!host || !host.contains(e.target)) return;
 
-        const btn = e.target.closest(".js-author-reset");
+        const btn = e.target.closest(".js-crud-reset");
         if (!btn) return;
 
-        const form = host.querySelector(".js-author-form");
+        const form = host.querySelector(".js-crud-form");
         if (!form) return;
 
         clearErrors(form);
@@ -109,6 +110,32 @@ export function initCrudForm() {
         const meta = form.querySelector("#meta-books");
         if (meta) meta.textContent = "—";
     });
+    /*
+       // RESET FILTER
+       document.addEventListener("click", async (e) => {
+   
+           const btn = e.target.closest(".js-filter-reset");
+           console.log(btn)
+           if (!btn) return;
+   
+           e.preventDefault();
+   
+           const form = btn.closest("form.js-filter-form");
+           if (!form) return;
+   
+           // limpia UI
+           form.reset();
+           const qInput = form.querySelector('input[name="q"]');
+           if (qInput) qInput.value = "";
+   
+           const select = form.querySelector('select[name="author_id"]');
+           if (select) select.value = "";
+   
+           // recarga datos sin querystring
+           await refreshCrud(form.action);
+       });
+   
+   */
 
     // DELETE
     document.addEventListener("click", async (e) => {

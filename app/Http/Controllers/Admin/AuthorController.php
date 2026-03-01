@@ -21,8 +21,9 @@ class AuthorController extends Controller
         $records = $query->orderBy('name')->paginate(10)->withQueryString();
 
         if ($request->expectsJson()) {
-
-            $formHtml = view('components.admin.authors.form')->render();
+            $formHtml = view('components.admin.authors.form', [
+                'author' => null,
+            ])->render();
 
             $tableHtml = view('components.admin.authors.list', [
                 'records' => $records,
@@ -33,22 +34,27 @@ class AuthorController extends Controller
                 'table' => $tableHtml,
             ]);
         }
-
         return view('admin.authors.index', [
             'records' => $records,
         ]);
     }
 
-    public function show(Author $author)
+    public function show(Request $request, Author $author)
     {
-        $author->load(['books:id,title']); // si quieres mostrar libros en meta
+        $author->loadCount('books'); // si quieres meta simple
 
-        return response()->json([
-            'id' => $author->id,
-            'name' => $author->name,
-            'bio' => $author->bio,
-            'books' => $author->books,
-        ]);
+        if ($request->expectsJson()) { {
+                return response()->json([
+                    'id' => $author->id,
+                    'name' => $author->name,
+                    'bio' => $author->bio,
+                    'books_count' => $author->books()->count(), // o loadCount
+                ]);
+            }
+        }
+
+        // si quieres, puedes redirigir o mostrar una vista normal
+        return view('admin.authors.show', compact('author'));
     }
 
     public function create()
