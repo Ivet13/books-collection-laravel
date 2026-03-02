@@ -110,32 +110,7 @@ export function initCrudForm() {
         const meta = form.querySelector("#meta-books");
         if (meta) meta.textContent = "—";
     });
-    /*
-       // RESET FILTER
-       document.addEventListener("click", async (e) => {
-   
-           const btn = e.target.closest(".js-filter-reset");
-           console.log(btn)
-           if (!btn) return;
-   
-           e.preventDefault();
-   
-           const form = btn.closest("form.js-filter-form");
-           if (!form) return;
-   
-           // limpia UI
-           form.reset();
-           const qInput = form.querySelector('input[name="q"]');
-           if (qInput) qInput.value = "";
-   
-           const select = form.querySelector('select[name="author_id"]');
-           if (select) select.value = "";
-   
-           // recarga datos sin querystring
-           await refreshCrud(form.action);
-       });
-   
-   */
+
 
     // DELETE
     document.addEventListener("click", async (e) => {
@@ -145,7 +120,7 @@ export function initCrudForm() {
         const btn = e.target.closest(".delete-btn");
         if (!btn) return;
 
-        const form = host.querySelector(".js-author-form");
+        const form = host.querySelector(".js-crud-form");
         if (!form) return;
 
         const id = form.querySelector('input[name="id"]')?.value?.trim();

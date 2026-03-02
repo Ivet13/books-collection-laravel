@@ -1,4 +1,3 @@
-// resources/js/tableAuthors.js
 function csrf() {
     return document.querySelector('meta[name="csrf-token"]')?.content ?? "";
 }
@@ -64,4 +63,41 @@ export function initCrudTable() {
             console.error("CLICK HANDLER ERROR:", err);
         }
     });
+
+
+    // RESET FILTER
+    document.addEventListener("click", async (e) => {
+
+        const btn = e.target.closest(".js-filter-reset");
+        console.log(btn)
+        if (!btn) return;
+
+        e.preventDefault();
+
+        const form = btn.closest("form.js-filter-form");
+        if (!form) return;
+
+        // limpia UI
+        form.reset();
+        const qInput = form.querySelector('input[name="q"]');
+        if (qInput) qInput.value = "";
+
+        const select = form.querySelector('select[name="author_id"]');
+        if (select) select.value = "";
+
+        // recarga datos sin querystring
+        const showBase = form.dataset.urlBase;
+        if (!showBase) return console.log("no data-show-url-base on form");
+        await refreshCrud(showBase);
+    });
+
+    async function refreshCrud(url = location.href) {
+        // recarga la URL actual; tu controller debe devolver {form, table} en JSON
+        const res = await fetch(url, { headers: { Accept: "application/json" } });
+        if (!res.ok) throw new Error(`Refresh failed ${res.status}`);
+        const data = await res.json();
+        document.querySelector("#crudForm").innerHTML = data.form ?? "";
+        document.querySelector("#crudTable").innerHTML = data.table ?? "";
+    }
+
 }

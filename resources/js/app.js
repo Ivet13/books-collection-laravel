@@ -16,8 +16,8 @@ import './navigation';
 //import './formValidate';
 
 import { initNavigation } from "./navigation"; // tu menu + popstate + pinta crudForm/crudTable
-import { initCrudForm } from "./formAuthors";
-import { initCrudTable } from "./tableAuthors";
+import { initCrudForm } from "./form";
+import { initCrudTable } from "./table";
 
 initNavigation();
 initCrudForm();
