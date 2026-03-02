@@ -8,7 +8,7 @@
           </x-slot:table>
 
           <x-slot:form>
-              <x-admin.authors.form />
+              <x-admin.authors.form :records="$records" />
           </x-slot:form>
 
       </x-admin.admin-layout>

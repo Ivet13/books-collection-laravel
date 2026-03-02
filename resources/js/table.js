@@ -3,7 +3,7 @@ function csrf() {
 }
 
 function showDeleteButton(form, show) {
-    const btn = form.querySelector(".delete-btn");
+    const btn = form.querySelector(".js-crud-delete");
     if (!btn) return;
     btn.classList.toggle("hidden", !show);
 }
@@ -58,6 +58,7 @@ export function initCrudTable() {
             form.querySelector('input[name="_method"]').value = "PUT";
             form.querySelector('[name="name"]').value = data.name ?? "";
             form.querySelector('[name="bio"]').value = data.bio ?? "";
+            showDeleteButton(form, true);
 
         } catch (err) {
             console.error("CLICK HANDLER ERROR:", err);

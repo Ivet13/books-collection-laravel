@@ -14,7 +14,7 @@ function clearErrors(form) {
 }
 
 function showDeleteButton(form, show) {
-    const btn = form.querySelector(".delete-btn");
+    const btn = form.querySelector(".js-crud-delete");
     if (!btn) return;
     btn.classList.toggle("hidden", !show);
 }
@@ -86,6 +86,7 @@ export function initCrudForm() {
         }
 
         await refreshCrud();
+        showDeleteButton(form, true);
     });
 
     // RESET
@@ -117,7 +118,7 @@ export function initCrudForm() {
         const host = document.querySelector("#crudForm");
         if (!host || !host.contains(e.target)) return;
 
-        const btn = e.target.closest(".delete-btn");
+        const btn = e.target.closest(".js-crud-delete");
         if (!btn) return;
 
         const form = host.querySelector(".js-crud-form");
