@@ -1,4 +1,4 @@
-<form class="js-filter-form" method="GET" action="{{ route('admin.authors.index') }}" style="">
+<form class="js-filter-form" method="GET" data-url-base="{{ route('admin.authors.index') }}" style="">
     <button type="submit" title="Aplicar filtros">
         <x-icons.filter-menu />
     </button>
