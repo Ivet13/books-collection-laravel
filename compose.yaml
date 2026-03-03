@@ -52,6 +52,17 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
+    mongodb:
+        image: mongo:7
+        ports:
+            - '${FORWARD_MONGODB_PORT:-27016}:27017'
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: '${MONGO_USERNAME:-root}'
+            MONGO_INITDB_ROOT_PASSWORD: '${MONGO_PASSWORD:-secret}'
+        volumes:
+            - 'sail-mongodb:/data/db'
+        networks:
+            - sail
     redis:
         image: 'redis:alpine'
         ports:
@@ -110,4 +121,6 @@ volumes:
     sail-redis:
         driver: local
     sail-meilisearch:
+        driver: local
+    sail-mongodb:
         driver: local

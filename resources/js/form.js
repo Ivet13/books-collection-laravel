@@ -1,3 +1,17 @@
+import { store } from './redux/store';
+import { updateForm, updateTable, showDeleteModal } from './redux/crud-slice';
+
+const formContainer = document.querySelector('.js-crud-form');
+
+store.subscribe(() => {
+    const currentState = store.getState();
+
+    if (currentState.crud.form && formContainer) {
+        formContainer.innerHTML = currentState.crud.form;
+    }
+});
+
+
 function csrf() {
     return document.querySelector('meta[name="csrf-token"]')?.content ?? "";
 }
@@ -10,7 +24,7 @@ function setGeneralError(form, msg) {
 function clearErrors(form) {
     setGeneralError(form, "");
     form.querySelectorAll(".is-invalid").forEach((el) => el.classList.remove("is-invalid"));
-    // si en el futuro pones mensajes por campo, los borras aquí
+
 }
 
 function showDeleteButton(form, show) {
@@ -20,12 +34,12 @@ function showDeleteButton(form, show) {
 }
 
 async function refreshCrud(url = location.href) {
-    // recarga la URL actual; tu controller debe devolver {form, table} en JSON
+
     const res = await fetch(url, { headers: { Accept: "application/json" } });
     if (!res.ok) throw new Error(`Refresh failed ${res.status}`);
     const data = await res.json();
-    document.querySelector("#crudForm").innerHTML = data.form ?? "";
-    document.querySelector("#crudTable").innerHTML = data.table ?? "";
+    store.dispatch(updateForm(data.form));
+    store.dispatch(updateTable(data.table));
 }
 
 export function initCrudForm() {
@@ -51,7 +65,7 @@ export function initCrudForm() {
         const url = id ? `${updateBase.replace(/\/$/, "")}/${id}` : storeUrl;
         console.log(url)
         const fd = new FormData(form);
-        // Laravel: siempre POST con _method
+
         if (id) fd.set("_method", "PUT");
         else fd.set("_method", "POST");
 
@@ -67,10 +81,10 @@ export function initCrudForm() {
 
         if (res.status === 422) {
             const payload = await res.json().catch(() => ({}));
-            // por ahora: mensaje general, luego lo refinamos por campos
+
             const first = payload?.message || "Validación incorrecta";
             setGeneralError(form, first);
-            // opcional: marcar inputs si payload.errors existe
+
             if (payload?.errors) {
                 for (const [field] of Object.entries(payload.errors)) {
                     const input = form.querySelector(`[name="${CSS.escape(field)}"]`);
@@ -107,7 +121,6 @@ export function initCrudForm() {
         if (method) method.value = "POST";
         showDeleteButton(form, false);
 
-        // opcional: limpia meta
         const meta = form.querySelector("#meta-books");
         if (meta) meta.textContent = "—";
     });

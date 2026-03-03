@@ -50,7 +50,7 @@ export function initCrudTable() {
             const text = await res.text(); // <- clave para ver si te devuelven HTML
             console.log("body preview", text.slice(0, 200));
 
-            // Si esto es JSON, entonces parseamos:
+
             const data = JSON.parse(text);
             console.log("json", data);
 
@@ -78,7 +78,6 @@ export function initCrudTable() {
         const form = btn.closest("form.js-filter-form");
         if (!form) return;
 
-        // limpia UI
         form.reset();
         const qInput = form.querySelector('input[name="q"]');
         if (qInput) qInput.value = "";
@@ -86,14 +85,13 @@ export function initCrudTable() {
         const select = form.querySelector('select[name="author_id"]');
         if (select) select.value = "";
 
-        // recarga datos sin querystring
+
         const showBase = form.dataset.urlBase;
         if (!showBase) return console.log("no data-show-url-base on form");
         await refreshCrud(showBase);
     });
 
     async function refreshCrud(url = location.href) {
-        // recarga la URL actual; tu controller debe devolver {form, table} en JSON
         const res = await fetch(url, { headers: { Accept: "application/json" } });
         if (!res.ok) throw new Error(`Refresh failed ${res.status}`);
         const data = await res.json();
