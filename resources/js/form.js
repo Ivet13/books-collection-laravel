@@ -11,6 +11,17 @@ store.subscribe(() => {
     }
 });
 
+const tableContainer = document.querySelector('#crudTable');
+
+store.subscribe(() => {
+    const currentState = store.getState();
+
+    if (currentState.crud.table && tableContainer) {
+        tableContainer.innerHTML = currentState.crud.table;
+    }
+});
+
+
 
 function csrf() {
     return document.querySelector('meta[name="csrf-token"]')?.content ?? "";
@@ -38,6 +49,7 @@ async function refreshCrud(url = location.href) {
     const res = await fetch(url, { headers: { Accept: "application/json" } });
     if (!res.ok) throw new Error(`Refresh failed ${res.status}`);
     const data = await res.json();
+    console.log(data)
     store.dispatch(updateForm(data.form));
     store.dispatch(updateTable(data.table));
 }
@@ -46,13 +58,16 @@ export function initCrudForm() {
     console.log('initCrudForm')
     // SUBMIT (crear/editar)
     document.addEventListener("submit", async (e) => {
+
+        e.preventDefault();
+
         const host = document.querySelector("#crudForm");
         if (!host || !host.contains(e.target)) return;
 
         const form = e.target.closest("form.js-crud-form, form");
         if (!form || !form.classList.contains("js-crud-form")) return;
 
-        e.preventDefault();
+
         clearErrors(form);
 
         const id = form.querySelector('input[name="id"]')?.value?.trim() || "";
