@@ -1,11 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("menu.js cargado");
 
     const toggle = document.getElementById("menuToggle");
     const menu = document.getElementById("sideMenu");
     const overlay = document.getElementById("menuOverlay");
-
-    console.log({ toggle, menu, overlay });
 
     if (!toggle || !menu || !overlay) return;
 

@@ -41,7 +41,7 @@ class AuthorController extends Controller
 
     public function show(Request $request, Author $author)
     {
-        $author->loadCount('books'); // si quieres meta simple
+        $author->loadCount('books');
 
         if ($request->expectsJson()) { {
                 return response()->json([
@@ -52,14 +52,6 @@ class AuthorController extends Controller
                 ]);
             }
         }
-
-        // si quieres, puedes redirigir o mostrar una vista normal
-        return view('admin.authors.show', compact('author'));
-    }
-
-    public function create()
-    {
-        return view('admin.authors.create');
     }
 
     public function store(Request $request)
@@ -72,13 +64,6 @@ class AuthorController extends Controller
         $author = Author::create($data);
 
         return response()->json(['id' => $author->id], 201);
-    }
-
-    public function edit(Author $author)
-    {
-        return view('admin.authors.edit', [
-            'author' => $author,
-        ]);
     }
 
     public function update(Request $request, Author $author)

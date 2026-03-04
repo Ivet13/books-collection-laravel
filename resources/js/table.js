@@ -1,102 +1,63 @@
-function csrf() {
-    return document.querySelector('meta[name="csrf-token"]')?.content ?? "";
-}
+import { store } from "./redux/store";
+import { updateForm } from "./redux/crud-slice";
 
-function showDeleteButton(form, show) {
-    const btn = form.querySelector(".js-crud-delete");
-    if (!btn) return;
-    btn.classList.toggle("hidden", !show);
-}
-export function initCrudTable() {
-    console.log("initCrudTable: mounted");
+const tableContainer = document.querySelector("#crudTable");
 
-    document.addEventListener("click", async (e) => {
-        const host = document.querySelector("#crudTable");
-        if (!host) return console.log("no #crudTable");
-        if (!host.contains(e.target)) return; // normal: clics fuera
+tableContainer.addEventListener("click", async event => {
 
-        console.log("click inside #crudTable", e.target);
+    if (event.target.closest(".edit-tab")) {
 
-        const editEl = e.target.closest(".edit-tab[data-id]");
-        if (!editEl) return console.log("no .edit-tab[data-id] found");
-
-        const a = e.target.closest("a");
-        if (a) return console.log("clicked link, ignoring", a.href);
-
-        const id = editEl.getAttribute("data-id");
-        console.log("picked id", id);
-
-        const form = document.querySelector("#crudForm .js-crud-form");
-        if (!form) return console.log("no form found");
-
-        const showBase = form.dataset.showUrlBase;
-        if (!showBase) return console.log("no data-show-url-base on form");
-
-        const url = `${showBase.replace(/\/$/, "")}/${id}`;
-        console.log("fetching", url);
+        const editElement = event.target.closest(".edit-tab");
+        const endpoint = editElement.dataset.endpoint;
 
         try {
-            const res = await fetch(url, {
+            const res = await fetch(endpoint, {
                 headers: {
                     Accept: "application/json",
                     "X-Requested-With": "XMLHttpRequest",
-                    "X-CSRF-TOKEN": csrf(),
                 },
                 credentials: "same-origin",
             });
 
-            console.log("response", res.status, res.headers.get("content-type"));
+            const data = await res.json()
 
-            const text = await res.text(); // <- clave para ver si te devuelven HTML
-            console.log("body preview", text.slice(0, 200));
-
-
-            const data = JSON.parse(text);
-            console.log("json", data);
-
-            form.querySelector('input[name="id"]').value = String(id);
-            form.querySelector('input[name="_method"]').value = "PUT";
-            form.querySelector('[name="name"]').value = data.name ?? "";
-            form.querySelector('[name="bio"]').value = data.bio ?? "";
-            showDeleteButton(form, true);
+            store.dispatch(updateForm(data));
 
         } catch (err) {
             console.error("CLICK HANDLER ERROR:", err);
         }
-    });
-
-
-    // RESET FILTER
-    document.addEventListener("click", async (e) => {
-
-        const btn = e.target.closest(".js-filter-reset");
-        console.log(btn)
-        if (!btn) return;
-
-        e.preventDefault();
-
-        const form = btn.closest("form.js-filter-form");
-        if (!form) return;
-
-        form.reset();
-        const qInput = form.querySelector('input[name="q"]');
-        if (qInput) qInput.value = "";
-
-        const select = form.querySelector('select[name="author_id"]');
-        if (select) select.value = "";
-
-
-        const showBase = form.dataset.urlBase;
-        if (!showBase) return console.log("no data-show-url-base on form");
-        await refreshCrud(showBase);
-    });
-
-    async function refreshCrud(url = location.href) {
-        const res = await fetch(url, { headers: { Accept: "application/json" } });
-        if (!res.ok) throw new Error(`Refresh failed ${res.status}`);
-        const data = await res.json();
-        document.querySelector("#crudForm").innerHTML = data.form ?? "";
-        document.querySelector("#crudTable").innerHTML = data.table ?? "";
     }
 
-}
+    if (event.target.closest(".js-filter-reset")) {
+        try {
+            const form = event.target.closest(".js-filter-form");
+            const res = await fetch(form.dataset.urlBase, { headers: { Accept: "application/json" } });
+            if (!res.ok) throw new Error(`Refresh failed ${res.status}`);
+            const data = await res.json();
+
+            tableContainer.innerHTML = data.table;
+        } catch (err) {
+            console.error("CLICK HANDLER ERROR:", err);
+        }
+    }
+
+    if (event.target.closest(".js-filter-submit")) {
+        event.preventDefault();
+
+        try {
+            const form = event.target.closest(".js-filter-form");
+            const formData = new FormData(form);
+            const url = form.dataset.urlBase + "?" + new URLSearchParams(formData);
+
+            const res = await fetch(url, { headers: { Accept: "application/json" } });
+            if (!res.ok) throw new Error(`Refresh failed ${res.status}`);
+            const data = await res.json();
+
+            console.log(data);
+
+            tableContainer.innerHTML = data.table;
+        } catch (err) {
+            console.error("CLICK HANDLER ERROR:", err);
+        }
+    }
+});

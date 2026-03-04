@@ -15,9 +15,4 @@ class Author extends Model
         'bio',
         'api_id',
     ];
-
-    public function books()
-    {
-        return $this->belongsToMany(Book::class, 'book_authors');
-    }
 }

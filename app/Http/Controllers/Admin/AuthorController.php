@@ -13,12 +13,13 @@ class AuthorController extends Controller
     {
         $query = Author::query();
 
-        if ($request->filled('q')) {
-            $q = trim((string) $request->input('q'));
-            $query->where('name', 'like', "%{$q}%");
+        foreach ($request->all() as $key => $value) {
+            if ($request->filled($key) && $key !== 'page' &&  $value !== '' && $key !== 'sort') {
+                $query->where($key, 'like', "%{$value}%");
+            }
         }
 
-        $records = $query->orderBy('name')->paginate(10)->withQueryString();
+        $records = $query->orderBy('name')->paginate(10);
 
         if ($request->expectsJson()) {
             $formHtml = view('components.admin.authors.form', [
@@ -34,6 +35,7 @@ class AuthorController extends Controller
                 'table' => $tableHtml,
             ]);
         }
+
         return view('admin.authors.index', [
             'records' => $records,
         ]);
@@ -41,16 +43,8 @@ class AuthorController extends Controller
 
     public function show(Request $request, Author $author)
     {
-        $author->loadCount('books');
-
-        if ($request->expectsJson()) { {
-                return response()->json([
-                    'id' => $author->id,
-                    'name' => $author->name,
-                    'bio' => $author->bio,
-                    'books_count' => $author->books()->count(), // o loadCount
-                ]);
-            }
+        if ($request->expectsJson()) {
+            return response()->json($author);
         }
     }
 

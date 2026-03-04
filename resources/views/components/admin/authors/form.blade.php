@@ -7,7 +7,7 @@
     <input type="hidden" id="method" name="_method" value="POST">
 
     <div class="buttons">
-        <button type="submit" title="Guardar">
+        <button type="button" class="js-crud-save" title="Guardar">
             <x-icons.content-save />
         </button>
         <button type="button" class="js-crud-reset" title="Limpiar">
