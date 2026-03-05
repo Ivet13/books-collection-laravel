@@ -7,9 +7,9 @@ const form = document.querySelector(".js-crud-form");
 
 formContainer.addEventListener('click', async event => {
 
-
     // CREATE / UPDATE
     if (event.target.closest(".js-crud-save")) {
+        console.log('save')
         clearErrors(form);
 
         const id = form.querySelector('input[name="id"]')?.value?.trim() || "";
@@ -143,7 +143,6 @@ async function refreshCrud(url = location.href) {
     const res = await fetch(url, { headers: { Accept: "application/json" } });
     if (!res.ok) throw new Error(`Refresh failed ${res.status}`);
     const data = await res.json();
-    console.log(data.table);
-    store.dispatch(updateForm(data.form));
+    //store.dispatch(updateForm(data.form));
     store.dispatch(updateTable(data.table));
 }

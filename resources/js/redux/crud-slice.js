@@ -13,9 +13,11 @@ export const crudSlice = createSlice({
     },
     reducers: {
         updateForm: (state, action) => {
+            console.log(action.payload);
             state.form = action.payload
         },
         updateTable: (state, action) => {
+            console.log(action.payload);
             state.table = action.payload
         },
         showDeleteModal: (state, action) => {
