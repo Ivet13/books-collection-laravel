@@ -4,7 +4,6 @@
     @csrf
 
     <input type="hidden" id="id" name="id" value="{{ $author->id ?? '' }}">
-    <input type="hidden" id="method" name="_method" value="POST">
 
     <div class="buttons">
         <button type="button" class="js-crud-save" title="Guardar">

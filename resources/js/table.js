@@ -3,6 +3,14 @@ import { updateForm } from "./redux/crud-slice";
 
 const tableContainer = document.querySelector("#crudTable");
 
+store.subscribe(() => {
+    const currentState = store.getState();
+
+    if (currentState.crud.table) {
+        tableContainer.innerHTML = currentState.crud.table;
+    }
+});
+
 tableContainer.addEventListener("click", async event => {
 
     if (event.target.closest(".edit-tab")) {
@@ -21,7 +29,7 @@ tableContainer.addEventListener("click", async event => {
 
             const data = await res.json()
 
-            store.dispatch(updateForm(data));
+            store.dispatch(updateForm(data.form));
 
         } catch (err) {
             console.error("CLICK HANDLER ERROR:", err);

@@ -7,6 +7,16 @@
 @import './menu.css';
 @import './pagination.css';
 
+* {
+    box-sizing: border-box;
+}
+
+.crud-shell {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 2fr;
+    padding: 1rem;
+}
 
 /* Responsive */
 @media (max-width: 768px) {

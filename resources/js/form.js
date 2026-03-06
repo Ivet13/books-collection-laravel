@@ -2,17 +2,24 @@ import { store } from './redux/store';
 import { updateForm, updateTable } from './redux/crud-slice';
 
 const formContainer = document.querySelector('#crudForm');
-const form = document.querySelector(".js-crud-form");
 
+store.subscribe(() => {
+    const currentState = store.getState();
+
+    if (currentState.crud.form) {
+        formContainer.innerHTML = currentState.crud.form;
+    }
+});
 
 formContainer.addEventListener('click', async event => {
 
     // CREATE / UPDATE
     if (event.target.closest(".js-crud-save")) {
-        console.log('save')
+
+        const form = document.querySelector(".js-crud-form");
         clearErrors(form);
 
-        const id = form.querySelector('input[name="id"]')?.value?.trim() || "";
+        const id = form.querySelector('#id')?.value?.trim() || "";
         const storeUrl = form.dataset.storeUrl;
         const updateBase = form.dataset.updateUrlBase;
 
@@ -22,11 +29,8 @@ formContainer.addEventListener('click', async event => {
         const url = id ? `${updateBase.replace(/\/$/, "")}/${id}` : storeUrl;
         const fd = new FormData(form);
 
-        if (id) fd.set("_method", "PUT");
-        else fd.set("_method", "POST");
-
         const res = await fetch(url, {
-            method: "POST",
+            method: id ? "PUT" : "POST",
             headers: {
                 "X-CSRF-TOKEN": csrf(),
                 "X-Requested-With": "XMLHttpRequest",
@@ -103,19 +107,6 @@ formContainer.addEventListener('click', async event => {
     }
 });
 
-store.subscribe(() => {
-    const currentState = store.getState();
-
-    if (currentState.crud.form && formContainer) {
-        Object.entries(currentState.crud.form).forEach(([key, value]) => {
-            const input = form.querySelector(`[name="${CSS.escape(key)}"]`);
-            if (input) input.value = value;
-        });
-
-        showDeleteButton(true);
-    }
-});
-
 function csrf() {
     return document.querySelector('meta[name="csrf-token"]')?.content ?? "";
 }
@@ -143,6 +134,6 @@ async function refreshCrud(url = location.href) {
     const res = await fetch(url, { headers: { Accept: "application/json" } });
     if (!res.ok) throw new Error(`Refresh failed ${res.status}`);
     const data = await res.json();
-    //store.dispatch(updateForm(data.form));
+    formContainer.innerHTML = data.form;
     store.dispatch(updateTable(data.table));
 }

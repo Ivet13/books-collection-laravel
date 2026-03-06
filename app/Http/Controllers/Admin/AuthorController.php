@@ -44,7 +44,13 @@ class AuthorController extends Controller
     public function show(Request $request, Author $author)
     {
         if ($request->expectsJson()) {
-            return response()->json($author);
+            $formHtml = view('components.admin.authors.form', [
+                'author' => $author,
+            ])->render();
+
+            return response()->json([
+                'form' => $formHtml,
+            ]);
         }
     }
 
@@ -62,6 +68,7 @@ class AuthorController extends Controller
 
     public function update(Request $request, Author $author)
     {
+        \Debugbar::info($request->all());
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'bio'  => 'nullable|string',

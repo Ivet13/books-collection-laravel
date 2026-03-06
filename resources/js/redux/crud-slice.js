@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-
 export const crudSlice = createSlice({
     name: 'crud',
     initialState: {
@@ -13,11 +12,9 @@ export const crudSlice = createSlice({
     },
     reducers: {
         updateForm: (state, action) => {
-            console.log(action.payload);
             state.form = action.payload
         },
         updateTable: (state, action) => {
-            console.log(action.payload);
             state.table = action.payload
         },
         showDeleteModal: (state, action) => {
