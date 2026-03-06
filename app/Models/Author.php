@@ -23,4 +23,9 @@ class Author extends Model
     {
         return $this->belongsToMany(Book::class, 'book_authors');
     }
+
+    public function sitemap()
+    {
+        return $this->hasOne(Sitemap::class, 'entity_id')->where('entity', 'authors');
+    }
 }

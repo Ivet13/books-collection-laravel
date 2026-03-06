@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Author;
 use Illuminate\Http\Request;
+use App\Services\SitemapService;
 
 class AuthorController extends Controller
 {
+
+    public function __construct(private Author $author, private SitemapService $sitemapService) {}
 
     public function index(Request $request)
     {
@@ -43,6 +46,9 @@ class AuthorController extends Controller
 
     public function show(Request $request, Author $author)
     {
+        $sitemap = $this->sitemapService->getSlug($request->slug);
+        $author = $this->author->where('id', $sitemap->entity_id)->first();
+
         if ($request->expectsJson()) {
             $formHtml = view('components.admin.authors.form', [
                 'author' => $author,
@@ -63,6 +69,12 @@ class AuthorController extends Controller
 
         $author = Author::create($data);
 
+        $this->sitemapService->updateOrCreateSlug(
+            'authors',
+            $author->id,
+            $author->name
+        );
+
         return response()->json(['id' => $author->id], 201);
     }
 
@@ -82,6 +94,8 @@ class AuthorController extends Controller
     public function destroy(Author $author)
     {
         $author->delete();
+
+        $this->sitemapService->deleteSlug('authors', $author->id);
 
         return response()->json(['ok' => true]);
     }

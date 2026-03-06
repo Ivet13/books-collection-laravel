@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use Illuminate\Http\Request;
+use App\Services\SitemapService;
 
 class BookController extends Controller
 {
+
+    public function __construct(private Book $book, private SitemapService $sitemapService) {}
+
     public function index(Request $request)
     {
         $query = Book::query()->with('authors')->with(['bookPublisher.publisher'])->with('genres');
