@@ -67,8 +67,10 @@ formContainer.addEventListener('click', async event => {
 
     //RESET
     if (event.target.closest(".js-crud-reset")) {
-        clearErrors(form);
-        form.reset();
+        const form = document.querySelector(".js-crud-form");
+        form.querySelectorAll("input, textarea, select").forEach(el => {
+            el.value = "";
+        });
         form.querySelector('input[name="id"]')?.setAttribute("value", "");
         const method = form.querySelector('input[name="_method"]');
         if (method) method.value = "POST";
@@ -77,6 +79,7 @@ formContainer.addEventListener('click', async event => {
 
     //DELETE
     if (event.target.closest(".js-crud-delete")) {
+        const form = document.querySelector(".js-crud-form");
 
         const id = form.querySelector('input[name="id"]')?.value?.trim();
         if (!id) return setGeneralError(form, "No hay ID para borrar");
