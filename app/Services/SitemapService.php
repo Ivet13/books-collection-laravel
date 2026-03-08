@@ -9,12 +9,12 @@ class SitemapService
 {
     public function __construct(private Sitemap $sitemap) {}
 
-    public function updateOrCreateSlug($entity, $entity_id, $slug)
+    public function updateOrCreateSlug($entity, $entityId, $slug)
     {
 
         $this->sitemap->updateOrCreate([
             'entity' => $entity,
-            'entity_id' => $entity_id,
+            'entity_id' => $entityId,
         ], [
             'slug' => Str::slug($slug),
         ]);
