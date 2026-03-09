@@ -17,6 +17,7 @@ tableContainer.addEventListener("click", async event => {
 
         const editElement = event.target.closest(".edit-tab");
         const endpoint = editElement.dataset.endpoint;
+        // const slug = editElement.dataset.slug;
 
         try {
             const res = await fetch(endpoint, {

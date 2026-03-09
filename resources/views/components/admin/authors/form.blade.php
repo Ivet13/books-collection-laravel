@@ -4,7 +4,6 @@
     @csrf
 
     <input type="hidden" id="id" name="id" value="{{ $author->id ?? '' }}">
-    <input type="hidden" id="slug" name="slug" value="{{ $author->slug ?? '' }}">
 
     <div class="buttons">
         <button type="button" class="js-crud-save" title="Guardar">
@@ -32,7 +31,7 @@
         <?php */
         ?>
 
-        <x-admin.authors.tabs-new />
+        <x-admin.authors.tabs-new :author="$author ?? ''" />
 
 
     </div>
