@@ -108,6 +108,35 @@ formContainer.addEventListener('click', async event => {
             return;
         }
     }
+
+    //VIEW
+    if (event.target.closest(".js-crud-view")) {
+        const form = document.querySelector(".js-crud-form");
+
+        const slug = form.querySelector('input[name="slug"]')?.value?.trim();
+        if (!slug) return setGeneralError(form, "No hay slug para ver");
+
+        const viewBase = form.dataset.viewUrlBase;
+        if (!viewBase) return setGeneralError(form, "Falta data-view-url-base");
+
+        const url = `${viewBase.replace(/\/$/, "")}/${slug}`;
+
+        const res = await fetch(url, {
+            method: "GET",
+            headers: {
+                "X-CSRF-TOKEN": csrf(),
+                "X-Requested-With": "XMLHttpRequest",
+                Accept: "application/json",
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            },
+        });
+        await refreshCrud();
+
+        if (!res.ok) {
+            setGeneralError(form, `Error viendo (${res.status})`);
+            return;
+        }
+    }
 });
 
 function csrf() {

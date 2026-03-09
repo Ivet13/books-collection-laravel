@@ -34,6 +34,11 @@ Route::prefix('customer')->name('customer.')->middleware('auth:customer')->group
     // Customer collection
     Route::get('/collection', [CustomerCollectionController::class, 'index'])->name('collection');
 
+    // Authors view
+    Route::get('/authors/', [AuthorController::class, 'show'])->name('author');
+    Route::get('/authors/{author}', [AuthorController::class, 'show'])->name('author');
+
+
     // Book collection management
     Route::post('/collection/{book}', [BookCustomerController::class, 'store'])->name('collection.store');
 
