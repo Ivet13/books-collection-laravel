@@ -46,6 +46,7 @@ class AuthorController extends Controller
 
     public function show(Request $request, Author $author)
     {
+        \Debugbar::info($request->all());
         $sitemap = $this->sitemapService->getSlug($request->slug);
         $author = $this->author->where('id', $sitemap->entity_id)->first();
         $author->load(['books:id,title']);

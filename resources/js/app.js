@@ -18,6 +18,7 @@ import './navigation';
 import { initNavigation } from "./navigation";
 import "./form";
 import "./table";
+import "./tabs.js";
 
 
 initNavigation();

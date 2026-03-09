@@ -6,6 +6,7 @@
 @import './buttons.css';
 @import './menu.css';
 @import './pagination.css';
+@import './tabs.css';
 
 * {
     box-sizing: border-box;

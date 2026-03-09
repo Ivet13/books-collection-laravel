@@ -26,28 +26,14 @@
     <div class="js-errors" style="color:red; margin:8px 0;"></div>
 
     <div class="form-fields">
-        <div>
-            <label for="name">Nombre</label>
 
-            <input name="name" value="{{ old('name', $author->name ?? '') }}">
-        </div>
+        <?php /* 
+        <x-admin.authors.tabs />
+        <?php */
+        ?>
 
-        <div style="width:100%;">
-            <label for="bio">Bio</label>
-            <textarea name="bio">{{ old('bio', $author->bio ?? '') }}</textarea>
+        <x-admin.authors.tabs-new />
 
-        </div>
+
     </div>
-
-    {{-- meta info (opcional) --}}
-    <section style="margin-top:12px;">
-        <strong>Libros:</strong>
-        <div id="meta-books">—</div>
-    </section>
 </form>
-
-<style>
-    .hidden {
-        display: none;
-    }
-</style>
