@@ -28,4 +28,15 @@ class Author extends Model
     {
         return $this->hasOne(Sitemap::class, 'entity_id')->where('entity', 'authors');
     }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        if (is_numeric($value)) {
+            return $this->findOrFail($value);
+        }
+
+        return $this->whereHas('sitemap', function ($query) use ($value) {
+            $query->where('slug', $value);
+        })->firstOrFail();
+    }
 }

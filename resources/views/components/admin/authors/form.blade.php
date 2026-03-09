@@ -1,9 +1,10 @@
 <form class="js-crud-form" data-store-url="{{ route('admin.authors.store') }}"
     data-show-url-base="{{ url('/admin/authors') }}" data-update-url-base="{{ url('/admin/authors') }}"
-    data-destroy-url-base="{{ url('/admin/authors') }}" data-view-url-base="{{ url('/customer/authors') }}">
+    data-destroy-url-base="{{ url('/admin/authors') }}" data-view-url-base="{{ url('/admin/authors') }}">
     @csrf
 
     <input type="hidden" id="id" name="id" value="{{ $author->id ?? '' }}">
+    <input type="hidden" id="slug" name="slug" value="{{ $author->sitemap->slug ?? '' }}">
 
     <div class="buttons">
         <button type="button" class="js-crud-save" title="Guardar">
@@ -26,13 +27,7 @@
 
     <div class="form-fields">
 
-        <?php /* 
-        <x-admin.authors.tabs />
-        <?php */
-        ?>
-
         <x-admin.authors.tabs-new :author="$author ?? ''" />
-
 
     </div>
 </form>

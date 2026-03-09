@@ -114,10 +114,10 @@ formContainer.addEventListener('click', async event => {
         const form = document.querySelector(".js-crud-form");
 
         const slug = form.querySelector('input[name="slug"]')?.value?.trim();
-        if (!slug) return setGeneralError(form, "No hay slug para ver");
+        if (!slug) return setGeneralError(form, "Error: Falta el slug.");
 
         const viewBase = form.dataset.viewUrlBase;
-        if (!viewBase) return setGeneralError(form, "Falta data-view-url-base");
+        if (!viewBase) return setGeneralError(form, "Error: Falta data-view-url-base");
 
         const url = `${viewBase.replace(/\/$/, "")}/${slug}`;
 
