@@ -8,9 +8,13 @@ use App\Models\Author;
 use App\Models\Genre;
 use App\Models\Publisher;
 use App\Models\BookPublisher;
+use App\Services\SitemapService;
 
 class BookSeeder extends Seeder
+
 {
+    public function __construct(private SitemapService $sitemapService) {}
+
     public function run(): void
     {
         $book1 = Book::create([
@@ -43,6 +47,16 @@ class BookSeeder extends Seeder
             BookPublisher::updateOrCreate(
                 ['book_id' => $book1->id],
                 ['publisher_id' => $publisher->id, 'published_year' => 2020]
+            );
+        }
+
+        $books = Book::all();
+
+        foreach ($books as $book) {
+            $this->sitemapService->updateOrCreateSlug(
+                'books',
+                $book->id,
+                $book->title
             );
         }
     }

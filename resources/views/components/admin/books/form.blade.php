@@ -1,20 +1,24 @@
-<form class="js-crud-form" method="POST" action="{{ route('admin.authors.store') }}"
-    data-store-url="{{ route('admin.authors.store') }}" data-show-url-base="{{ url('/admin/authors') }}"
-    data-update-url-base="{{ url('/admin/authors') }}" data-destroy-url-base="{{ url('/admin/authors') }}">
+<form class="js-crud-form" data-store-url="{{ route('admin.books.store') }}" data-show-url-base="{{ url('/admin/books') }}"
+    data-update-url-base="{{ url('/admin/books') }}" data-destroy-url-base="{{ url('/admin/books') }}"
+    data-view-url-base="{{ url('/admin/books') }}">
     @csrf
 
-    <input type="hidden" id="id" name="id" value="{{ $author->id ?? '' }}">
-    <input type="hidden" id="method" name="_method" value="POST">
+    <input type="hidden" id="id" name="id" value="{{ $book->id ?? '' }}">
+    <input type="hidden" id="slug" name="slug" value="{{ $book->sitemap->slug ?? '' }}">
 
     <div class="buttons">
-        <button type="submit" title="Guardar">
+        <button type="button" class="js-crud-save" title="Guardar">
             <x-icons.content-save />
         </button>
         <button type="button" class="js-crud-reset" title="Limpiar">
             <x-icons.broom />
         </button>
 
-        <button type="button" class="js-crud-delete {{ empty($author?->id) ? 'hidden' : '' }}">
+        <button type="button" class="js-crud-view " title="Ver">
+            <x-icons.eye />
+        </button>
+
+        <button type="button" class="js-crud-delete {{ empty($book?->id) ? 'hidden' : '' }}">
             <x-icons.delete /></button>
 
     </div>
@@ -22,28 +26,8 @@
     <div class="js-errors" style="color:red; margin:8px 0;"></div>
 
     <div class="form-fields">
-        <div>
-            <label for="name">Nombre</label>
 
-            <input name="name" value="{{ old('name', $author->name ?? '') }}">
-        </div>
+        <x-admin.books.tabs :book="$book ?? ''" />
 
-        <div style="width:100%;">
-            <label for="bio">Bio</label>
-            <textarea name="bio">{{ old('bio', $author->bio ?? '') }}</textarea>
-
-        </div>
     </div>
-
-    {{-- meta info (opcional) --}}
-    <section style="margin-top:12px;">
-        <strong>Libros:</strong>
-        <div id="meta-books">—</div>
-    </section>
 </form>
-
-<style>
-    .hidden {
-        display: none;
-    }
-</style>

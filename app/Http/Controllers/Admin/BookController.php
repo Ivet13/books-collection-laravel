@@ -121,6 +121,12 @@ class BookController extends Controller
 
         $book = Book::create($data);
 
+        $this->sitemapService->updateOrCreateSlug(
+            'books',
+            $book->id,
+            $book->title
+        );
+
         if ($request->ajax()) {
             $query = Book::query()
                 ->with('authors')
@@ -181,6 +187,7 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         $book->delete();
+        $this->sitemapService->deleteSlug('books', $book->id);
         return response()->json(['ok' => true]);
     }
 }

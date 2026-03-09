@@ -1,4 +1,4 @@
-<x-admin.authors.filter :authors="$records" />
+<x-admin.books.filter :books="$records" />
 
 {{-- PAGINACIÓN --}}
 <div class="js-pagination">
@@ -8,8 +8,8 @@
 {{-- LISTA --}}
 <div class="js-list">
     @forelse ($records as $record)
-        <x-admin.authors.item :author="$record" />
+        <x-admin.books.item :book="$record" />
     @empty
-        <p>No hay autores con esos filtros.</p>
+        <p>No hay libros con esos filtros.</p>
     @endforelse
 </div>

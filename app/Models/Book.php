@@ -29,6 +29,11 @@ class Book extends Model
         'updated_at' => 'datetime',
     ];
 
+    public function sitemap()
+    {
+        return $this->hasOne(Sitemap::class, 'entity_id')->where('entity', 'books');
+    }
+
     public function authors()
     {
         return $this->belongsToMany(Author::class, 'book_authors');
@@ -60,5 +65,16 @@ class Book extends Model
         return $this->belongsToMany(Customer::class, 'book_customer', 'book_id', 'customer_id')
             ->withPivot(['status', 'is_favorite', 'rating', 'review'])
             ->withTimestamps();
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        if (is_numeric($value)) {
+            return $this->findOrFail($value);
+        }
+
+        return $this->whereHas('sitemap', function ($query) use ($value) {
+            $query->where('slug', $value);
+        })->firstOrFail();
     }
 }

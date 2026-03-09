@@ -27,7 +27,7 @@
 
     <div class="form-fields">
 
-        <x-admin.authors.tabs-new :author="$author ?? ''" />
+        <x-admin.authors.tabs :author="$author ?? ''" />
 
     </div>
 </form>

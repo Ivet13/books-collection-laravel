@@ -1,18 +1,11 @@
-<form class="js-filter-form" method="GET" data-url-base="{{ route('admin.authors.index') }}" style="">
-    <button type="submit" title="Aplicar filtros">
+<form class="js-filter-form" data-url-base="{{ route('admin.books.index') }}">
+    <button type="submit" title="Aplicar filtros" class="js-filter-submit">
         <x-icons.filter-menu />
     </button>
 
-    <input type="text" name="q" placeholder="Buscar por nombre del autor" value="{{ request('q') }}">
+    <input type="text" name="name" placeholder="Buscar por nombre del libro" value="{{ request('name') }}">
+    <input type="text" name="synopsis" placeholder="Buscar por sinopsis del libro" value="{{ request('synopsis') }}">
 
-    <select name="author_id">
-        <option value="">-- Autor --</option>
-        @foreach ($authors as $author)
-            <option value="{{ $author->id }}" @selected(request('author_id') == $author->id)>
-                {{ $author->name }}
-            </option>
-        @endforeach
-    </select>
 
     <button type="button" class="js-filter-reset">Reset</button>
 
