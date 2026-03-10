@@ -20,12 +20,12 @@
                          <h3>EN</h3>
                          <div>
                              <label for="name">Name</label>
-                             <input name="name" value="{{ old('name', $author->name ?? '') }}">
+                             <input name="locale[en.name]" value="{{ old('name', $author->name ?? '') }}">
                          </div>
 
                          <div style="width:100%;">
                              <label for="bio">Biography</label>
-                             <textarea name="bio">{{ old('bio', $author->bio ?? '') }}</textarea>
+                             <textarea name="locale[en.bio]">{{ old('bio', $author->bio ?? '') }}</textarea>
                          </div>
                      </div>
 
@@ -33,12 +33,12 @@
                          <h3>ES</h3>
                          <div>
                              <label for="name_es">Nombre</label>
-                             <input name="name_es" value="{{ old('name', $author->name ?? '') }}">
+                             <input name="locale[es.name]" value="{{ old('name', $author->name ?? '') }}">
                          </div>
 
                          <div style="width:100%;">
                              <label for="bio_es">Biografía</label>
-                             <textarea name="bio_es">{{ old('bio', $author->bio ?? '') }}</textarea>
+                             <textarea name="locale[es.bio]">{{ old('bio', $author->bio ?? '') }}</textarea>
                          </div>
                      </div>
                  </div>

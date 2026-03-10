@@ -114,7 +114,7 @@ return [
         ],
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => env('MONGODB_URI', 'mongodb://root:secret@localhost:27016'),
+            'dsn' => env('MONGODB_URI', 'mongodb://root:secret@localhost:27017'),
             'database' => env('MONGODB_DATABASE', 'laravel_app'),
         ],
 

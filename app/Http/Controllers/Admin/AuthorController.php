@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Author;
+use App\Models\mongoDB\Author;
 use Illuminate\Http\Request;
 use App\Services\SitemapService;
 
@@ -61,10 +61,15 @@ class AuthorController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+
+        \Debugbar::info($request->all());
+
+        /*   $data = $request->validate([
             'name' => 'required|string|max:255',
             'bio'  => 'nullable|string',
         ]);
+ */
+        $data['locale'] = $request->input('locale', []);
 
         $author = Author::create($data);
 

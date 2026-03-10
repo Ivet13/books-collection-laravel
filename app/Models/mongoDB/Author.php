@@ -9,10 +9,16 @@ class Author extends Model
 {
     use SoftDeletes;
     protected $table = 'authors';
+    protected $connection = 'mongodb';
+    protected $primaryKey = '_id';
+    protected $keyType = 'string';
+    public $incrementing = false;
+    public $timestamps = true;
 
-    protected $fillable = [
-        'name',
-        'bio',
-        'api_id',
-    ];
+    protected $guarded = [];
+
+    public function getRouteKeyName()
+    {
+        return '_id';
+    }
 }
