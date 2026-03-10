@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\sql;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use App\Models\Book;
+use App\Models\sql\Book;
 
 class Customer extends Authenticatable
 {

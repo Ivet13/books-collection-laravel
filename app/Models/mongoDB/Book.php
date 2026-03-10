@@ -8,29 +8,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Book extends Model
 {
     use SoftDeletes;
+    protected $table = 'books';
+    protected $connection = 'mongodb';
+    protected $primaryKey = '_id';
+    protected $keyType = 'string';
+    public $incrementing = false;
+    public $timestamps = true;
 
-    protected $fillable = [
-        'title',
-        'description',
-        'isbn',
-    ];
+    protected $guarded = [];
 
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
-
-    public function authors()
+    public function getRouteKeyName()
     {
-        return $this->belongsToMany(Author::class, 'book_authors');
-    }
-
-    public function genres()
-    {
-        return $this->belongsToMany(\App\Models\Genre::class, 'book_genres');
-    }
-    public function bookPublisher()
-    {
-        return $this->hasOne(\App\Models\BookPublisher::class);
+        return '_id';
     }
 }

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Author;
+use App\Models\sql\Author;
 use App\Services\SitemapService;
 
 class AuthorSeeder extends Seeder

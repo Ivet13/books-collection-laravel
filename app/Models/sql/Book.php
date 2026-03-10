@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\sql;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-use App\Models\Author;
-use App\Models\Publisher;
-use App\Models\Genre;
-use App\Models\Customer;
+use App\Models\sql\Author;
+use App\Models\sql\Publisher;
+use App\Models\sql\Genre;
+use App\Models\sql\Customer;
 
 class Book extends Model
 {
@@ -41,11 +41,11 @@ class Book extends Model
 
     public function genres()
     {
-        return $this->belongsToMany(\App\Models\Genre::class, 'book_genres');
+        return $this->belongsToMany(\App\Models\sql\Genre::class, 'book_genres');
     }
     public function bookPublisher()
     {
-        return $this->hasOne(\App\Models\BookPublisher::class);
+        return $this->hasOne(\App\Models\sql\BookPublisher::class);
     }
 
     public function publisher()

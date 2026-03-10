@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Customer;
+use App\Models\sql\Customer;
 use Illuminate\Support\Facades\Hash;
 
 class CustomerSeeder extends Seeder

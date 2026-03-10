@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\sql;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\Book;
+use App\Models\sql\Book;
 
 class Author extends Model
 {

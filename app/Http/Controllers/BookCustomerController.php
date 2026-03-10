@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Book;
+use App\Models\sql\Book;
 use Illuminate\Http\Request;
 
 class BookCustomerController extends Controller

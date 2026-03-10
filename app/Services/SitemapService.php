@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Sitemap;
+use App\Models\sql\Sitemap;
+use App\Models\sql\Customer;
 use Illuminate\Support\Str;
 
 class SitemapService

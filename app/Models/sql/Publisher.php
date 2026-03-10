@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\sql;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-use App\Models\Book;
-
-class Genre extends Model
+class Publisher extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -23,8 +20,8 @@ class Genre extends Model
         'updated_at' => 'datetime',
     ];
 
-    public function books(): BelongsToMany
+    public function bookPublishers()
     {
-        return $this->belongsToMany(Book::class);
+        return $this->hasMany(\App\Models\sql\BookPublisher::class);
     }
 }

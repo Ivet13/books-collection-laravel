@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
-use App\Models\Author;
+use App\Models\mongoDB\Author;
 
 class DownloadAuthorsFromApi extends Command
 {

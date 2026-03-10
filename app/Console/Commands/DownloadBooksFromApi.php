@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Console\Command;
-use App\Models\Book;
+use App\Models\mongoDB\Book;
 
 class DownloadBooksFromApi extends Command
 {

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use Illuminate\Support\Facades\View;
 use App\Http\Controllers\Controller;
-use App\Models\Author;
+use app\Models\sql\Author;
 use Illuminate\Http\Request;
 use App\Services\SitemapService;
 

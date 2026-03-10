@@ -3,11 +3,11 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Book;
-use App\Models\Author;
-use App\Models\Genre;
-use App\Models\Publisher;
-use App\Models\BookPublisher;
+use App\Models\sql\Book;
+use App\Models\sql\Author;
+use App\Models\sql\Genre;
+use App\Models\sql\Publisher;
+use App\Models\sql\BookPublisher;
 use App\Services\SitemapService;
 
 class BookSeeder extends Seeder

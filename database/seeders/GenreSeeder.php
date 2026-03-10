@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Genre;
+use App\Models\sql\Genre;
 
 class GenreSeeder extends Seeder
 {

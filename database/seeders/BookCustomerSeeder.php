@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Customer;
-use App\Models\Book;
+use App\Models\sql\Customer;
+use app\Models\sql\Book;
 
 class BookCustomerSeeder extends Seeder
 {

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Genre;
+use app\Models\sql\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Http\GenreRequest;
 

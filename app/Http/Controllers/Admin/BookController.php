@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Book;
+use App\Models\sql\Book;
 use Illuminate\Http\Request;
 use App\Services\SitemapService;
 
@@ -60,9 +60,9 @@ class BookController extends Controller
             ->withQueryString();
 
         // Para los selects del formulario (si ya tienes estos modelos)
-        $authors = \App\Models\Author::orderBy('name')->get();
-        $genres = \App\Models\Genre::orderBy('name')->get();
-        $publishers = \App\Models\Publisher::orderBy('name')->get();
+        $authors = \App\Models\sql\Author::orderBy('name')->get();
+        $genres = \App\Models\sql\Genre::orderBy('name')->get();
+        $publishers = \App\Models\sql\Publisher::orderBy('name')->get();
 
         if ($request->ajax()) {
             return response()->view('admin.books._list_and_pagination', [
@@ -100,9 +100,9 @@ class BookController extends Controller
 
     public function create(Request $request)
     {
-        $authors = \App\Models\Author::orderBy('name')->get();
-        $genres = \App\Models\Genre::orderBy('name')->get();
-        $publishers = \App\Models\Publisher::orderBy('name')->get();
+        $authors = \App\Models\sql\Author::orderBy('name')->get();
+        $genres = \App\Models\sql\Genre::orderBy('name')->get();
+        $publishers = \App\Models\sql\Publisher::orderBy('name')->get();
 
         return view('admin.books.create', [
             'authors' => $authors,

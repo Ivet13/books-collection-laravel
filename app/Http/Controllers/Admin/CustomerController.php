@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
+use App\Models\sql\Customer;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\UserRequest;
 use Barryvdh\Debugbar\Facades\Debugbar;
