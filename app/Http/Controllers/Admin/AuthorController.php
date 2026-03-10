@@ -85,10 +85,13 @@ class AuthorController extends Controller
     public function update(Request $request, Author $author)
     {
         \Debugbar::info($request->all());
-        $data = $request->validate([
+        /*      $data = $request->validate([
             'name' => 'required|string|max:255',
             'bio'  => 'nullable|string',
-        ]);
+        ]); */
+
+        $data = $request->all();
+        $data['locale'] = $request->input('locale', []);
 
         $author->update($data);
 
