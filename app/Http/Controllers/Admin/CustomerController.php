@@ -33,11 +33,22 @@ class CustomerController extends Controller
 
 
 
-        if ($request->ajax()) {
-            return response()->view('admin.customers._list_and_pagination', [
+
+        if ($request->expectsJson()) {
+            $formHtml = view('components.admin.customers.form', [
+                'author' => null,
+            ])->render();
+
+            $tableHtml = view('components.admin.customers.list', [
                 'records' => $records,
+            ])->render();
+
+            return response()->json([
+                'form' => $formHtml,
+                'table' => $tableHtml,
             ]);
         }
+
         return view('admin.customers.index', [
             'records' => $records,
         ]);
