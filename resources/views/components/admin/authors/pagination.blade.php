@@ -25,7 +25,7 @@
             @endif
 
             @if (!in_array($records->currentPage(), [1, $records->lastPage()]))
-                <div class="table-pagination-page active">
+                <div class="table-pagination-page active" data-pagination="{{ $records->url($records->currentPage()) }}">
                     <button>{{ $records->currentPage() }}</button>
                 </div>
             @endif

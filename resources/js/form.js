@@ -1,5 +1,5 @@
 import { store } from './redux/store';
-import { updateTable } from './redux/crud-slice';
+import { updateTable, setFilterQuery } from './redux/crud-slice';
 
 const formContainer = document.querySelector('#crudForm');
 
@@ -168,4 +168,5 @@ async function refreshCrud(url = location.href) {
     const data = await res.json();
     formContainer.innerHTML = data.form;
     store.dispatch(updateTable(data.table));
+    store.dispatch(setFilterQuery(queryString))
 }

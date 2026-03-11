@@ -1,5 +1,5 @@
 import { store } from './redux/store';
-import { updateTable } from './redux/crud-slice';
+import { updateTable, setFilterQuery } from './redux/crud-slice';
 
 const tableContainer = document.querySelector("#crudTable");
 
@@ -24,7 +24,13 @@ tableContainer.addEventListener("click", async event => {
         try {
 
             let endpoint = paginationButton.dataset.pagination
-            console.log(endpoint)
+
+            let filterQuery = store.getState().crud.filterQuery
+
+            if (filterQuery) {
+                endpoint += '&' + filterQuery
+            }
+
             const response = await fetch(endpoint, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
