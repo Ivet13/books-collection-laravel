@@ -1,5 +1,5 @@
 import { store } from './redux/store';
-import { updateTable, setFilterQuery } from './redux/crud-slice';
+import { updateTable } from './redux/crud-slice';
 
 const tableContainer = document.querySelector("#crudTable");
 
