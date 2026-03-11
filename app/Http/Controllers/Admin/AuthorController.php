@@ -14,6 +14,7 @@ class AuthorController extends Controller
 
     public function index(Request $request)
     {
+        /*
         $query = Author::query();
 
         foreach ($request->all() as $key => $value) {
@@ -21,8 +22,36 @@ class AuthorController extends Controller
                 $query->where($key, 'like', "%{$value}%");
             }
         }
-
         $records = $query->orderBy('name')->paginate(10);
+*/
+        $filters = [
+            'name' => 'like',
+            'email' => 'like',
+            // 'created_at' => 'date'
+        ];
+
+        $query = $this->author->newQuery();
+
+        foreach ($filters as $field => $type) {
+            $value = request($field);
+
+            if ($value === null || $value === '') {
+                continue;
+            }
+
+            match ($type) {
+                'like' => $query->where($field, 'like', '%' . $value . '%'),
+                '='    => $query->where($field, $value),
+                'date' => $query->whereDate($field, $value),
+                default => null,
+            };
+        }
+
+        $records = $query
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
 
         if ($request->expectsJson()) {
             $formHtml = view('components.admin.authors.form', [

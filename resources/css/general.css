@@ -74,9 +74,9 @@ main {
     padding-top: 2vh;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    flex-direction: column;
+    flex-flow: column wrap;
     align-items: center;
+
 }
 
 /* RIGHT PANEL */

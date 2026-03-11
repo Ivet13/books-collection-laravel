@@ -1,9 +1,12 @@
 <x-admin.authors.filter :authors="$records" />
 
 {{-- PAGINACIÓN --}}
-<div class="js-pagination">
+
+{{-- <div class="js-pagination">
     {{ $records->links() }}
-</div>
+</div> --}}
+
+<x-admin.authors.pagination :records="$records" />
 
 {{-- LISTA --}}
 <div class="js-list">

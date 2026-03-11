@@ -1,5 +1,5 @@
 import { store } from './redux/store';
-import { updateForm, updateTable } from './redux/crud-slice';
+import { updateTable } from './redux/crud-slice';
 
 const formContainer = document.querySelector('#crudForm');
 
