@@ -1,6 +1,6 @@
 @props(['book'])
 
-<table class="edit-tab" data-endpoint="{{ route('admin.books.show', $book->id) }}" data-slug="{{ $book->sitemap->slug }}">
+<table class="edit-tab" data-endpoint="{{ route('admin.books.show', $book->id) }}">
     <tr>
         <th>ID:</th>
         <td>{{ $book->id }}</td>

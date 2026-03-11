@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\sql\Book;
+//use App\Models\sql\Book;
+use App\Models\mongoDB\Book;
 use Illuminate\Http\Request;
 use App\Services\SitemapService;
 
@@ -14,7 +15,9 @@ class BookController extends Controller
 
     public function index(Request $request)
     {
-        $query = Book::query()->with('authors')->with(['bookPublisher.publisher'])->with('genres');
+        //$query = Book::query()->with('authors')->with(['bookPublisher.publisher'])->with('genres');
+
+        $query = Book::query()->with('authors');
 
         // Texto libre: title o isbn
         if ($request->filled('q')) {
@@ -64,9 +67,18 @@ class BookController extends Controller
         $genres = \App\Models\sql\Genre::orderBy('name')->get();
         $publishers = \App\Models\sql\Publisher::orderBy('name')->get();
 
-        if ($request->ajax()) {
-            return response()->view('admin.books._list_and_pagination', [
+        if ($request->expectsJson()) {
+            $formHtml = view('components.admin.books.form', [
+                'author' => null,
+            ])->render();
+
+            $tableHtml = view('components.admin.books.list', [
                 'records' => $records,
+            ])->render();
+
+            return response()->json([
+                'form' => $formHtml,
+                'table' => $tableHtml,
             ]);
         }
         return view('admin.books.index', [
