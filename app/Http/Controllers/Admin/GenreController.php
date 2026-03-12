@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use app\Models\sql\Genre;
+use App\Models\sql\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Http\GenreRequest;
 
@@ -20,8 +20,19 @@ class GenreController extends Controller
 
         $records = $query->orderBy('name')->paginate(10)->withQueryString();
 
-        if ($request->ajax()) {
-            return response()->view('admin.genres.partials.list', ['records' => $records]);
+        if ($request->expectsJson()) {
+            $formHtml = view('components.admin.genres.form', [
+                'genre' => null,
+            ])->render();
+
+            $tableHtml = view('components.admin.genres.list', [
+                'records' => $records,
+            ])->render();
+
+            return response()->json([
+                'form' => $formHtml,
+                'table' => $tableHtml,
+            ]);
         }
 
         return view('admin.genres.index', [

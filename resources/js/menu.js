@@ -3,8 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggle = document.getElementById("menuToggle");
     const menu = document.getElementById("sideMenu");
     const overlay = document.getElementById("menuOverlay");
+    const links = document.querySelectorAll(".side-menu a");
 
-    if (!toggle || !menu || !overlay) return;
+    if (!toggle || !menu || !overlay || !links) return;
 
     const openMenu = () => {
         document.body.classList.add("menu-open");
@@ -17,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.remove("menu-open");
         toggle.setAttribute("aria-expanded", "false");
         menu.setAttribute("aria-hidden", "true");
-        window.setTimeout(() => (overlay.hidden = true), 250);
+        window.setTimeout(() => (overlay.hidden = true), 2000);
     };
 
     toggle.addEventListener("click", (e) => {
@@ -26,6 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     overlay.addEventListener("click", closeMenu);
+
+    links.forEach((link) => {
+        link.addEventListener("click", (e) => {
+            e.stopPropagation();
+            closeMenu();
+        });
+    });
 
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && document.body.classList.contains("menu-open")) {

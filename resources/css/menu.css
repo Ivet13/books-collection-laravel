@@ -28,7 +28,7 @@
     padding: 80px 16px 16px;
     /* deja espacio para header */
     transform: translateX(110%);
-    transition: transform .25s ease;
+    transition: transform 0.5s ease;
     z-index: 1000;
 }
 

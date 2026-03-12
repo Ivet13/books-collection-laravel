@@ -1,4 +1,4 @@
-     @props(['book'])
+     @props(['genre'])
      <!-- Tabs -->
      <div class="tab">
          <button class="tablinks active" data-tab="General">General</button>
@@ -18,27 +18,27 @@
                      <!-- Tab content -->
                      <div id="EN" class="tabcontent" style="display: block;">
                          <h3>EN</h3>
-                         <div class="form-group">
+                         <div>
                              <label for="name">Name</label>
-                             <input name="name" value="{{ old('name', $book->name ?? '') }}">
+                             <input name="locale[en.name]" value="{{ old('name', $genre->name ?? '') }}">
                          </div>
 
-                         <div class="form-group">
+                         <div style="width:100%;">
                              <label for="bio">Biography</label>
-                             <textarea name="bio">{{ old('bio', $book->bio ?? '') }}</textarea>
+                             <textarea name="locale[en.bio]">{{ old('bio', $genre->bio ?? '') }}</textarea>
                          </div>
                      </div>
 
                      <div id="ES" class="tabcontent" style="display: none;">
                          <h3>ES</h3>
-                         <div class="form-group">
+                         <div>
                              <label for="name_es">Nombre</label>
-                             <input name="name_es" value="{{ old('name', $book->name ?? '') }}">
+                             <input name="locale[es.name]" value="{{ old('name', $genre->name ?? '') }}">
                          </div>
 
-                         <div class="form-group">
+                         <div style="width:100%;">
                              <label for="bio_es">Biografía</label>
-                             <textarea name="bio_es">{{ old('bio', $book->bio ?? '') }}</textarea>
+                             <textarea name="locale[es.bio]">{{ old('bio', $genre->bio ?? '') }}</textarea>
                          </div>
                      </div>
                  </div>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use app\Models\sql\Publisher;
+use App\Models\sql\Publisher;
 use Illuminate\Http\Request;
 
 class PublisherController extends Controller
@@ -19,8 +19,19 @@ class PublisherController extends Controller
 
         $records = $query->orderBy('name')->paginate(10)->withQueryString();
 
-        if ($request->ajax()) {
-            return response()->view('admin.publishers.partials.list', ['records' => $records]);
+        if ($request->expectsJson()) {
+            $formHtml = view('components.admin.publishers.form', [
+                'publisher' => null,
+            ])->render();
+
+            $tableHtml = view('components.admin.publishers.list', [
+                'records' => $records,
+            ])->render();
+
+            return response()->json([
+                'form' => $formHtml,
+                'table' => $tableHtml,
+            ]);
         }
 
         return view('admin.publishers.index', [
