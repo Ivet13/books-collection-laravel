@@ -27,6 +27,7 @@
                 | <a href="{{ route('customer.register') }}">Registro</a>
                 | <a href="{{ route('admin.login') }}">Admin</a>
             @endif
+            <x-language-selector />
         </nav>
     </header>
 

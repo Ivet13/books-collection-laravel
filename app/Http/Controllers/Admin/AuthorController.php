@@ -119,6 +119,11 @@ class AuthorController extends Controller
             'bio'  => 'nullable|string',
         ]); */
 
+        $request->validated();
+        $data = $request->all();
+        $data['_id'] = $request->input('id');
+
+
         $data = $request->all();
         $data['locale'] = $request->input('locale', []);
 
