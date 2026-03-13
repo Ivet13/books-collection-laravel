@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('sitemaps', function (Blueprint $table) {
             $table->id();
-            $table->string('entity');
-            $table->integer('entity_id');
-            $table->string('slug');
+            $table->string('language');
+            $table->string('entity')->nullable();
+            $table->string('entity_id')->nullable();
+            $table->string('path');
+            $table->string('route_name');
             $table->timestamps();
         });
     }

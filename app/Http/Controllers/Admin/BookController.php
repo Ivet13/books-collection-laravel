@@ -91,13 +91,13 @@ class BookController extends Controller
 
 
     public function show(Book $book)
-    {
+    {/*
         $book->load([
             'authors:id,name',
             'genres:id,name',
             'bookPublisher.publisher:id,name',
         ]);
-
+*/
         return response()->json([
             'id' => $book->id,
             'title' => $book->title,

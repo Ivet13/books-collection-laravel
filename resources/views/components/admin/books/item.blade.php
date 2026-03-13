@@ -7,7 +7,7 @@
     </tr>
     <tr>
         <th>Nombre:</th>
-        <td>{{ $book->name }}</td>
+        <td>{{ $book->title }}</td>
     </tr>
     <tr>
         <th>Sinopsis:</th>
