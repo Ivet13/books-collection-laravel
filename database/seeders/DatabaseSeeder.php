@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             CustomerSeeder::class,
             BookCustomerSeeder::class,
             AdminUserSeeder::class,
+            LanguageSeeder::class,
         ]);
     }
 }

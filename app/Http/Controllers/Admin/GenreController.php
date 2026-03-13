@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\sql\Genre;
+use App\Models\mongoDB\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Http\GenreRequest;
 
@@ -52,8 +52,7 @@ class GenreController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'bio' => ['nullable', 'string'],
+            'locale.*.name' => ['required', 'string', 'max:255']
         ]);
 
         $genre = Genre::create($data);
