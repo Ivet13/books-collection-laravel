@@ -91,43 +91,52 @@ class AuthorController extends Controller
     public function store(Request $request)
     {
 
-        \Debugbar::info($request->all());
+        try {
+            $data = $request->all();
+            $author = Author::create($data);
 
-        /*   $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'bio'  => 'nullable|string',
-        ]);
- */
-        $data['locale'] = $request->input('locale', []);
+            foreach ($author->locale as $language => $fields) {
+                $slugs = [
+                    'name' => $fields['name']
+                ];
 
-        $author = Author::create($data);
+                $this->sitemapService->updateOrCreateSlug(
+                    'authors',
+                    $author->_id,
+                    $language,
+                    'author',
+                    $slugs
+                );
+            }
 
-        $this->sitemapService->updateOrCreateSlug(
-            'authors',
-            $author->id,
-            $author->name
-        );
-
-        return response()->json(['id' => $author->id], 201);
+            return response()->json(['id' => $author->_id], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function update(Request $request, Author $author)
     {
-        \Debugbar::info($request->all());
-        /*      $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'bio'  => 'nullable|string',
-        ]); */
-
-        $request->validated();
         $data = $request->all();
         $data['_id'] = $request->input('id');
 
-
-        $data = $request->all();
-        $data['locale'] = $request->input('locale', []);
-
         $author->update($data);
+
+        foreach ($author->locale as $language => $fields) {
+            $slugs = [
+                'name' => $fields['name']
+            ];
+
+            $this->sitemapService->updateOrCreateSlug(
+                'authors',
+                $author->_id,
+                $language,
+                'author',
+                $slugs
+            );
+        }
 
         return response()->json(['id' => $author->id]);
     }

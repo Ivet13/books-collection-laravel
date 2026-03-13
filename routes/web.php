@@ -18,11 +18,6 @@ use App\Http\Controllers\{
     CustomerCollectionController
 };
 
-// HOME PAGE
-
-Route::get('/', fn() => view('public.home'));
-
-
 /*
 |--------------------------------------------------------------------------
 | Customer Routes
@@ -66,4 +61,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'verified'])->gr
 
     // Publishers
     Route::resource('publishers', PublisherController::class);
+});
+
+Route::get('/', function () {})->middleware('setlocale');
+
+Route::group(['middleware' => 'sitemap'], function () {
+    Route::get('/es', 'App\Http\Controllers\Public\HomeController@index')->name('es.home');
+    Route::get('/es/autores/{name}', 'App\Http\Controllers\Public\AuthorController@show')->name('es.author');
+
+    Route::get('/en', 'App\Http\Controllers\Public\HomeController@index')->name('en.home');
+    Route::get('/en/authors/{name}', 'App\Http\Controllers\Public\AuthorController@show')->name('en.author');
 });

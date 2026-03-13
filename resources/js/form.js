@@ -2,12 +2,14 @@ import { store } from './redux/store';
 import { updateTable } from './redux/crud-slice';
 
 const formContainer = document.querySelector('#crudForm');
+let form = null;
 
 store.subscribe(() => {
     const currentState = store.getState();
 
-    if (currentState.crud.form) {
+    if (currentState.crud.form && currentState.crud.form !== form) {
         formContainer.innerHTML = currentState.crud.form;
+        form = currentState.crud.form;
     }
 });
 

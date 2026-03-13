@@ -19,13 +19,5 @@ class AuthorSeeder extends Seeder
         ]);
 
         $authors = Author::all();
-
-        foreach ($authors as $author) {
-            $this->sitemapService->updateOrCreateSlug(
-                'authors',
-                $author->id,
-                $author->name
-            );
-        }
     }
 }

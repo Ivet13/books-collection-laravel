@@ -133,11 +133,13 @@ class BookController extends Controller
 
         $book = Book::create($data);
 
-        $this->sitemapService->updateOrCreateSlug(
-            'books',
-            $book->id,
-            $book->title
-        );
+        foreach ($book->locale as $language => $fields) {
+            $slugs = [
+                'title' => $fields['title']
+            ];
+
+            $this->sitemapService->updateOrCreateSlug('books', $book->id, $language, 'book', $slugs);
+        }
 
         if ($request->ajax()) {
             $query = Book::query()

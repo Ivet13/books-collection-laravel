@@ -11,8 +11,7 @@ class Author extends Model
     protected $table = 'authors';
     protected $connection = 'mongodb';
     protected $primaryKey = '_id';
-    protected $keyType = 'string';
-    public $incrementing = false;
+
     public $timestamps = true;
 
     protected $guarded = [];
