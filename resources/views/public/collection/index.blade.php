@@ -4,6 +4,7 @@
     </x-slot>
 
     <h1>Mi colección</h1>
+    <x-genre-selector />
 
     <form method="GET" action="{{ route('customer.collection') }}" style="display:flex; gap:10px; align-items:center;">
         <input name="q" placeholder="Buscar título o ISBN" value="{{ request('q') }}">

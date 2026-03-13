@@ -29,5 +29,12 @@ class ViewComposerServiceProvider extends ServiceProvider
             ],
             'App\Http\ViewComposers\Language'
         );
+
+        view()->composer(
+            [
+                'components.genre-selector',
+            ],
+            'App\Http\ViewComposers\Genre'
+        );
     }
 }
