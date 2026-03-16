@@ -20,6 +20,7 @@ import "./form";
 import "./table";
 import "./tabs.js";
 import "./pagination.js";
+import "./langSelector.js";
 
 
 initNavigation();

@@ -13,7 +13,11 @@ store.subscribe(() => {
     }
 });
 
-tableContainer.addEventListener("click", async event => {
+document.addEventListener("click", async event => {
+
+    const tableContainer = event.target.closest("#crudTable");
+
+    if (!tableContainer) return;
 
     if (event.target.closest(".edit-tab")) {
 

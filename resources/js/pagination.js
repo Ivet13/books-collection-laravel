@@ -3,7 +3,11 @@ import { updateTable } from './redux/crud-slice';
 
 const tableContainer = document.querySelector("#crudTable");
 
-tableContainer.addEventListener("click", async event => {
+document.addEventListener("click", async event => {
+
+    const tableContainer = event.target.closest("#crudTable");
+
+    if (!tableContainer) return;
 
     if (event.target.closest('.table-pagination-page')) {
 

@@ -2,6 +2,7 @@ import { store } from './redux/store';
 import { updateTable } from './redux/crud-slice';
 
 const formContainer = document.querySelector('#crudForm');
+
 let form = null;
 
 store.subscribe(() => {
@@ -13,7 +14,11 @@ store.subscribe(() => {
     }
 });
 
-formContainer.addEventListener('click', async event => {
+document.addEventListener("click", async event => {
+
+    const formContainer = event.target.closest("#crudForm");
+
+    if (!formContainer) return;
 
     // CREATE / UPDATE
     if (event.target.closest(".js-crud-save")) {
