@@ -1,5 +1,5 @@
 
-document.addEventListener("change", async (e) => {
+document.addEventListener("click", async (e) => {
     const langSelector = e.target.closest(".lang-select-container");
     if (!langSelector) return;
     e.preventDefault();
@@ -30,6 +30,7 @@ document.addEventListener("change", async (e) => {
         }
 
         const json = await response.json();
+
         window.location.replace(json.route);
 
 

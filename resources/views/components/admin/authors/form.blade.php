@@ -20,6 +20,9 @@
         <button type="button" class="js-crud-delete {{ empty($author?->id) ? 'hidden' : '' }}">
             <x-icons.delete /></button>
 
+        <button type="button" class="js-crud-upload {{ empty($author?->id) ? 'hidden' : '' }}">
+            <x-icons.upload /></button>
+
     </div>
 
     <div class="js-errors" style="color:red; margin:8px 0;"></div>

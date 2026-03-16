@@ -144,6 +144,68 @@ document.addEventListener("click", async event => {
             return;
         }
     }
+
+    // UPLOAD
+    if (event.target.closest(".js-crud-upload")) {
+
+        const form = document.querySelector(".js-crud-form");
+        const id = form.querySelector('#id')?.value?.trim() || "";
+
+        const uploadModal = document.querySelector('.modal.upload-modal');
+
+        uploadModal.classList.add('active');
+
+        const modalClose = uploadModal.querySelector('.modal-close');
+        const modalCancel = uploadModal.querySelector('.modal-cancel');
+        const modalConfirm = uploadModal.querySelector('.modal-confirm');
+
+
+        modalClose.addEventListener('click', function () {
+            uploadModal.classList.remove('active');
+        });
+
+        modalCancel.addEventListener('click', function () {
+            uploadModal.classList.remove('active');
+        });
+
+        modalConfirm.addEventListener('click', async function (e) {
+            e.preventDefault();
+
+            uploadModal.classList.remove('active');
+            const form = document.querySelector('.upload-modal form');
+
+            const formData = new FormData(form);
+            const params = new URLSearchParams(formData).toString();
+
+            const url = `${form.dataset.endpoint}?${params}`;
+
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw response;
+                }
+
+                const data = await response.json();
+
+                document.dispatchEvent(new CustomEvent('reset-crud', {
+                    detail: {
+                        data: data
+                    }
+                }));
+
+            } catch (error) {
+                console.error(error);
+            }
+
+        });
+
+    }
 });
 
 function csrf() {

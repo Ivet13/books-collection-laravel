@@ -61,6 +61,8 @@
         <p>© {{ date('Y') }} - Un Proyecto hecho con Laravel - &#x2764 </p>
     </footer>
 
+    <x-modal-upload />
+
 </body>
 
 </html>
