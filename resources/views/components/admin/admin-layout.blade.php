@@ -16,6 +16,9 @@
     <header class="header">
         <div>{{ __('admin/titles.mainTitle') }} </div>
         <div>
+            <x-language-selector />
+        </div>
+        <div>
             <x-icons.menu />
         </div>
     </header>

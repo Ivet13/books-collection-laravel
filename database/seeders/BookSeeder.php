@@ -56,7 +56,9 @@ class BookSeeder extends Seeder
             $this->sitemapService->updateOrCreateSlug(
                 'books',
                 $book->id,
-                $book->title
+                $book->title,
+
+
             );
         }
     }

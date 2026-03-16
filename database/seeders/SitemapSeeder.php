@@ -23,6 +23,16 @@ class SitemapSeeder extends Seeder
                 "language" => "en",
                 "path" => config('app.url') . "/en",
                 "route_name" => "en.home"
+            ],
+            [
+                "language" => "es",
+                "path" => config('app.url') . "/admin/autores",
+                "route_name" => "admin.author.index"
+            ],
+            [
+                "language" => "en",
+                "path" => config('app.url') . "/admin/authors",
+                "route_name" => "admin.author.index"
             ]
         ];
 

@@ -18,6 +18,8 @@ use App\Http\Controllers\{
     CustomerCollectionController
 };
 
+use App\Http\Controllers\Public\LanguageController;
+
 /*
 |--------------------------------------------------------------------------
 | Customer Routes
@@ -64,6 +66,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'verified'])->gr
 });
 
 Route::get('/', function () {})->middleware('setlocale');
+
+Route::post('/change-language', [LanguageController::class, 'changeLanguage'])->name('change-language');
 
 Route::group(['middleware' => 'sitemap'], function () {
     Route::get('/es', 'App\Http\Controllers\Public\HomeController@index')->name('es.home');
