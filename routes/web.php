@@ -19,7 +19,7 @@ use App\Http\Controllers\{
 };
 
 use App\Http\Controllers\Public\LanguageController;
-use App\Http\Controllers\FileController;
+use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,4 +78,5 @@ Route::group(['middleware' => 'sitemap'], function () {
     Route::get('/en/authors/{name}', 'App\Http\Controllers\Public\AuthorController@show')->name('en.author');
 });
 
-Route::post('/upload-file', [FileController::class, 'upload']);
+Route::post('/upload-file', [ImageController::class, 'upload']);
+Route::delete('/image/{id}', [ImageController::class, 'delete']);
