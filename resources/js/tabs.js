@@ -8,16 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Get direct children elements of the parent of the clicked tab with class="tabcontent" and hide them
         let tabcontents = [...tabLink.parentElement.children].filter(element => element.classList.contains("tabcontent"));
-        console.log(tabcontents)
         tabcontents.forEach(element => {
             //add display:none inline style
             element.style.display = "none";
         });
 
-        // Show the current tab, and add an "active" class to the button that opened the tab
-        console.log(document.getElementById(tabLink.dataset.tab));
+        // Show the current tab, and add an "active" class to the button that opened the tab        
         document.getElementById(tabLink.dataset.tab).style.display = "block";
-        console.log(tabLink.dataset.tab)
         tabLink.classList.add("active");
 
     });
