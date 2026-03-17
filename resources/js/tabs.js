@@ -15,7 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         // Show the current tab, and add an "active" class to the button that opened the tab
+        console.log(document.getElementById(tabLink.dataset.tab));
         document.getElementById(tabLink.dataset.tab).style.display = "block";
+        console.log(tabLink.dataset.tab)
         tabLink.classList.add("active");
 
     });

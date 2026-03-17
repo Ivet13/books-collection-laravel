@@ -32,6 +32,11 @@
     --text-main: #e4e4e4;
     --text-muted: #aaaaaa;
     --border-color: #333;
+    --color-surface: #252526;
+    --color-danger: #ff4040;
+    --color-success: #4caf50;
+    --color-warning: #ff9800;
+    --color-info: #2196f3;
 }
 
 /* Layout general */
