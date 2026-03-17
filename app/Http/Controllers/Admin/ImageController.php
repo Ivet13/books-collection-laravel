@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Models\mongoDB\Image;
+use Illuminate\Support\Facades\Storage;
+use App\Services\ImageService;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ImageRequest;
+
+class ImageController extends Controller
+{
+    public function __construct(private Image $image, private ImageService $imageService) {}
+
+    public function store(ImageRequest $request)
+    {
+        try {
+            $data = $request->validated();
+
+            $filename = $this->imageService->uploadImage($request->file('image'));
+
+            $this->image->create([
+                'filename' => $filename
+            ]);
+
+            return response()->json([
+                'imageGallery' => view('components.image-gallery', ['filename' => $filename])->render(),
+            ], 200);
+        } catch (\Exception $e) {
+            \Debugbar::info($e->getMessage());
+            return response()->json([
+                'message' => \Lang::get('admin/notification.error'),
+            ], 500);
+        }
+    }
+
+    public function showThumb($filename)
+    {
+        try {
+            $disk = Storage::disk('public');
+            $path = "images/gallery/thumbnail/{$filename}";
+
+            if ($disk->exists($path)) {
+                return response($disk->get($path), 200)->header('Content-Type', 'image/webp');
+            } else {
+                return response()->json([
+                    'message' => \Lang::get('admin/notification.error'),
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => \Lang::get('admin/notification.error'),
+            ], 500);
+        }
+    }
+
+    public function destroy($filename)
+    {
+        try {
+            $this->imageService->deleteImage($filename);
+            $this->image->where('filename', $filename)->delete();
+
+            return response()->json([
+                'imageGallery' => view('components.image-gallery')->render(),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => \Lang::get('admin/notification.error'),
+            ], 500);
+        }
+    }
+}

@@ -78,5 +78,6 @@ Route::group(['middleware' => 'sitemap'], function () {
     Route::get('/en/authors/{name}', 'App\Http\Controllers\Public\AuthorController@show')->name('en.author');
 });
 
-Route::post('/upload-file', [ImageController::class, 'upload']);
-Route::delete('/image/{id}', [ImageController::class, 'delete']);
+Route::post('/images', 'App\Http\Controllers\Admin\ImageController@store')->name('images_store');
+Route::get('/images/thumb/{filename}', 'App\Http\Controllers\Admin\ImageController@showThumb')->name('images_thumb');
+Route::delete('/images/{filename}', 'App\Http\Controllers\Admin\ImageController@destroy')->name('images_destroy');

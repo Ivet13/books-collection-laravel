@@ -168,46 +168,6 @@ document.addEventListener("click", async event => {
             uploadModal.classList.remove('active');
         });
 
-        modalConfirm.addEventListener('click', async function (e) {
-            e.preventDefault();
-
-            uploadModal.classList.remove('active');
-            const form = document.querySelector('.upload-modal form');
-
-            const formData = new FormData(form);
-            let file = document.getElementById('file').files[0];
-
-            formData.append('file', file);
-
-
-            try {
-                fetch('/upload-file', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        console.log(data);
-                        alert(data.mensaje);
-                    })
-                    .catch(err => console.error(err));
-
-                const data = await response.json();
-
-                document.dispatchEvent(new CustomEvent('reset-crud', {
-                    detail: {
-                        data: data
-                    }
-                }));
-
-            } catch (error) {
-                console.error(error);
-            }
-
-        });
 
     }
 });

@@ -21,6 +21,7 @@ import "./table";
 import "./tabs.js";
 import "./pagination.js";
 import "./langSelector.js";
+import "./gallery.js";
 
 
 initNavigation();

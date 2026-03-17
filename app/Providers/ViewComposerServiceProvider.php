@@ -36,5 +36,12 @@ class ViewComposerServiceProvider extends ServiceProvider
             ],
             'App\Http\ViewComposers\Genre'
         );
+
+        view()->composer(
+            [
+                'components.image-selector',
+            ],
+            'App\Http\ViewComposers\Image'
+        );
     }
 }
