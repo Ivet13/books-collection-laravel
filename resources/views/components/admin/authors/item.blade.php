@@ -1,10 +1,7 @@
 @props(['author'])
 
 <table class="edit-tab" data-endpoint="{{ route('admin.authors.show', $author->id) }}">
-    <tr>
-        <th>ID:</th>
-        <td>{{ $author->id }}</td>
-    </tr>
+
     <tr>
         <th>Nombre:</th>
         <td>{{ $author->name }}</td>
