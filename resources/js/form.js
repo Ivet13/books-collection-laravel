@@ -175,21 +175,25 @@ document.addEventListener("click", async event => {
             const form = document.querySelector('.upload-modal form');
 
             const formData = new FormData(form);
-            const params = new URLSearchParams(formData).toString();
+            let file = document.getElementById('file').files[0];
 
-            const url = `${form.dataset.endpoint}?${params}`;
+            formData.append('file', file);
+
 
             try {
-                const response = await fetch(url, {
+                fetch('/upload-file', {
+                    method: 'POST',
+                    body: formData,
                     headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                     }
-                });
-
-                if (!response.ok) {
-                    throw response;
-                }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        alert(data.mensaje);
+                    })
+                    .catch(err => console.error(err));
 
                 const data = await response.json();
 

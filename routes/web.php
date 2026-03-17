@@ -19,6 +19,7 @@ use App\Http\Controllers\{
 };
 
 use App\Http\Controllers\Public\LanguageController;
+use App\Http\Controllers\FileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,3 +77,5 @@ Route::group(['middleware' => 'sitemap'], function () {
     Route::get('/en', 'App\Http\Controllers\Public\HomeController@index')->name('en.home');
     Route::get('/en/authors/{name}', 'App\Http\Controllers\Public\AuthorController@show')->name('en.author');
 });
+
+Route::post('/upload-file', [FileController::class, 'upload']);
