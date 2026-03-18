@@ -2,7 +2,7 @@
      <!-- Tabs -->
      <div class="tab">
          <button class="tablinks active" data-tab="General">General</button>
-         <button class="tablinks" data-tab="Images">Images</button>
+         <button class="tablinks image-gallery-container" data-tab="Images">Images</button>
 
          <!-- Tab content -->
          <div id="General" class="tabcontent">
@@ -46,14 +46,8 @@
          </div>
 
          <!-- Tab content -->
-         <div id="Images" class="tabcontent" style="display: none;">
+         <div id="Images" class="tabcontent tab-images" style="display: none;">
              <h3>Images</h3>
              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.</p>
-             <div id="Images" class="tabcontent" style="display: none;">
-
-             </div>
          </div>
-
-
-
      </div>

@@ -1,4 +1,4 @@
-<form class="js-crud-form" data-store-url="{{ route('admin.authors.store') }}"
+<div class="js-crud-form" data-store-url="{{ route('admin.authors.store') }}"
     data-show-url-base="{{ url('/admin/authors') }}" data-update-url-base="{{ url('/admin/authors') }}"
     data-destroy-url-base="{{ url('/admin/authors') }}" data-view-url-base="{{ url('/admin/authors') }}">
     @csrf
@@ -32,4 +32,4 @@
         <x-admin.authors.tabs :author="$author ?? ''" />
 
     </div>
-</form>
+</div>

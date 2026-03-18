@@ -1,7 +1,6 @@
 <!-- Tabs -->
 <div class="tab">
     <button class="tablinks active" data-tab="tab-general">Subir nuevo archivo</button>
-    <button class="tablinks image-gallery-container" data-tab="tab-images">Ver galería</button>
 
     <!-- Tab content -->
     <div id="tab-general" class="tabcontent">
@@ -16,13 +15,7 @@
 
     </div>
 
-    <!-- Tab content -->
-    <div id="tab-images" class="tabcontent" style="display: none;">
 
-        <h3>Images</h3>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.</p>
-
-    </div>
 
 
 

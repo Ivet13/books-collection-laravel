@@ -65,4 +65,16 @@ class ImageService
             logger()->error($e->getMessage());
         }
     }
+
+    public function updateImage($filename, $file)
+    {
+        try {
+            $disk = Storage::disk('public');
+
+            $disk->delete("images/gallery/original/{$filename}");
+            $disk->delete("images/gallery/thumbnail/{$filename}");
+        } catch (\Throwable $e) {
+            logger()->error($e->getMessage());
+        }
+    }
 }

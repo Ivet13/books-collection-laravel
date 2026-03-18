@@ -22,9 +22,9 @@ class ImageController extends Controller
             $this->image->create([
                 'filename' => $filename
             ]);
-
+            $images = $this->image->all();
             return response()->json([
-                'imageGallery' => view('components.image-gallery', ['filename' => $filename])->render(),
+                'imageGallery' => view('components.image-gallery', ['images' => $images])->render(),
             ], 200);
         } catch (\Exception $e) {
             \Debugbar::info($e->getMessage());
@@ -75,11 +75,28 @@ class ImageController extends Controller
         try {
             $this->imageService->deleteImage($filename);
             $this->image->where('filename', $filename)->delete();
-
+            $images = $this->image->all();
             return response()->json([
-                'imageGallery' => view('components.image-gallery')->render(),
+                'imageGallery' => view('components.image-gallery', ['images' => $images])->render(),
             ], 200);
         } catch (\Exception $e) {
+            \Debugbar::info($e->getMessage());
+            return response()->json([
+                'message' => \Lang::get('admin/notification.error'),
+            ], 500);
+        }
+    }
+
+    public function modify($filename)
+    {
+        try {
+            $this->imageService->updateImage($filename, $request->file('image'));
+            $images = $this->image->all();
+            return response()->json([
+                'imageGallery' => view('components.image-gallery', ['images' => $images])->render(),
+            ], 200);
+        } catch (\Exception $e) {
+            \Debugbar::info($e->getMessage());
             return response()->json([
                 'message' => \Lang::get('admin/notification.error'),
             ], 500);
