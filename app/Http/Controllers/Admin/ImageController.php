@@ -34,6 +34,22 @@ class ImageController extends Controller
         }
     }
 
+    public function index()
+    {
+        try {
+            $images = $this->image->all();
+            \Debugbar::info($images);
+            return response()->json([
+                'imageGallery' => view('components.image-gallery', ['images' => $images])->render(),
+            ], 200);
+        } catch (\Exception $e) {
+            \Debugbar::info($e->getMessage());
+            return response()->json([
+                'message' => \Lang::get('admin/notification.error'),
+            ], 500);
+        }
+    }
+
     public function showThumb($filename)
     {
         try {

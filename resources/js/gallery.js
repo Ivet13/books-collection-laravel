@@ -5,6 +5,26 @@ document.addEventListener('openGallery', () => {
 });
 
 imageGalleryContainer?.addEventListener('click', async (event) => {
+    console.log('click in gallery');
+
+    try {
+        const endpoint = document.querySelector('.upload-image-input').dataset.endpoint
+
+        const result = await fetch(`${endpoint}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
+            }
+        })
+
+        const data = await result.json()
+        console.log(data)
+        document.getElementById('tab-images').innerHTML = data.imageGallery
+    } catch (error) {
+        console.error(error)
+    }
+
     if (event.target.closest('.close')) {
         imageGalleryContainer.classList.remove('active');
     }
@@ -25,7 +45,8 @@ imageGalleryContainer?.addEventListener('click', async (event) => {
         })
 
         const data = await result.json()
-        imageGalleryContainer.innerHTML = data.imageGallery
+        console.log(data)
+        document.getElementById('tab-images').innerHTML = data.imageGallery
     }
 })
 
@@ -48,7 +69,7 @@ document.querySelector('.upload-image-input').addEventListener('change', async (
         })
 
         const data = await result.json()
-        imageGalleryContainer.innerHTML = data.imageGallery
+        document.getElementById('tab-images').innerHTML = data.imageGallery
 
     } catch (error) {
         console.error(error)

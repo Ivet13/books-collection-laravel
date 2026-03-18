@@ -80,4 +80,5 @@ Route::group(['middleware' => 'sitemap'], function () {
 
 Route::post('/images', 'App\Http\Controllers\Admin\ImageController@store')->name('images_store');
 Route::get('/images/thumb/{filename}', 'App\Http\Controllers\Admin\ImageController@showThumb')->name('images_thumb');
+Route::get('/images', 'App\Http\Controllers\Admin\ImageController@index')->name('images_index');
 Route::delete('/images/{filename}', 'App\Http\Controllers\Admin\ImageController@destroy')->name('images_destroy');
