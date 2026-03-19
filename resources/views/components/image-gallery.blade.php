@@ -2,11 +2,11 @@
     @foreach ($images as $image)
         {{ Debugbar::info($image) }}
         <div>
-            <button class="delete-button" data-endpoint="{{ route('images_destroy', $image->_id) }}">X</button>
+            <button class="delete-button" data-endpoint="{{ route('images_destroy', (string) $image->_id) }}">X</button>
 
 
-            <button type="button" class="js-crud-modify {{ empty($image?->_id) ? 'hidden' : '' }}"
-                data-id="{{ $image->_id }}" data-endpoint="{{ route('images_modify') }}">
+            <button type="button" class="js-crud-modify {{ empty((string) $image->_id) ? 'hidden' : '' }}"
+                data-id="{{ (string) $image->_id }}" data-endpoint="{{ route('images_modify') }}">
                 <x-icons.eye /></button>
 
             <img src="{{ route('images_thumb', $image->filename) }}" alt="{{ $image->filename }}">

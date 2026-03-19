@@ -3,13 +3,19 @@ const tabImages = document.querySelector('.tab-images');
 const uploadInput = document.querySelector('.upload-image-input');
 const csrf = document.head.querySelector('meta[name="csrf-token"]').content;
 
-// ABRIR GALERÍA
-document.addEventListener('openGallery', () => {
-    gallery?.classList.add('active');
-});
-
 // CLICK GENERAL (delegación)
 gallery?.addEventListener('click', async (event) => {
+
+
+    gallery?.classList.add('active');
+
+    const endpoint = gallery.dataset.endpoint;
+
+    const res = await fetch(endpoint);
+    const data = await res.json();
+
+    tabImages.innerHTML = data.imageGallery;
+
 
     // CERRAR
     if (event.target.closest('.close')) {

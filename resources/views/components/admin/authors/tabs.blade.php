@@ -2,7 +2,8 @@
      <!-- Tabs -->
      <div class="tab">
          <button class="tablinks active" data-tab="General">General</button>
-         <button class="tablinks image-gallery-container" data-tab="Images">Images</button>
+         <button class="tablinks image-gallery-container" data-endpoint="{{ route('images_index') }}"
+             data-tab="Images">Images</button>
 
          <!-- Tab content -->
          <div id="General" class="tabcontent">
