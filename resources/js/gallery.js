@@ -45,11 +45,7 @@ gallery?.addEventListener('click', async (event) => {
         tabImages.innerHTML = data.imageGallery;
     }
 
-    // MODAL MODIFICAR
-    if (event.target.closest('.js-crud-modify')) {
-        const modal = document.querySelector('.modify-image-modal');
-        modal.classList.add('active');
-    }
+
 });
 
 // MODAL (cerrar)
@@ -99,5 +95,13 @@ uploadInput?.addEventListener('change', async (event) => {
 
     } catch (error) {
         console.error(error);
+    }
+});
+
+tabImages.addEventListener('click', (event) => {
+    // MODAL MODIFICAR
+    if (event.target.closest('.js-crud-modify')) {
+        const modal = document.querySelector('.modify-image-modal');
+        modal.classList.add('active');
     }
 });
