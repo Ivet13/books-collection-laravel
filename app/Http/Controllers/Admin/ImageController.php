@@ -87,10 +87,13 @@ class ImageController extends Controller
         }
     }
 
-    public function modify($filename)
+    public function modify($id)
     {
         try {
-            $this->imageService->updateImage($filename, $request->file('image'));
+            \Debugbar::info($id);
+            $this->image->where('_id', $id)->update([
+                'is_active' => false
+            ]);
             $images = $this->image->all();
             return response()->json([
                 'imageGallery' => view('components.image-gallery', ['images' => $images])->render(),

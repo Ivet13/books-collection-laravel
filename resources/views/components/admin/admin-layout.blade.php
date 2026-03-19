@@ -63,6 +63,8 @@
 
     <x-modal-upload />
 
+    <x-modal-modify-image />
+
 </body>
 
 </html>

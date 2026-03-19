@@ -108,6 +108,52 @@ imageGalleryContainer?.addEventListener('click', async (event) => {
         console.log(data)
         document.getElementById('Images').innerHTML = data.imageGallery
     }
+
+    // MODIFY
+    if (event.target.closest(".js-crud-modify")) {
+
+        const form = document.querySelector(".js-crud-form");
+        const id = form.querySelector('#id')?.value?.trim() || "";
+
+        const modifyModal = document.querySelector('.modal.modify-image-modal');
+        modifyModal.dataset.endpoint = '';
+
+
+        modifyModal.classList.add('active');
+
+        const modalClose = modifyModal.querySelector('.modal-close');
+        const modalCancel = modifyModal.querySelector('.modal-cancel');
+        const modalConfirm = uploadModal.querySelector('.modal-confirm');
+
+
+        modalClose.addEventListener('click', function () {
+            uploadModal.classList.remove('active');
+        });
+
+        modalCancel.addEventListener('click', function () {
+            uploadModal.classList.remove('active');
+        });
+
+    }
+
+
+    if (event.target.closest('.modify-button')) {
+        event.preventDefault()
+        console.log('modify button');
+        const endpoint = event.target.closest('.modify-button').dataset.endpoint
+
+        const result = await fetch(`${endpoint}`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
+            }
+        })
+
+        const data = await result.json()
+        console.log(data)
+        document.getElementById('Images').innerHTML = data.imageGallery
+    }
 })
 
 document.querySelector('.upload-image-input').addEventListener('change', async (event) => {
