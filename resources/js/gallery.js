@@ -1,183 +1,97 @@
-const imageGalleryButton = document.querySelector('.image-gallery-container');
+const gallery = document.querySelector('.image-gallery-container');
+const tabImages = document.querySelector('.tab-images');
+const uploadInput = document.querySelector('.upload-image-input');
+const csrf = document.head.querySelector('meta[name="csrf-token"]').content;
 
+// ABRIR GALERÍA
 document.addEventListener('openGallery', () => {
-    imageGalleryContainer.classList.add('active');
+    gallery?.classList.add('active');
 });
 
-imageGalleryButton?.addEventListener('click', async (event) => {
-    console.log('click in gallery');
+// CLICK GENERAL (delegación)
+gallery?.addEventListener('click', async (event) => {
 
-    if (event.target.closest('.image-gallery-container')) {
-
-
-        try {
-            const endpoint = document.querySelector('.upload-image-input').dataset.endpoint
-
-            const result = await fetch(`${endpoint}`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
-                }
-            })
-
-            const data = await result.json()
-            console.log(data)
-            document.querySelector('.tab-images').innerHTML = data.imageGallery
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
+    // CERRAR
     if (event.target.closest('.close')) {
-        imageGalleryButton.classList.remove('active');
+        gallery.classList.remove('active');
     }
 
+    // SUBIR IMAGEN (abrir input)
     if (event.target.closest('.upload-image')) {
-        document.querySelector('.upload-image-input').click()
+        uploadInput.click();
     }
 
+    // ELIMINAR
     if (event.target.closest('.delete-button')) {
-        event.preventDefault()
-        console.log('delete button');
-        const endpoint = event.target.closest('.delete-button').dataset.endpoint
+        event.preventDefault();
 
-        const result = await fetch(`${endpoint}`, {
+        const endpoint = event.target.closest('.delete-button').dataset.endpoint;
+
+        const res = await fetch(endpoint, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
+                'X-CSRF-TOKEN': csrf
             }
-        })
-
-        const data = await result.json()
-        console.log(data)
-        document.getElementById('tab-images').innerHTML = data.imageGallery
-    }
-})
-
-const imageGalleryContainer = document.querySelector('.tab-images');
-
-imageGalleryContainer?.addEventListener('click', async (event) => {
-    console.log('click in gallery');
-
-    if (event.target.closest('.image-gallery-container')) {
-
-
-        try {
-            const endpoint = document.querySelector('.upload-image-input').dataset.endpoint
-
-            const result = await fetch(`${endpoint}`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
-                }
-            })
-
-            const data = await result.json()
-            console.log(data)
-            document.querySelector('.tab-images').innerHTML = data.imageGallery
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    if (event.target.closest('.close')) {
-        imageGalleryContainer.classList.remove('active');
-    }
-
-    if (event.target.closest('.upload-image')) {
-        document.querySelector('.upload-image-input').click()
-    }
-
-    if (event.target.closest('.delete-button')) {
-        event.preventDefault()
-        console.log('delete button');
-        const endpoint = event.target.closest('.delete-button').dataset.endpoint
-
-        const result = await fetch(`${endpoint}`, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
-            }
-        })
-
-        const data = await result.json()
-        console.log(data)
-        document.getElementById('Images').innerHTML = data.imageGallery
-    }
-
-    // MODIFY
-    if (event.target.closest(".js-crud-modify")) {
-
-        const form = document.querySelector(".js-crud-form");
-        const id = form.querySelector('#id')?.value?.trim() || "";
-
-        const modifyModal = document.querySelector('.modal.modify-image-modal');
-        modifyModal.dataset.endpoint = '';
-
-
-        modifyModal.classList.add('active');
-
-        const modalClose = modifyModal.querySelector('.modal-close');
-        const modalCancel = modifyModal.querySelector('.modal-cancel');
-        const modalConfirm = uploadModal.querySelector('.modal-confirm');
-
-
-        modalClose.addEventListener('click', function () {
-            uploadModal.classList.remove('active');
         });
 
-        modalCancel.addEventListener('click', function () {
-            uploadModal.classList.remove('active');
-        });
-
+        const data = await res.json();
+        tabImages.innerHTML = data.imageGallery;
     }
 
+    // MODAL MODIFICAR
+    if (event.target.closest('.js-crud-modify')) {
+        const modal = document.querySelector('.modify-image-modal');
+        modal.classList.add('active');
+    }
+});
 
+// MODAL (cerrar)
+const modal = document.querySelector('.modify-image-modal');
+
+modal?.addEventListener('click', (event) => {
+    if (
+        event.target.closest('.modal-close') ||
+        event.target.closest('.modal-cancel')
+    ) {
+        modal.classList.remove('active');
+    }
+});
+
+// MODIFICAR
+modal?.addEventListener('click', async (event) => {
     if (event.target.closest('.modify-button')) {
-        event.preventDefault()
-        console.log('modify button');
-        const endpoint = event.target.closest('.modify-button').dataset.endpoint
+        event.preventDefault();
 
-        const result = await fetch(`${endpoint}`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
-            }
-        })
+        const endpoint =
+            event.target.closest('.modify-button').dataset.endpoint;
 
-        const data = await result.json()
-        console.log(data)
-        document.getElementById('Images').innerHTML = data.imageGallery
+        console.log('modify:', endpoint);
     }
-})
+});
 
-document.querySelector('.upload-image-input').addEventListener('change', async (event) => {
-    console.log('upload image')
+// SUBIR IMAGEN
+uploadInput?.addEventListener('change', async (event) => {
     try {
-        const endpoint = document.querySelector('.upload-image-input').dataset.endpoint
-        const image = event.target.files[0]
+        const endpoint = uploadInput.dataset.endpoint;
+        const image = event.target.files[0];
 
-        const formData = new FormData()
-        formData.append('image', image)
+        const formData = new FormData();
+        formData.append('image', image);
 
-        const result = await fetch(endpoint, {
+        const res = await fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
+                'X-CSRF-TOKEN': csrf
             },
             body: formData
-        })
+        });
 
-        const data = await result.json()
-        document.getElementById('tab-images').innerHTML = data.imageGallery
+        const data = await res.json();
+        tabImages.innerHTML = data.imageGallery;
 
     } catch (error) {
-        console.error(error)
+        console.error(error);
     }
-})
+});

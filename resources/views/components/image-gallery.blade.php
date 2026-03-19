@@ -5,7 +5,8 @@
             <button class="delete-button" data-endpoint="{{ route('images_destroy', $image->_id) }}">X</button>
 
 
-            <button type="button" class="js-crud-modify {{ empty($image?->_id) ? 'hidden' : '' }}">
+            <button type="button" class="js-crud-modify {{ empty($image?->_id) ? 'hidden' : '' }}"
+                data-id="{{ $image->_id }}" data-endpoint="{{ route('images_modify') }}">
                 <x-icons.eye /></button>
 
             <img src="{{ route('images_thumb', $image->filename) }}" alt="{{ $image->filename }}">
