@@ -150,6 +150,8 @@ document.addEventListener("click", async event => {
 
         const form = document.querySelector(".js-crud-form");
         const id = form.querySelector('#id')?.value?.trim() || "";
+        const entityType = form.dataset.entityType;
+        const entityId = form.dataset.entityId;
 
         const uploadModal = document.querySelector('.modal.upload-modal');
 

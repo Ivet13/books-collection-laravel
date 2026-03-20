@@ -9,7 +9,9 @@
                 </svg></button>
         </div>
         <div class="modal-body form-content">
-            <button class="modify-button">MODIFY</button>
+            <button class="modify-button" data>MODIFY</button>
+            <input type="text" name="alt" id="alt" placeholder="Alt">
+            <input type="text" name="caption" id="caption" placeholder="Caption">
         </div>
         <div class="modal-footer">
 

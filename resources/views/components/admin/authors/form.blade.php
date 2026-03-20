@@ -20,7 +20,8 @@
         <button type="button" class="js-crud-delete {{ empty($author?->id) ? 'hidden' : '' }}">
             <x-icons.delete /></button>
 
-        <button type="button" class="js-crud-upload {{ empty($author?->id) ? 'hidden' : '' }}">
+        <button type="button" class="js-crud-upload {{ empty($author?->id) ? 'hidden' : '' }}"
+            data-entity-type="author" data-entity-id="{{ $author->id ?? '' }}">
             <x-icons.upload /></button>
 
     </div>

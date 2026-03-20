@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Services\ImageService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ImageRequest;
+use Illuminate\Http\Request;
 
 class ImageController extends Controller
 {
@@ -20,7 +21,9 @@ class ImageController extends Controller
             $filename = $this->imageService->uploadImage($request->file('image'));
 
             $this->image->create([
-                'filename' => $filename
+                'filename' => $filename,
+                'entity_type' => $data['entity_type'],
+                'entity_id' => $data['entity_id'],
             ]);
             $images = $this->image->all();
             return response()->json([
@@ -87,13 +90,19 @@ class ImageController extends Controller
         }
     }
 
-    public function modify($id)
+    public function modify(Request $request, $id)
     {
         try {
-            \Debugbar::info($id);
+            \Debugbar::info($request);
+            $data = $request->all();
+            \Debugbar::info($data);
             $this->image->where('_id', $id)->update([
-                'is_active' => false
+                'is_active' => false,
+                'alt' => $data['alt'],
+                'caption' => $data['caption']
             ]);
+
+
             $images = $this->image->all();
             return response()->json([
                 'imageGallery' => view('components.image-gallery', ['images' => $images])->render(),

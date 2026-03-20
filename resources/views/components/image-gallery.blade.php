@@ -6,7 +6,8 @@
 
 
             <button type="button" class="js-crud-modify {{ empty((string) $image->_id) ? 'hidden' : '' }}"
-                data-id="{{ (string) $image->_id }}" data-endpoint="{{ route('images_modify', (string) $image->_id) }}">
+                data-id="{{ (string) $image->_id }}" data-entity-type="{{ $entityType }}"
+                data-entity-id="{{ $entityId }}" data-endpoint="{{ route('images_modify', (string) $image->_id) }}">
                 <x-icons.eye /></button>
 
             <img src="{{ route('images_thumb', $image->filename) }}" alt="{{ $image->filename }}">
