@@ -16,8 +16,8 @@ class ImageController extends Controller
     public function store(ImageRequest $request)
     {
         try {
-            $data = $request->validated();
-
+            $data = $request->all();
+            \Debugbar::info($data);
             $filename = $this->imageService->uploadImage($request->file('image'));
 
             $this->image->create([

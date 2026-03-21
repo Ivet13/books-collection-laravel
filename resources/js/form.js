@@ -150,12 +150,19 @@ document.addEventListener("click", async event => {
 
         const form = document.querySelector(".js-crud-form");
         const id = form.querySelector('#id')?.value?.trim() || "";
-        const entityType = form.dataset.entityType;
-        const entityId = form.dataset.entityId;
 
+        const entityType = document.querySelector('.js-crud-upload').dataset.entityType;
+        const entityId = document.querySelector('.js-crud-upload').dataset.entityId;
+        console.log(entityId, entityType)
         const uploadModal = document.querySelector('.modal.upload-modal');
 
+        const input = document.getElementById('file');
+        input.dataset.entityType = entityType;
+        input.dataset.entityId = entityId;
+
         uploadModal.classList.add('active');
+        uploadModal.dataset.entityType = entityType;
+        uploadModal.dataset.entityId = entityId;
 
         const modalClose = uploadModal.querySelector('.modal-close');
         const modalCancel = uploadModal.querySelector('.modal-cancel');

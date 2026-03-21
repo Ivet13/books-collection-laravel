@@ -1,14 +1,16 @@
 const gallery = document.querySelector('.image-gallery-container');
-const tabImages = document.querySelector('.tab-images');
+const tabImages = document.querySelector('.tab-images'); // contenedor de imágenes
+const tabImagesButton = document.querySelector('.tab-images-button'); // TAB (IMPORTANTE)
 const uploadInput = document.querySelector('.upload-image-input');
 const modal = document.querySelector('.modify-image-modal');
 
 const csrf = document.head.querySelector('meta[name="csrf-token"]').content;
 
 //
-// GALERÍA (abrir + cargar imágenes + acciones)
+// CARGAR GALERÍA (DESDE EL TAB)
 //
-gallery?.addEventListener('click', async (event) => {
+tabImagesButton?.addEventListener('click', async () => {
+    console.log('tab images clicked');
 
     gallery.classList.add('active');
 
@@ -18,6 +20,12 @@ gallery?.addEventListener('click', async (event) => {
     const data = await res.json();
 
     tabImages.innerHTML = data.imageGallery;
+});
+
+//
+// GALERÍA (acciones internas: cerrar, upload, delete)
+//
+gallery?.addEventListener('click', async (event) => {
 
     // CERRAR GALERÍA
     if (event.target.closest('.close')) {
@@ -56,11 +64,12 @@ gallery?.addEventListener('click', async (event) => {
 //
 // ABRIR MODAL (desde la galería)
 //
-tabImages.addEventListener('click', (event) => {
+tabImages?.addEventListener('click', (event) => {
+    console.log('click images');
+
     const button = event.target.closest('.js-crud-modify');
 
     if (button) {
-        // Guardar datos en la modal
         modal.dataset.endpoint = button.dataset.endpoint;
         modal.dataset.id = button.dataset.id;
 
@@ -90,8 +99,6 @@ modal?.addEventListener('click', async (event) => {
 
         const alt = document.querySelector('#alt').value;
         const caption = document.querySelector('#caption').value;
-
-        console.log('modify:', endpoint, id, alt, caption);
 
         const res = await fetch(endpoint, {
             method: 'PUT',
@@ -123,12 +130,15 @@ modal?.addEventListener('click', async (event) => {
 uploadInput?.addEventListener('change', async (event) => {
     try {
         const endpoint = uploadInput.dataset.endpoint;
+        const entityType = uploadInput.dataset.entityType;
+        const entityId = uploadInput.dataset.entityId;
+
         const image = event.target.files[0];
 
         const formData = new FormData();
         formData.append('image', image);
-        formData.append('entity_type', uploadInput.dataset.entityType);
-        formData.append('entity_id', uploadInput.dataset.entityId);
+        formData.append('entity_type', entityType);
+        formData.append('entity_id', entityId);
 
         const res = await fetch(endpoint, {
             method: 'POST',
