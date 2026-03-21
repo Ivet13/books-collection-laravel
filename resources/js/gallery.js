@@ -8,9 +8,15 @@ document.addEventListener('click', async (event) => {
     const tabImagesButton = event.target.closest('.tab-images-button');
     if (tabImagesButton) {
         const tabImages = document.querySelector('.tab-images');
-        const endpoint  = tabImagesButton.dataset.endpoint;
+        let endpoint  = tabImagesButton.dataset.endpoint;
+        const entityType = tabImagesButton.dataset.entityType;
+        const entityId   = tabImagesButton.dataset.entityId;
 
-        const res  = await fetch(endpoint, { headers: { 'Accept': 'application/json' } });
+        const url = new URL(endpoint, window.location.origin);
+        if (entityType) url.searchParams.append('entity_type', entityType);
+        if (entityId) url.searchParams.append('entity_id', entityId);
+
+        const res  = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
         const data = await res.json();
 
         if (tabImages) tabImages.innerHTML = data.imageGallery;
@@ -25,6 +31,13 @@ document.addEventListener('click', async (event) => {
 
         modal.dataset.endpoint = modifyBtn.dataset.endpoint;
         modal.dataset.id       = modifyBtn.dataset.id;
+        
+        const altInput     = document.querySelector('#alt');
+        const captionInput = document.querySelector('#caption');
+        
+        if (altInput) altInput.value         = modifyBtn.dataset.alt || '';
+        if (captionInput) captionInput.value = modifyBtn.dataset.caption || '';
+
         modal.classList.add('active');
         return;
     }

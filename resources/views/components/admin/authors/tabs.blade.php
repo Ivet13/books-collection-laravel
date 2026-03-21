@@ -25,12 +25,12 @@
                          <h3>EN</h3>
                          <div>
                              <label for="name">Name</label>
-                             <input name="locale[en][name]" value="{{ $author->locale['en']['name'] ?? '' }}">
+                             <input name="locale[en][name]" value="{{ data_get($author, 'locale.en.name', $author->name ?? '') }}">
                          </div>
 
                          <div style="width:100%;">
                              <label for="bio">Biography</label>
-                             <textarea name="locale[en][bio]">{{ $author->locale['en']['bio'] ?? '' }}</textarea>
+                             <textarea name="locale[en][bio]">{{ data_get($author, 'locale.en.bio', $author->bio ?? '') }}</textarea>
                          </div>
                      </div>
 
@@ -38,12 +38,12 @@
                          <h3>ES</h3>
                          <div>
                              <label for="name_es">Nombre</label>
-                             <input name="locale[es][name]" value="{{ $author->locale['es']['name'] ?? '' }}">
+                             <input name="locale[es][name]" value="{{ data_get($author, 'locale.es.name', '') }}">
                          </div>
 
                          <div style="width:100%;">
                              <label for="bio_es">Biografía</label>
-                             <textarea name="locale[es][bio]">{{ $author->locale['es']['bio'] ?? '' }}</textarea>
+                             <textarea name="locale[es][bio]">{{ data_get($author, 'locale.es.bio', '') }}</textarea>
                          </div>
                      </div>
                  </div>
