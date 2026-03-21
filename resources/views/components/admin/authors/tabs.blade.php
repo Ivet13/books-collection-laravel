@@ -2,7 +2,11 @@
      <!-- Tabs -->
      <div class="tab">
          <button class="tablinks active" data-tab="General">General</button>
-         <button class="tablinks tab-images-button image-gallery-container" data-endpoint="{{ route('images_index') }}"
+         <button class="tablinks tab-images-button image-gallery-container"
+             data-endpoint="{{ route('images_index') }}"
+             data-upload-endpoint="{{ route('images_store') }}"
+             data-entity-type="author"
+             data-entity-id="{{ $author->id ?? '' }}"
              data-tab="Images">Images</button>
 
          <!-- Tab content -->

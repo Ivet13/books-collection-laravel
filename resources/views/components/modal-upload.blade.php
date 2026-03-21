@@ -10,9 +10,12 @@
         </div>
         <div class="modal-body form-content">
             <x-tabs />
+            {{-- Hidden file input used by gallery.js to trigger the OS file picker --}}
+            <input type="file" id="uploadFileInput" class="upload-image-input" accept="image/*" style="display:none">
+            {{-- Button visible to the user to start an upload --}}
+            <button type="button" class="upload-image">Subir imagen</button>
         </div>
         <div class="modal-footer">
-
             <button class="modal-cancel">Cancelar</button>
         </div>
     </div>

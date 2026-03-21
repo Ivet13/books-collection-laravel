@@ -145,39 +145,10 @@ document.addEventListener("click", async event => {
         }
     }
 
-    // UPLOAD
+    // UPLOAD — handled in gallery.js
     if (event.target.closest(".js-crud-upload")) {
-
-        const form = document.querySelector(".js-crud-form");
-        const id = form.querySelector('#id')?.value?.trim() || "";
-
-        const entityType = document.querySelector('.js-crud-upload').dataset.entityType;
-        const entityId = document.querySelector('.js-crud-upload').dataset.entityId;
-        console.log(entityId, entityType)
         const uploadModal = document.querySelector('.modal.upload-modal');
-
-        const input = document.getElementById('file');
-        input.dataset.entityType = entityType;
-        input.dataset.entityId = entityId;
-
-        uploadModal.classList.add('active');
-        uploadModal.dataset.entityType = entityType;
-        uploadModal.dataset.entityId = entityId;
-
-        const modalClose = uploadModal.querySelector('.modal-close');
-        const modalCancel = uploadModal.querySelector('.modal-cancel');
-        const modalConfirm = uploadModal.querySelector('.modal-confirm');
-
-
-        modalClose.addEventListener('click', function () {
-            uploadModal.classList.remove('active');
-        });
-
-        modalCancel.addEventListener('click', function () {
-            uploadModal.classList.remove('active');
-        });
-
-
+        if (uploadModal) uploadModal.classList.add('active');
     }
 });
 

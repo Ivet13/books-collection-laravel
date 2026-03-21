@@ -1,158 +1,155 @@
-const gallery = document.querySelector('.image-gallery-container');
-const tabImages = document.querySelector('.tab-images'); // contenedor de imágenes
-const tabImagesButton = document.querySelector('.tab-images-button'); // TAB (IMPORTANTE)
-const uploadInput = document.querySelector('.upload-image-input');
-const modal = document.querySelector('.modify-image-modal');
-
 const csrf = document.head.querySelector('meta[name="csrf-token"]').content;
 
 //
-// CARGAR GALERÍA (DESDE EL TAB)
+// CARGAR GALERÍA — delegated so it works even when form is injected dynamically
 //
-tabImagesButton?.addEventListener('click', async () => {
-    console.log('tab images clicked');
+document.addEventListener('click', async (event) => {
 
-    gallery.classList.add('active');
+    const tabImagesButton = event.target.closest('.tab-images-button');
+    if (tabImagesButton) {
+        const tabImages = document.querySelector('.tab-images');
+        const endpoint  = tabImagesButton.dataset.endpoint;
 
-    const endpoint = gallery.dataset.endpoint;
+        const res  = await fetch(endpoint, { headers: { 'Accept': 'application/json' } });
+        const data = await res.json();
 
-    const res = await fetch(endpoint);
-    const data = await res.json();
-
-    tabImages.innerHTML = data.imageGallery;
-});
-
-//
-// GALERÍA (acciones internas: cerrar, upload, delete)
-//
-gallery?.addEventListener('click', async (event) => {
-
-    // CERRAR GALERÍA
-    if (event.target.closest('.close')) {
-        gallery.classList.remove('active');
+        if (tabImages) tabImages.innerHTML = data.imageGallery;
         return;
     }
 
-    // SUBIR IMAGEN (abrir input)
+    // ABRIR MODAL MODIFICAR desde la galería
+    const modifyBtn = event.target.closest('.js-crud-modify');
+    if (modifyBtn) {
+        const modal = document.querySelector('.modify-image-modal');
+        if (!modal) return;
+
+        modal.dataset.endpoint = modifyBtn.dataset.endpoint;
+        modal.dataset.id       = modifyBtn.dataset.id;
+        modal.classList.add('active');
+        return;
+    }
+
+    // ELIMINIAR IMAGEN
+    const deleteBtn = event.target.closest('.delete-button');
+    if (deleteBtn) {
+        event.preventDefault();
+        const endpoint = deleteBtn.dataset.endpoint;
+
+        const res  = await fetch(endpoint, {
+            method: 'DELETE',
+            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrf }
+        });
+        const data = await res.json();
+
+        const tabImages = document.querySelector('.tab-images');
+        if (tabImages) tabImages.innerHTML = data.imageGallery;
+        return;
+    }
+
+    // SUBIR IMAGEN — abrir file picker
     if (event.target.closest('.upload-image')) {
+        const uploadInput = document.getElementById('uploadFileInput');
+        if (!uploadInput) return;
+
+        // Propagate entity info from the tab-images-button into the input
+        const tabImagesBtn = document.querySelector('.tab-images-button');
+        if (tabImagesBtn) {
+            uploadInput.dataset.entityType = tabImagesBtn.dataset.entityType;
+            uploadInput.dataset.entityId   = tabImagesBtn.dataset.entityId;
+            uploadInput.dataset.endpoint   = tabImagesBtn.dataset.uploadEndpoint;
+        }
+
         uploadInput.click();
         return;
     }
 
-    // ELIMINAR IMAGEN
-    const deleteBtn = event.target.closest('.delete-button');
-    if (deleteBtn) {
-        event.preventDefault();
+    // UPLOAD MODAL — cerrar
+    const uploadModal = document.querySelector('.modal.upload-modal');
+    if (uploadModal) {
+        if (event.target.closest('.upload-modal .modal-close') ||
+            event.target.closest('.upload-modal .modal-cancel')) {
+            uploadModal.classList.remove('active');
+            return;
+        }
+    }
 
-        const endpoint = deleteBtn.dataset.endpoint;
+    // MODIFY MODAL — cerrar
+    const modal = document.querySelector('.modify-image-modal');
+    if (modal) {
+        if (event.target.closest('.modify-image-modal .modal-close') ||
+            event.target.closest('.modify-image-modal .modal-cancel')) {
+            modal.classList.remove('active');
+            return;
+        }
 
-        const res = await fetch(endpoint, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrf
-            }
-        });
+        // MODIFICAR
+        if (event.target.closest('.modify-button')) {
+            const endpoint = modal.dataset.endpoint;
+            const id       = modal.dataset.id;
+            const alt      = document.querySelector('#alt')?.value ?? '';
+            const caption  = document.querySelector('#caption')?.value ?? '';
 
-        const data = await res.json();
-        tabImages.innerHTML = data.imageGallery;
+            const res = await fetch(endpoint, {
+                method: 'PUT',
+                headers: {
+                    'Accept':       'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrf
+                },
+                body: JSON.stringify({ id, alt, caption })
+            });
 
-        return;
+            const data = await res.json();
+            const tabImages = document.querySelector('.tab-images');
+            if (tabImages) tabImages.innerHTML = data.imageGallery;
+
+            if (document.querySelector('#alt'))     document.querySelector('#alt').value = '';
+            if (document.querySelector('#caption')) document.querySelector('#caption').value = '';
+
+            modal.classList.remove('active');
+            return;
+        }
     }
 });
 
 //
-// ABRIR MODAL (desde la galería)
+// SUBIR IMAGEN (file input change)
 //
-tabImages?.addEventListener('click', (event) => {
-    console.log('click images');
+document.addEventListener('change', async (event) => {
+    const uploadInput = event.target.closest('#uploadFileInput');
+    if (!uploadInput) return;
 
-    const button = event.target.closest('.js-crud-modify');
-
-    if (button) {
-        modal.dataset.endpoint = button.dataset.endpoint;
-        modal.dataset.id = button.dataset.id;
-
-        modal.classList.add('active');
-    }
-});
-
-//
-// MODAL (cerrar + modificar)
-//
-modal?.addEventListener('click', async (event) => {
-
-    // CERRAR
-    if (
-        event.target.closest('.modal-close') ||
-        event.target.closest('.modal-cancel')
-    ) {
-        modal.classList.remove('active');
-        return;
-    }
-
-    // MODIFICAR
-    if (event.target.closest('.modify-button')) {
-
-        const endpoint = modal.dataset.endpoint;
-        const id = modal.dataset.id;
-
-        const alt = document.querySelector('#alt').value;
-        const caption = document.querySelector('#caption').value;
-
-        const res = await fetch(endpoint, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrf
-            },
-            body: JSON.stringify({
-                id,
-                alt,
-                caption
-            })
-        });
-
-        const data = await res.json();
-        tabImages.innerHTML = data.imageGallery;
-
-        document.querySelector('#alt').value = '';
-        document.querySelector('#caption').value = '';
-
-        modal.classList.remove('active');
-    }
-});
-
-//
-// SUBIR IMAGEN
-//
-uploadInput?.addEventListener('change', async (event) => {
     try {
-        const endpoint = uploadInput.dataset.endpoint;
+        const endpoint   = uploadInput.dataset.endpoint;
         const entityType = uploadInput.dataset.entityType;
-        const entityId = uploadInput.dataset.entityId;
+        const entityId   = uploadInput.dataset.entityId;
+        const image      = uploadInput.files[0];
 
-        const image = event.target.files[0];
+        if (!image || !endpoint) return;
 
         const formData = new FormData();
-        formData.append('image', image);
+        formData.append('image',       image);
         formData.append('entity_type', entityType);
-        formData.append('entity_id', entityId);
+        formData.append('entity_id',   entityId);
 
-        const res = await fetch(endpoint, {
+        const res  = await fetch(endpoint, {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrf
-            },
+            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrf },
             body: formData
         });
 
         const data = await res.json();
-        tabImages.innerHTML = data.imageGallery;
+        const tabImages = document.querySelector('.tab-images');
+        if (tabImages) tabImages.innerHTML = data.imageGallery;
+
+        // Close upload modal after successful upload
+        const uploadModal = document.querySelector('.modal.upload-modal');
+        if (uploadModal) uploadModal.classList.remove('active');
+
+        // Reset file input
+        uploadInput.value = '';
 
     } catch (error) {
-        console.error(error);
+        console.error('Upload error:', error);
     }
 });
