@@ -2,7 +2,7 @@
     @foreach ($images as $image)
         @php Debugbar::info($image); @endphp
         <div>
-            <button class="delete-button" data-endpoint="{{ route('images_destroy', (string) $image->_id) }}">X</button>
+            <button class="delete-button" data-endpoint="{{ route('images_destroy', $image->filename) }}">X</button>
 
 
             <button type="button" class="js-crud-modify {{ empty((string) $image->_id) ? 'hidden' : '' }}"

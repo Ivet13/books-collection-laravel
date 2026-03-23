@@ -145,10 +145,17 @@ document.addEventListener("click", async event => {
         }
     }
 
-    // UPLOAD — handled in gallery.js
-    if (event.target.closest(".js-crud-upload")) {
+    // UPLOAD — open modal and set entity info
+    const uploadBtn = event.target.closest(".js-crud-upload");
+    if (uploadBtn) {
         const uploadModal = document.querySelector('.modal.upload-modal');
-        if (uploadModal) uploadModal.classList.add('active');
+        const fileInput   = document.getElementById('file');
+        
+        if (uploadModal && fileInput) {
+            fileInput.dataset.entityType = uploadBtn.dataset.entityType;
+            fileInput.dataset.entityId   = uploadBtn.dataset.entityId;
+            uploadModal.classList.add('active');
+        }
     }
 });
 

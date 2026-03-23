@@ -92,7 +92,6 @@ class ImageController extends Controller
                 $entityType = $image->entity_type;
                 $entityId = $image->entity_id;
                 
-                $this->imageService->deleteImage($filename);
                 $image->delete();
 
                 $images = $this->image->where('entity_type', $entityType)

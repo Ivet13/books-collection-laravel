@@ -1,10 +1,11 @@
 const csrf = document.head.querySelector('meta[name="csrf-token"]').content;
 
 //
-// CARGAR GALERÍA — delegated so it works even when form is injected dynamically
+// EVENTOS DE GALERÍA Y MODALES (DELEGADOS)
 //
 document.addEventListener('click', async (event) => {
 
+    // CARGAR GALERÍA (desde el tab Images)
     const tabImagesButton = event.target.closest('.tab-images-button');
     if (tabImagesButton) {
         const tabImages = document.querySelector('.tab-images');
@@ -59,34 +60,59 @@ document.addEventListener('click', async (event) => {
         return;
     }
 
-    // SUBIR IMAGEN — abrir file picker
-    if (event.target.closest('.upload-image')) {
-        const uploadInput = document.getElementById('uploadFileInput');
-        if (!uploadInput) return;
-
-        // Propagate entity info from the tab-images-button into the input
-        const tabImagesBtn = document.querySelector('.tab-images-button');
-        if (tabImagesBtn) {
-            uploadInput.dataset.entityType = tabImagesBtn.dataset.entityType;
-            uploadInput.dataset.entityId   = tabImagesBtn.dataset.entityId;
-            uploadInput.dataset.endpoint   = tabImagesBtn.dataset.uploadEndpoint;
-        }
-
-        uploadInput.click();
-        return;
-    }
-
     // UPLOAD MODAL — cerrar
     const uploadModal = document.querySelector('.modal.upload-modal');
     if (uploadModal) {
         if (event.target.closest('.upload-modal .modal-close') ||
             event.target.closest('.upload-modal .modal-cancel')) {
             uploadModal.classList.remove('active');
+            
+            // clear the file input when closing
+            const fileInput = document.getElementById('file');
+            if (fileInput) fileInput.value = '';
+            
+            return;
+        }
+        
+        // SUBIR IMAGEN (click en boton "Subir")
+        if (event.target.closest('.modal-confirm')) {
+            const fileInput = document.getElementById('file');
+            if (!fileInput) return;
+
+            const endpoint   = fileInput.dataset.endpoint;
+            const entityType = fileInput.dataset.entityType;
+            const entityId   = fileInput.dataset.entityId;
+            const image      = fileInput.files[0];
+
+            if (!image || !endpoint) return;
+
+            const formData = new FormData();
+            formData.append('image',       image);
+            formData.append('entity_type', entityType);
+            formData.append('entity_id',   entityId);
+
+            try {
+                const res  = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrf },
+                    body: formData
+                });
+
+                const data = await res.json();
+                const tabImages = document.querySelector('.tab-images');
+                if (tabImages) tabImages.innerHTML = data.imageGallery;
+
+                // Reset and close
+                fileInput.value = '';
+                uploadModal.classList.remove('active');
+            } catch (error) {
+                console.error('Upload error:', error);
+            }
             return;
         }
     }
 
-    // MODIFY MODAL — cerrar
+    // MODIFY MODAL — cerrar y modificar
     const modal = document.querySelector('.modify-image-modal');
     if (modal) {
         if (event.target.closest('.modify-image-modal .modal-close') ||
@@ -122,47 +148,5 @@ document.addEventListener('click', async (event) => {
             modal.classList.remove('active');
             return;
         }
-    }
-});
-
-//
-// SUBIR IMAGEN (file input change)
-//
-document.addEventListener('change', async (event) => {
-    const uploadInput = event.target.closest('#uploadFileInput');
-    if (!uploadInput) return;
-
-    try {
-        const endpoint   = uploadInput.dataset.endpoint;
-        const entityType = uploadInput.dataset.entityType;
-        const entityId   = uploadInput.dataset.entityId;
-        const image      = uploadInput.files[0];
-
-        if (!image || !endpoint) return;
-
-        const formData = new FormData();
-        formData.append('image',       image);
-        formData.append('entity_type', entityType);
-        formData.append('entity_id',   entityId);
-
-        const res  = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrf },
-            body: formData
-        });
-
-        const data = await res.json();
-        const tabImages = document.querySelector('.tab-images');
-        if (tabImages) tabImages.innerHTML = data.imageGallery;
-
-        // Close upload modal after successful upload
-        const uploadModal = document.querySelector('.modal.upload-modal');
-        if (uploadModal) uploadModal.classList.remove('active');
-
-        // Reset file input
-        uploadInput.value = '';
-
-    } catch (error) {
-        console.error('Upload error:', error);
     }
 });

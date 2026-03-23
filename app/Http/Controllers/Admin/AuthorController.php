@@ -96,6 +96,10 @@ class AuthorController extends Controller
             $author = Author::create($data);
 
             foreach ($author->locale as $language => $fields) {
+                if (empty($fields['name'])) {
+                    continue;
+                }
+
                 $slugs = [
                     'name' => $fields['name']
                 ];
@@ -125,6 +129,10 @@ class AuthorController extends Controller
         $author->update($data);
 
         foreach ($author->locale as $language => $fields) {
+            if (empty($fields['name'])) {
+                continue;
+            }
+
             $slugs = [
                 'name' => $fields['name']
             ];
