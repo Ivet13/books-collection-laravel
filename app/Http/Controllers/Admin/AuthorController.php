@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\mongoDB\Author;
 use Illuminate\Http\Request;
 use App\Services\SitemapService;
+use App\Events\AuthorStored;
 
 class AuthorController extends Controller
 {
@@ -95,7 +96,16 @@ class AuthorController extends Controller
             $data = $request->all();
             $author = Author::create($data);
 
-            foreach ($author->locale as $language => $fields) {
+
+
+            AuthorStored::dispatch(
+                $author,
+                $request->filled('images')
+                    ? $request->input('images')
+                    : []
+            );
+
+            /*       foreach ($author->locale as $language => $fields) {
                 if (empty($fields['name'])) {
                     continue;
                 }
@@ -111,7 +121,7 @@ class AuthorController extends Controller
                     'author',
                     $slugs
                 );
-            }
+            } */
 
             return response()->json(['id' => $author->_id], 201);
         } catch (\Exception $e) {
