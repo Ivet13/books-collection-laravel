@@ -96,7 +96,7 @@ class AuthorController extends Controller
             $data = $request->all();
             $author = Author::create($data);
 
-
+            \Debugbar::info($request->input('images'));
 
             AuthorStored::dispatch(
                 $author,
@@ -144,7 +144,7 @@ class AuthorController extends Controller
             }
 
             $slugs = [
-                'name' => $fields['name']
+                'name' => \Str::slug($fields['name'])
             ];
 
             $this->sitemapService->updateOrCreateSlug(

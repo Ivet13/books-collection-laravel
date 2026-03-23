@@ -15,7 +15,11 @@ class ProcessAuthorSitemap implements ShouldQueue
   public function handle(AuthorStored $event)
   {
     foreach ($event->author->locale as $language => $fields) {
-      $slugs = ['title' => \Str::slug($fields['title'])];
+      if (empty($fields['name'])) {
+        continue;
+      }
+
+      $slugs = ['name' => \Str::slug($fields['name'])];
       $this->sitemapService->updateOrCreateSlug('authors', $event->author->id, $language, 'author', $slugs);
     }
   }
