@@ -20,6 +20,9 @@ class ProcessAuthorSitemap implements ShouldQueue
       }
 
       $slugs = ['name' => \Str::slug($fields['name'])];
+
+
+      //\Debugbar::info($slugs);
       $this->sitemapService->updateOrCreateSlug('authors', $event->author->id, $language, 'author', $slugs);
     }
   }

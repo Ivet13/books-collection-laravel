@@ -15,8 +15,8 @@ class ProcessAuthorImages implements ShouldQueue
     public function handle(AuthorStored $event)
     {
         if (!empty($event->images)) {
-            $this->imageService->groupAdminImages($event->images, $event->course);
-            $this->imageService->resizeImages($event->images, 'courses', $event->course->id, $event->course);
+            $this->imageService->groupAdminImages($event->images, $event->author);
+            $this->imageService->resizeImages($event->images, 'authors', $event->author->id, $event->author);
         }
     }
 }
