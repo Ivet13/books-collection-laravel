@@ -98,13 +98,21 @@ class AuthorController extends Controller
 
             \Debugbar::info($request->input('images'));
 
-            AuthorStored::dispatch(
+            if ($request->has('images') && is_string($request->images)) {
+                $request->merge([
+                    'images' => json_decode($request->images, true),
+                ]);
+            }
+
+            \Debugbar::info($request->input('images'));
+
+            /*    AuthorStored::dispatch(
                 $author,
                 $request->filled('images')
                     ? $request->input('images')
                     : []
             );
-
+ */
             /*       foreach ($author->locale as $language => $fields) {
                 if (empty($fields['name'])) {
                     continue;
@@ -138,7 +146,26 @@ class AuthorController extends Controller
 
         $author->update($data);
 
-        foreach ($author->locale as $language => $fields) {
+        \Debugbar::info($request->input('images'));
+
+        if ($request->has('images') && is_string($request->images)) {
+            $request->merge([
+                'images' => json_decode($request->images, true),
+            ]);
+        }
+
+        \Debugbar::info($request->input('images'));
+
+        /*         //\Debugbar::info($request->input('images'));
+
+        AuthorStored::dispatch(
+            $author,
+            $request->filled('images')
+                ? $request->input('images')
+                : []
+        ); */
+
+        /* foreach ($author->locale as $language => $fields) {
             if (empty($fields['name'])) {
                 continue;
             }
@@ -154,7 +181,7 @@ class AuthorController extends Controller
                 'author',
                 $slugs
             );
-        }
+        } */
 
         return response()->json(['id' => $author->id]);
     }

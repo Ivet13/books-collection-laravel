@@ -10,8 +10,33 @@
         </div>
         <div class="modal-body form-content">
             <button class="modify-button" data>MODIFY</button>
+            <input type="hidden" name="configuration"
+                value="{{ json_encode([
+                    'thumbnail' => [
+                        'widthPx' => '100',
+                        'heightPx' => '100',
+                    ],
+                    'xs' => [
+                        'widthPx' => '200',
+                        'heightPx' => '200',
+                    ],
+                    'sm' => [
+                        'widthPx' => '200',
+                        'heightPx' => '200',
+                    ],
+                    'md' => [
+                        'widthPx' => '450',
+                        'heightPx' => '450',
+                    ],
+                    'lg' => [
+                        'widthPx' => '450',
+                        'heightPx' => '450',
+                    ],
+                ]) }}">
+            <input type="text" name="name" id="name" placeholder="name">
             <input type="text" name="alt" id="alt" placeholder="Alt">
-            <input type="text" name="caption" id="caption" placeholder="Caption">
+            <input type="text" name="title" id="title" placeholder="Title">
+
         </div>
         <div class="modal-footer">
 

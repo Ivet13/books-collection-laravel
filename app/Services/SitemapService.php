@@ -21,8 +21,8 @@ class SitemapService
         ]);
     }
 
-    public function deleteSlug($entity, $entityId, $slug)
+    public function deleteSlug($entity, $entityId)
     {
-        $this->sitemap->where('entity', $entity)->where('entity_id', $entityId)->where('slug', $slug)->delete();
+        $this->sitemap->where('entity', $entity)->where('entity_id', $entityId)->delete();
     }
 }
