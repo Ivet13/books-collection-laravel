@@ -96,23 +96,15 @@ class AuthorController extends Controller
             $data = $request->all();
             $author = Author::create($data);
 
-            \Debugbar::info($request->input('images'));
+            $images = json_decode($data['images'], true);
 
-            if ($request->has('images') && is_string($request->images)) {
-                $request->merge([
-                    'images' => json_decode($request->images, true),
-                ]);
-            }
-
-            \Debugbar::info($request->input('images'));
-
-            /*    AuthorStored::dispatch(
+            AuthorStored::dispatch(
                 $author,
-                $request->filled('images')
-                    ? $request->input('images')
+                $images
+                    ? $images
                     : []
             );
- */
+
             /*       foreach ($author->locale as $language => $fields) {
                 if (empty($fields['name'])) {
                     continue;
@@ -146,24 +138,14 @@ class AuthorController extends Controller
 
         $author->update($data);
 
-        \Debugbar::info($request->input('images'));
-
-        if ($request->has('images') && is_string($request->images)) {
-            $request->merge([
-                'images' => json_decode($request->images, true),
-            ]);
-        }
-
-        \Debugbar::info($request->input('images'));
-
-        /*         //\Debugbar::info($request->input('images'));
+        $images = json_decode($data['images'], true);
 
         AuthorStored::dispatch(
             $author,
-            $request->filled('images')
-                ? $request->input('images')
+            $images
+                ? $images
                 : []
-        ); */
+        );
 
         /* foreach ($author->locale as $language => $fields) {
             if (empty($fields['name'])) {

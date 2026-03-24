@@ -40,12 +40,14 @@ document.addEventListener("click", async event => {
             const images = []
             const tabImages = form.querySelectorAll('.js-crud-modify')
             tabImages.forEach(tabImage => {
+
                 const image = {
                     name: tabImage.dataset.name,
                     languageAlias: tabImage.dataset.language,
                     imageConfigurations: JSON.parse(tabImage.dataset.configuration),
                     files: []
                 }
+
                 if (tabImage.nextElementSibling.getAttribute('src')) {
                     image.files.push({
                         filename: tabImage.nextElementSibling.getAttribute('src').split('/').pop(),
@@ -54,16 +56,18 @@ document.addEventListener("click", async event => {
                     })
                 }
 
+                console.log(images)
+
                 if (image.files.length > 0) {
                     images.push(image)
                 }
             })
 
             if (images.length > 0) {
-                fd.append('images', images)
+                fd.append('images', JSON.stringify(images))
             }
         }
-        console.log(fd)
+
         const res = await fetch(url, {
             method: id ? "PUT" : "POST",
             headers: {
