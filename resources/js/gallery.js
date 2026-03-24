@@ -131,7 +131,7 @@ document.addEventListener('click', async (event) => {
             const name = document.querySelector('#name')?.value ?? '';
             const title = document.querySelector('#title')?.value ?? '';
             const configuration = document.querySelector('#configuration')?.value ?? '';
-            console.log(configuration);
+
             const res = await fetch(endpoint, {
                 method: 'PUT',
                 headers: {
