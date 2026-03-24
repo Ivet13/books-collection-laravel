@@ -36,6 +36,34 @@ document.addEventListener("click", async event => {
         const url = id ? `${updateBase.replace(/\/$/, "")}/${id}` : storeUrl;
         const fd = new FormData(form);
 
+        if (form.querySelector('.images-container')) {
+            const images = []
+            const tabImages = form.querySelectorAll('.js-crud-modify')
+            tabImages.forEach(tabImage => {
+                const image = {
+                    name: tabImage.dataset.name,
+                    languageAlias: tabImage.dataset.language,
+                    imageConfigurations: JSON.parse(tabImage.dataset.configuration),
+                    files: []
+                }
+                if (tabImage.nextElementSibling.getAttribute('src')) {
+                    image.files.push({
+                        filename: tabImage.nextElementSibling.getAttribute('src').split('/').pop(),
+                        alt: tabImage.nextElementSibling.getAttribute('alt'),
+                        title: tabImage.nextElementSibling.getAttribute('title')
+                    })
+                }
+
+                if (image.files.length > 0) {
+                    images.push(image)
+                }
+            })
+
+            if (images.length > 0) {
+                fd.append('images', images)
+            }
+        }
+        console.log(fd)
         const res = await fetch(url, {
             method: id ? "PUT" : "POST",
             headers: {
@@ -149,11 +177,11 @@ document.addEventListener("click", async event => {
     const uploadBtn = event.target.closest(".js-crud-upload");
     if (uploadBtn) {
         const uploadModal = document.querySelector('.modal.upload-modal');
-        const fileInput   = document.getElementById('file');
-        
+        const fileInput = document.getElementById('file');
+
         if (uploadModal && fileInput) {
             fileInput.dataset.entityType = uploadBtn.dataset.entityType;
-            fileInput.dataset.entityId   = uploadBtn.dataset.entityId;
+            fileInput.dataset.entityId = uploadBtn.dataset.entityId;
             uploadModal.classList.add('active');
         }
     }

@@ -1,4 +1,4 @@
-<div>
+<div class='images-container'>
     @foreach ($images as $image)
         <div>
             <button class="delete-button" data-endpoint="{{ route('images_destroy', $image->filename) }}">X</button>
@@ -10,7 +10,7 @@
                 data-title="{{ $image->title ?? '' }}" data-configuration="{{ $image->configuration ?? '' }}">
                 <x-icons.eye /></button>
 
-            <img src="{{ route('images_thumb', $image->filename) }}" alt="{{ $image->filename }}">
+            <img class="image" src="{{ route('images_thumb', $image->filename) }}" alt="{{ $image->filename }}">
         </div>
     @endforeach
 </div>
