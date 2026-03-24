@@ -10,7 +10,7 @@
         </div>
         <div class="modal-body form-content">
             <button class="modify-button" data>MODIFY</button>
-            <input type="hidden" name="configuration"
+            <input type="hidden" name="configuration" id="configuration"
                 value="{{ json_encode([
                     'thumbnail' => [
                         'widthPx' => '100',

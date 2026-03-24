@@ -26,8 +26,8 @@ class ImageController extends Controller
                 'entity_id' => $data['entity_id'],
             ]);
             $images = $this->image->where('entity_type', $data['entity_type'])
-                                  ->where('entity_id', $data['entity_id'])
-                                  ->get();
+                ->where('entity_id', $data['entity_id'])
+                ->get();
             return response()->json([
                 'imageGallery' => view('components.image-gallery', ['images' => $images])->render(),
             ], 200);
@@ -43,7 +43,7 @@ class ImageController extends Controller
     {
         try {
             $query = $this->image->newQuery();
-            
+
             if ($request->filled('entity_type')) {
                 $query->where('entity_type', $request->input('entity_type'));
             }
@@ -91,12 +91,12 @@ class ImageController extends Controller
             if ($image) {
                 $entityType = $image->entity_type;
                 $entityId = $image->entity_id;
-                
+
                 $image->delete();
 
                 $images = $this->image->where('entity_type', $entityType)
-                                      ->where('entity_id', $entityId)
-                                      ->get();
+                    ->where('entity_id', $entityId)
+                    ->get();
             } else {
                 $images = collect();
             }
@@ -117,17 +117,19 @@ class ImageController extends Controller
             \Debugbar::info($request);
             $data = $request->all();
             \Debugbar::info($data);
-            
+
             $image = $this->image->where('_id', $id)->first();
             if ($image) {
                 $image->update([
                     'is_active' => false,
                     'alt' => $data['alt'],
-                    'caption' => $data['caption']
+                    'name' => $data['name'],
+                    'title' => $data['title'],
+                    'configuration' => $data['configuration']
                 ]);
                 $images = $this->image->where('entity_type', $image->entity_type)
-                                      ->where('entity_id', $image->entity_id)
-                                      ->get();
+                    ->where('entity_id', $image->entity_id)
+                    ->get();
             } else {
                 $images = collect();
             }
