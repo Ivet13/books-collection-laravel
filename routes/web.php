@@ -83,3 +83,5 @@ Route::get('/images/thumb/{filename}', 'App\Http\Controllers\Admin\ImageControll
 Route::get('/images', 'App\Http\Controllers\Admin\ImageController@index')->name('images_index');
 Route::delete('/images/{filename}', 'App\Http\Controllers\Admin\ImageController@destroy')->name('images_destroy');
 Route::put('/images/modify/{id}', 'App\Http\Controllers\Admin\ImageController@modify')->name('images_modify');
+
+Route::get('/images/{entity}/{entityId}/{filename}', 'App\Http\Controllers\Front\ImageController@showImage')->name('image');

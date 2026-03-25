@@ -18,8 +18,8 @@ class AuthorController extends Controller
             'name' => $author->name,
             'bio' => $author->bio,
             'books' => $author->books,
-            'publisher' => $book->bookPublisher?->publisher,
-            'published_year' => $book->bookPublisher?->published_year,
+            //       'publisher' => $book->bookPublisher?->publisher,
+            //       'published_year' => $book->bookPublisher?->published_year,
         ]);
     }
 }
