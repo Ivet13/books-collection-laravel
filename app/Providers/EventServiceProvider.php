@@ -6,6 +6,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use App\Events\AuthorStored;
 use App\Listeners\ProcessAuthorSitemap;
+use App\Events\CustomerRegistered;
+use App\Listeners\ProcessCustomerRegistered;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         AuthorStored::class => [
             ProcessAuthorSitemap::class,
+        ],
+        CustomerRegistered::class => [
+            ProcessCustomerRegistered::class,
         ]
     ];
 

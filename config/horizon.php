@@ -216,7 +216,7 @@ return [
         'local' => [
             'supervisor-1' => [
                 'connection' => 'redis',
-                'queue'      => ['images', 'default'],
+                'queue'      => ['images', 'emails', 'default'],
                 'balance'    => 'auto',
                 'processes'  => 3,
                 'tries'      => 3,
