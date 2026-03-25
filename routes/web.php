@@ -10,12 +10,17 @@ use App\Http\Controllers\Admin\{
     AuthorController,
     GenreController,
     CustomerController,
-    PublisherController
+    PublisherController,
+    FaqController as AdminFaqController
 };
 //use App\Http\Controllers\Admin\mongoDB\AuthorController;
 use App\Http\Controllers\{
     BookCustomerController,
     CustomerCollectionController
+};
+
+use App\Http\Controllers\Public\{
+    FaqController as CustomerFaqController
 };
 
 use App\Http\Controllers\Public\LanguageController;
@@ -43,6 +48,12 @@ Route::prefix('customer')->name('customer.')->middleware('auth:customer')->group
     Route::delete('/collection/{book}', [BookCustomerController::class, 'destroy'])->name('collection.destroy');
 });
 
+Route::prefix('customer')->name('customer.')->group(function () {
+    // FAQS view
+    Route::get('/faqs/', [CustomerFaqController::class, 'index'])->name('faq');
+    Route::get('/faqs/{faq}', [CustomerFaqController::class, 'show'])->name('faq');
+});
+
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
@@ -64,6 +75,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'verified'])->gr
 
     // Publishers
     Route::resource('publishers', PublisherController::class);
+
+    //FAQS
+    Route::resource('faqs', AdminFaqController::class);
 });
 
 Route::get('/', function () {})->middleware('setlocale');

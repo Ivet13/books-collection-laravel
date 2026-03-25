@@ -8,6 +8,7 @@
 @import './pagination.css';
 @import './tabs.css';
 @import './modal.css';
+@import './faqs.css';
 
 * {
     box-sizing: border-box;

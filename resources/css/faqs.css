@@ -1,0 +1,57 @@
+.faq-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.faq-card {
+    background: var(--panel-bg-color);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.25s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.faq-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.faq-card p:first-child {
+    font-size: 12px;
+    font-weight: bold;
+    color: #888;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.faq-card a {
+    text-decoration: none;
+}
+
+.faq-card a p {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 10px 0;
+}
+
+.faq-card a p:hover {
+    color: #007bff;
+}
+
+.faq-card p:nth-of-type(3) {
+    font-size: 12px;
+    font-weight: bold;
+    color: #888;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.faq-card p:last-child {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+}
