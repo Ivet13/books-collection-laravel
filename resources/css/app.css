@@ -9,6 +9,7 @@
 @import './tabs.css';
 @import './modal.css';
 @import './faqs.css';
+@import './chatbot.css';
 
 * {
     box-sizing: border-box;

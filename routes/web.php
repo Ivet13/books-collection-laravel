@@ -16,7 +16,8 @@ use App\Http\Controllers\Admin\{
 //use App\Http\Controllers\Admin\mongoDB\AuthorController;
 use App\Http\Controllers\{
     BookCustomerController,
-    CustomerCollectionController
+    CustomerCollectionController,
+    ChatController
 };
 
 use App\Http\Controllers\Public\{
@@ -99,3 +100,5 @@ Route::delete('/images/{filename}', 'App\Http\Controllers\Admin\ImageController@
 Route::put('/images/modify/{id}', 'App\Http\Controllers\Admin\ImageController@modify')->name('images_modify');
 
 Route::get('/images/{entity}/{entityId}/{filename}', 'App\Http\Controllers\Front\ImageController@showImage')->name('image');
+
+Route::post('/chat', [ChatController::class, 'chat']);

@@ -37,6 +37,7 @@
 
     <footer>
         <p>&copy; {{ date('Y') }} Books Collection</p>
+        <x-chatbot />
     </footer>
 </body>
 

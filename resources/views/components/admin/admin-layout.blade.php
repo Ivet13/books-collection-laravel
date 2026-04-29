@@ -58,8 +58,11 @@
         </div>
     </main>
     <footer>
-        <p>© {{ date('Y') }} - Un Proyecto hecho con Laravel - &#x2764 </p>
+        <p>© {{ date('Y') }} - Un Proyecto hecho con Laravelo - &#x2764 </p>
+
     </footer>
+
+    <x-chatbot />
 
     <x-modal-upload />
 
