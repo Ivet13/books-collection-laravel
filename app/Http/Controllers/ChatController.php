@@ -36,7 +36,7 @@ class ChatController extends Controller
                     ],
                 ],
             ],
-            'tool_choice' => 'required', // pon 'required' para forzar durante pruebas, 'auto' en produccion
+            'tool_choice' => 'required', //  'required' to force during deveolpnet, 'auto' en produccion
 
         ]);
 
