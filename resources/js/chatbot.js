@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // close if click 
+        // close if click outside
         if (!chatbotBox) {
             document.querySelector(".messages").classList.add("d-none");
             return;
